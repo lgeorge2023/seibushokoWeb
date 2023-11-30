@@ -4,16 +4,20 @@ import { Modal } from "@mantine/core";
 import BasicTable from "./BasicTable";
 import {useTranslation} from 'next-i18next'
 
-function CustomDataTable({  setShowModal, showModal ,form,setCutter}) {
 
-  const [records, setRecords] = useState([]);
-  const { t } = useTranslation("common");
+function CustomDataTable({  setShowModal, showModal ,form,handleChange,index,page}) {
+ const { t } = useTranslation("common");
+ const [records, setRecords] = useState([]);
  const handleRowClick=(row)=>{
   setShowModal(false);
+if(page=="addorder"){
+  handleChange(row.id,index)
+}else{
   form.setValues({ "cutter_no": row.id, 
   "module": row.module==null?"":parseFloat(row.module),"process_type": row.type,"supplier":row.supplier,
   "gear_dwg_no":row.cutter_dwg_no,
 });
+}
  }
   const columns=[
     { header: t('cutter.Cutter No'), accessorKey:"cutter_no" ,    mantineTableBodyCellProps: ({ cell }) => ({
@@ -41,7 +45,6 @@ function CustomDataTable({  setShowModal, showModal ,form,setCutter}) {
       const data = await get("/cutter/");
       setRecords(data);
     } catch (error) {
-      console.error(error);
     }
   };
   return (

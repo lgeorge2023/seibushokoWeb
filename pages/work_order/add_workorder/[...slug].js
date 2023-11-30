@@ -116,8 +116,7 @@ const AddWorkOrder = () => {
       mfg_no: (value) => value == 0 && "MFG no is required",
       client_id: (value) => value == 0 && "Client is required",
       work_order_no: (value) => value.length == 0 && "Workorder no is required",
-      workorder_status: (value) => value.length == 0 && "Workorder status is required",
-      location: (value) => value.length == 0 && "Location is required",
+      workorder_status: (value) =>value.length == 0 && "Workorder status is required",
     },
   });
   const workOrderNo = async () => {
@@ -137,7 +136,6 @@ const AddWorkOrder = () => {
       form.setValues(nulltostring);
       form.setValues({ "work_order_no": workorderno });
     } catch (error) {
-      console.error(error);
     }
   };
   const autofilWorkOrder = (id) => {
@@ -158,7 +156,6 @@ const AddWorkOrder = () => {
         });
       },
       (error) => {
-        console.log(error);
       }
     );
     form.setValues({});

@@ -8,6 +8,7 @@ import {
   Title,
   NumberInput,
   Paper,
+  UnstyledButton,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useEffect, useState } from "react";
@@ -26,6 +27,7 @@ import { getFormattedDate } from "@/utils/dateUtils";
 import { UserManagement } from "@/utils/UserManagement";
 import SubmitButtons from "@/components/SubmitButtons";
 import ProtectedRoute from "@/utils/ProtectedRoute";
+import CustomDataTable from "@/components/cutterListModal";
 
 
 const AddOrder = () => {
@@ -43,8 +45,9 @@ const AddOrder = () => {
   const [managerData,setManagerData]=useState([]);
   const [numForms, setNumForms] = useState(1);
   const [visible,setVisible]=useState(0);
- 
-  const form = useForm({
+  const [showModal, setShowModal] = useState(false);
+  const [index,setIndex]=useState(null)
+    const form = useForm({
     initialValues: {
       order_no: "",
       placed_by: userId,
@@ -108,7 +111,6 @@ const AddOrder = () => {
         form.setFieldValue(`order_lines.${i}.mfg_no`, mfgValue);
       }
     } catch (error) {
-      console.error(error);
     }
   };
   const [mfgData, setMFGData] = useState(Array.from({ length: numForms }, () => []));
@@ -163,7 +165,6 @@ const AddOrder = () => {
       setCutter(cutterData);
       setManagerData(managerData);
     } catch (error) {
-      console.error(error);
     }
   };
   useEffect(() => {
@@ -226,7 +227,8 @@ const AddOrder = () => {
     ];
   return (
     <Layout breadcrumbs={breadcrumbs}>
-        <Box >
+          <CustomDataTable setShowModal={setShowModal} showModal={showModal}  handleChange={handleChange} index={index} page={"addorder"} />
+          <Box>
           { visible == 1?
           <Title order={1}>
             {isEditing ? t("editOrder") : t("addOrder")}
@@ -293,20 +295,29 @@ const AddOrder = () => {
                       {...form.getInputProps(`order_lines.${index}.drawing_no`)}
                     />
                   </Grid.Col>
-                  <Grid.Col  md={6} lg={3}>                   
-                    <Select
-                      label={t('content.cutter')}
-                      withAsterisk
-                      placeholder="Please Select"
-                      {...form.getInputProps(`order_lines.${index}.cutter_no`)}
-                      onChange={(value) => {
-                        handleChange(value,index)
-                        
-                      }}
+                  <Grid.Col  md={6} lg={3}>   
+                    <Box   key={index}>
+                      <Select
                       data={cutter}
-                    />
+                      value={form.values.order_lines[index]?.cutter_no}
+                      label={t('content.cutter')}
+                      onClick={() => {setShowModal(true)
+                        setIndex(index)
+                      }}
+                      disabled
+              />
+                    {/* {cutter} */}
+                      <UnstyledButton
+                        onClick={() => {setShowModal(true)
+                          setIndex(index)
+                        }}
+                        className="selectbutton"
+                      >
+                        Select
+                      </UnstyledButton>
+                    </Box>
                   </Grid.Col>
-                  <Grid.Col  md={6} lg={3}>                   
+                  <Grid.Col  md={6} lg={3}>      
                     <Select
                       label={t('content.MFG')}
                       placeholder="Please Select"
@@ -315,7 +326,6 @@ const AddOrder = () => {
                       {...form.getInputProps(`order_lines.${index}.mfg_no`)}
                     />
                   </Grid.Col>
-                
                   <Grid.Col  md={6}  lg={6}>                   
                     <Textarea
                       placeholder="Comments"
@@ -385,4 +395,4 @@ export const getStaticProps = async ({ locale }) => ({
   },
 });
 
-export default ProtectedRoute(AddOrder) ;
+export default ProtectedRoute(AddOrder);

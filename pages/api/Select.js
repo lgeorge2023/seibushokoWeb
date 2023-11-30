@@ -51,7 +51,7 @@ export const fetchAndTransformWorkOrderData = async () => {
 };
 
 export const fetchAndTransformCutterData = async () => {
-  return fetchAndTransformData("/cutter/", (item) => ({
+  return fetchAndTransformData("/cutter/select/", (item) => ({
     value: item.id,
     label: item.cutter_no,
   }));
