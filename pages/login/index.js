@@ -26,6 +26,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [alert, setAlert] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+  const [isSubmitting,setIsSubmitting] = useState(false);
   const rememberedUser = Cookies.get("rememberedUser"); // Replace with your actual cookie retrieval logic
   const rememberedPassword = Cookies.get("rememberedPassword");
   useEffect(() => {
@@ -49,6 +50,7 @@ const Login = () => {
   };
   const { t, i18n } = useTranslation("common");
   const handleSubmit = async (e) => {
+    setIsSubmitting(true);
     e.preventDefault();
     try {
       const encodedPassword = btoa(password);
@@ -75,6 +77,9 @@ const Login = () => {
     } catch (error) {
       setAlert(true);
       // Handle login error, such as displaying an error message
+    }
+    finally{
+      setIsSubmitting(false);
     }
   };
   const handleKeyPress = (e) => {
@@ -157,7 +162,7 @@ const Login = () => {
               defaultValue={currentLocale} 
               onChange={(value) => onToggleLanguageClick(value)}/>
         </Group>
-        <Button fullWidth mt="xl" onClick={handleSubmit}>
+        <Button fullWidth mt="xl" loading={isSubmitting} onClick={handleSubmit}>
           {t("Sign in")}
         </Button>
       </Paper>

@@ -125,6 +125,31 @@ const MantineReactTables = (props) => {
             </ActionIcon>
           </Tooltip>
         )}
+                {page == "workorder" && (
+          <Box>
+            {row.original.inspection_report === 0 ?(
+              (row.original.workorder_status === 'FINISHED'?
+              <Tooltip label={t("add__inspectionreport")}>
+                <Link href={`/inspection_report/add/${row.original.id}`}>
+                  <IconFileAnalytics
+                    color="green"
+                    size={size}
+                  ></IconFileAnalytics>
+                </Link>
+              </Tooltip>
+              :null)
+            ):(
+              <Tooltip label={t("edit_inspectionreport")}>
+                <Link href={`/inspection_report/add/edit/${row.original.inspection_report}`}>
+                  <IconFileAnalytics
+                  color = "indigo"
+                  size={size}
+                  ></IconFileAnalytics>
+                </Link>
+              </Tooltip>
+            )}
+          </Box>
+        )}
         {page == "cutter" && (
           <Box>
             <Flex gap="sm" direction={row}>

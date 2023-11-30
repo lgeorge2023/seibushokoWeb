@@ -30,6 +30,7 @@ const AddInspectionReport = () => {
   const router = useRouter();
   const [visible, setVisible] = useState(false)
   const { slug } = router.query;
+  const report_id = slug && slug[0] !== ("edit" || "new");
   const isEditing = slug && slug[0] === "edit";
   const id = slug && slug[1]; // Extract the id from the slug array
   const { t } = useTranslation('common');
@@ -118,6 +119,22 @@ const AddInspectionReport = () => {
     { label: t('inspectionReport'), link: "/inspection_report" },
     { label: isEditing?t("edit_inspectionreport"):t("add__inspectionreport"), link: "" },
   ];
+  const autofillReport = (id) =>{
+    let reportData = get(`/workorder/${id}`);
+    reportData.then(
+      (data) =>{
+        removeNulls(data);
+        console.log("api data",data);
+        form.setValues({"work_order":data.id,"client":data.client_id,"cutter_no":data.cutter_no ,
+        "order_no":data.order_no,"serial_no":data.mfg_no, "gear_dwg_no":data.geardrawing_no,
+        "ts_module":data.module, 
+        "ts_shaving_method":data.regrind_type,
+        "trial":data.test,"no_polishing_times":data.regrind_count,
+       "product_no":data.product,"regrind_count":data.regrind_count,
+        "regrind_type":data.regrind_type})
+      }
+    )
+  }
   const fetchData  = async () => {
     try {
       const api_data = await get(`report/${id}/`);
@@ -133,6 +150,10 @@ const AddInspectionReport = () => {
       fetchData();
     }
   }, [id,isEditing]);
+  useEffect(()=>{
+    if(report_id && slug[0] != "new") autofillReport(slug[0])
+  }
+  ,[])
   const fetchClientId = () =>{
     const profile_data = JSON.parse(UserManagement.getItem("profile_data") || '{}');
     const visible = profile_data?.client === 1;    

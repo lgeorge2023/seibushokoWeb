@@ -12,12 +12,12 @@ const breadcrumbs = [
     { label: 'Dashboard', link: '/client_dashboard' },
   ];
 const Dashboard =()=>{
-
-  const [visible,setVisible] = useState(false);
+  const profile_data = JSON.parse(UserManagement.getItem("profile_data") || '{}');
+  const visible = profile_data?.client === 1;
+  const username = profile_data?.first_name + " " +profile_data.last_name;
   const [records,setRecords] = useState([]);
   const [tools,setTools] = useState([]);
   const [orderRecord, setOrderRecord] = useState([]);
-  const [username,setUsername] = useState('');
   const [loading, setLoading] = useState(true);
   const workOrderData = async()=>{
     try{
@@ -25,21 +25,19 @@ const Dashboard =()=>{
       setRecords(data.reverse());
       const toolsCount = await get('/workorder/tools');
       setTools(toolsCount)
-      const orderData = await get(`/order/active`);
-      setOrderRecord(orderData)
+      if(!visible){
+        const orderData = await get(`/order/active`);
+        setOrderRecord(orderData)
+        setLoading(false);
+      }
       setLoading(false);
+
     }catch(error){
-      console.error(error);
       setLoading(false)
     }
   }
 
   useEffect(()=>{
-    const profile_data = JSON.parse(UserManagement.getItem("profile_data") || '{}');
-    const visible = profile_data?.client === 1; 
-    const username = profile_data.username;
-    setUsername(username)
-    setVisible(visible);
     workOrderData();
   },[])
 
@@ -68,4 +66,4 @@ export const getStaticProps = async ({
     },
   })
   
-export default ProtectedRoute(Dashboard) ;
+export default ProtectedRoute(Dashboard);

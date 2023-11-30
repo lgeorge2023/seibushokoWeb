@@ -1,5 +1,6 @@
 import { Breadcrumbs, Text } from '@mantine/core';
 import { IconHome2 } from '@tabler/icons-react';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 const BreadcrumbTrail = ({ breadcrumbs }) => {
@@ -11,9 +12,9 @@ const BreadcrumbTrail = ({ breadcrumbs }) => {
 
   return (
     <Breadcrumbs>
-      <Text component="a" href="/client_dashboard">
+      <Link href="/client_dashboard">
         <IconHome2 size={16} color="blue" />
-      </Text>
+      </Link>
       {breadcrumbs.map((breadcrumb, index) => (
         index === breadcrumbs.length - 1 ? (
           <Text key={index} component="span" size={13} color="blue">
