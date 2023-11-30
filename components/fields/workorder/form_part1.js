@@ -9,44 +9,74 @@ import {
 } from "@mantine/core";
 import { FieldsArray } from "./fields_form1";
 import DatePicker from "@/components/DatePicker";
-import CustomDataTable from "@/components/cutterListModal";
 import OrderDataTable from "@/components/OrderListModal";
 import styles from "./add_workorder.module.css";
 import { UserManagement } from "@/utils/UserManagement";
+import { get } from "@/pages/api/apiUtils";
 export default function FormPart1(props) {
-  const [showModal, setShowModal] = useState(false);
   const [showOrderModal, setOrderShowModal] = useState(false);
   const [visible, setVisible] = useState(false);
+  const [requesterData,setRequesterdata]=useState([])
   const {form,isEditing} = props;
   const fields = FieldsArray();
+  const profile_data = JSON.parse(
+    UserManagement.getItem("profile_data") || "{}"
+  );
+  let client= form.values.client_id;
   useEffect(() => {
-    const profile_data = JSON.parse(
-      UserManagement.getItem("profile_data") || "{}"
-    );
     const client_id = profile_data?.client === 1;
     setVisible(client_id);
   }, []);
-
+  useEffect(() => {
+    if(client){
+    handleRequester(client);
+    }
+  }, [client]);
+  const handleRequester = async (e,orderChange) => {
+    form.setFieldValue('client_id', e);
+      try {
+      const requesterlist = await get(`/staff/client/${e}`);
+      const transformedRequestorData = requesterlist.map((item) => ({
+        value: item.id,
+        label: item.user_full_name,
+        disabled: item.disabled,
+      }));
+      setRequesterdata(transformedRequestorData);
+      const firstNonDisabled = transformedRequestorData.find((item) => !item.disabled);
+      if (firstNonDisabled && (!isEditing|| orderChange)) {
+        form.setFieldValue("requester", firstNonDisabled.value);
+      } 
+      } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <SimpleGrid cols={3}>
-      <CustomDataTable
-        setShowModal={setShowModal}
-        showModal={showModal}
-        form={form}
-      />
       <OrderDataTable
         form={form}
         setOrderShowModal={setOrderShowModal}
         showOrderModal={showOrderModal}
+        handleRequester={handleRequester}
+
       />
       {fields.map((field, i) => {
         const { name, type, ...props } = field;
-
+        if (type === "requesterselect") {
+          return (
+            <div>
+            <Select
+              key={i}
+              {...form.getInputProps(name)}
+              {...props}
+              data={requesterData}
+            /></div> 
+          );
+        }
         if (type === "select") {
           return (
             <Select
               key={i}
-              placeholder="Pick one"
+              placeholder={props.disabled?null:"Pick one"}
               value={form.values[field.name]}
               {...form.getInputProps(name)}
               {...props}

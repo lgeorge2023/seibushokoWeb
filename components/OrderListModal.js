@@ -5,7 +5,7 @@ import BasicTable from "./BasicTable";
 import { removeNulls } from "@/utils/removeNulls";
 import {useTranslation} from 'next-i18next'
 
-function OrderDataTable({ form, setOrderShowModal, showOrderModal }) {
+function OrderDataTable({ form, setOrderShowModal, showOrderModal,handleRequester }) {
   const [records, setRecords] = useState([]);
   const { t } = useTranslation("common");
 
@@ -17,7 +17,6 @@ function OrderDataTable({ form, setOrderShowModal, showOrderModal }) {
       const data = await get("/order/new");
       setRecords(data);
     } catch (error) {
-      console.error(error);
     }
   };   
   const autofilWorkOrder=(id)=>{
@@ -28,9 +27,9 @@ function OrderDataTable({ form, setOrderShowModal, showOrderModal }) {
         form.setValues({"order_no":id,"client_id":data.client_id,"cutter_no":data.cutter_no ,"geardrawing_no":data.drawing_no,
         "mfg_no":data.mfg_no,"module":data.module,"product_no":data.product,"regrind_count":data.regrind_count,
         "regrind_type":data.regrind_type})
+        handleRequester(data.client_id,"orderchange")
      },
      (error) => { 
-        console.log(error);
      })
     form.setValues({})
    
