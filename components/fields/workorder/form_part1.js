@@ -63,9 +63,8 @@ export default function FormPart1(props) {
         const { name, type, ...props } = field;
         if (type === "requesterselect") {
           return (
-            <div>
+            <div   key={i}>
             <Select
-              key={i}
               {...form.getInputProps(name)}
               {...props}
               data={requesterData}

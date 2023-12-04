@@ -4,6 +4,7 @@ import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import instance from "../api/axiosInstance";
 import { useState } from "react";
+import { notifications } from "@mantine/notifications";
 
 export default function Export() {
   const { t } = useTranslation("common");
@@ -29,7 +30,13 @@ export default function Export() {
       })
       .catch((err) => {
         setLoading(false);
-        // toast.error(errorMessage(err.response.data.detail));
+        if(err.response.status == '409'){
+          notifications.show({
+            title:t('Error'),
+            message:t("You don't have permission to download this file"),
+            color:'red'
+          })
+        }
       });
   };
   return (

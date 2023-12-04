@@ -413,7 +413,8 @@
   "Edit Work Order": "作業指示書を編集",
   "View Messge": "メッセージを見る",
   "Rows per page":"ページあたりの行数",
-
+  
+  "You don't have permission to download this file":"JP-You don't have permission to download this file",
   "INVALID_EXTENSION": "無効なファイルタイプ",
   "EMAIL_EXIST": "メールは既に存在します",
   "NO_ACTIVE_ACCOUNT_ERROR": "指定された資格情報を持つアクティブなアカウントが見つかりません。",

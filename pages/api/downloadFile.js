@@ -1,6 +1,7 @@
+import { notifications } from "@mantine/notifications";
 import instance from "./axiosInstance";
 
-export const downloadFile = async (url,filename) =>{
+export const downloadFile = async (url,filename,t) =>{
     instance.get(url, { responseType: "blob" })
                     .then((response) => {
                         const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -12,5 +13,12 @@ export const downloadFile = async (url,filename) =>{
                     })
                     .catch((err) => {
                         // toast.error(errorMessage(err.response.data.detail));
+                        if(err.response.status == '409'){
+                            notifications.show({
+                              title:t('Error'),
+                              message:t("You don't have permission to download this file"),
+                              color:'red'
+                            })
+                          }
                     });
   };

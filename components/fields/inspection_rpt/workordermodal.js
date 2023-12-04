@@ -5,7 +5,8 @@ import BasicTable from "@/components/BasicTable";
 import { removeNulls } from "@/utils/removeNulls";
 import {useTranslation} from 'next-i18next'
 
-function WorkOrderModal({ form, setShowModal, showModal,isEditing }) {
+
+function WorkOrderModal({ form, setShowModal, showModal }) {
   const [records, setRecords] = useState([]);
   const { t } = useTranslation("common");
 
@@ -17,7 +18,6 @@ function WorkOrderModal({ form, setShowModal, showModal,isEditing }) {
       const data = await get("/workorder/finished");
       setRecords(data);
     } catch (error) {
-      console.error(error);
     }
   };    
   const autofilInspectionReport=(id)=>{
@@ -56,7 +56,6 @@ function WorkOrderModal({ form, setShowModal, showModal,isEditing }) {
           })
         }
       },(error)=>{
-        console.log(error)
       })
     let WorkOrderdata =get(`/workorder/${id}`);
       WorkOrderdata.then(
@@ -71,7 +70,6 @@ function WorkOrderModal({ form, setShowModal, showModal,isEditing }) {
         "regrind_type":data.regrind_type})
      },
      (error) => { 
-        console.log(error);
      })
    
    }
@@ -80,7 +78,13 @@ const  columns=[{header: t('workOrder.workOrderNo'), accessorKey:"work_order_no"
     let id =cell.row.original.id;
     handleRowClick(id)
   },
-}),},
+}),
+Cell: ({
+  cell
+}) => <span style={{
+  color: '#518FE2'
+}}>{cell.getValue()}</span>
+},
 { header: t('content.cutter'),accessorKey:"cutter_no" },
 { header: t('content.MFG'), accessorKey:"mfg_no" },
 { header: t('Gear Dwg No'),accessorKey:"geardrawing_no", },

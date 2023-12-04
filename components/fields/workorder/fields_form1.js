@@ -35,13 +35,13 @@ export const FieldsArray = () => {
     fetchAllData();
   }, []);
   const statuslist = [
-    { value: "PENDING", label: "Pending" },
-    { value: "REGRIND", label: "Regrind" },
-    { value: "REQUIREFIX", label: "Require Fix" },
-    { value: "FINISHED", label: "Finished" },
-    { value: "DELIVERED", label: "Delivered" },
-    {value:"INSPECTIONRPT", label:"Inspection Report"},
-    { value: "RETURNED", label: "Returned" }
+    { value: "PENDING", label: t("workOrder.Pending") },
+    { value: "REGRIND", label: t("workOrder.Regrind") },
+    { value: "REQUIREFIX", label: t("workOrder.Require Fix") },
+    { value: "FINISHED", label: t("workOrder.Finished") },
+    { value: "DELIVERED", label: t("workOrder.Delivered") },
+    {value:"INSPECTIONRPT", label:t("workOrder.Inspection Report"),disabled:true},
+    { value: "RETURNED", label: t("workOrder.Returned") }
   ];
   const Locations=[ { value: "SEIBUSHOKO", label: t('location.Seibushoko') },
                     { value: "CUSTOMER", label: t('location.Customer') },
@@ -51,12 +51,12 @@ export const FieldsArray = () => {
   { value: "NONE", label: t('arbor.None') },
 ]
  const regrindform=[
-    { value: "CUSTOMERRETURN", label: "CUSTOMER RETURN" },
-    { value: "WORKORDER", label: "WORK ORDER" },
+    { value: "CUSTOMERRETURN", label: t("workOrder.cutomerReturn") },
+    { value: "WORKORDER", label: t("Workorder") },
   ]
   const sooneql=  [{ value: "TRUE", label: "True" },{value: "FALSE", label: "False"}] ;
   const urgency=[{ value: "USUALLY", label: "Usually" },{value:"LIMITEDEXPRESS", label: "Limited Express"}] ;
-const Test=[{ value: "TRIAL", label: "Trial" },{value: "NONTRIAL", label: "Non Trial"}]
+const Test=[{ value: "TRIAL", label: t('inspection.Trial') },{value: "NONTRIAL", label: t('inspection.Non Trial')}]
   const fields = [
     { label: t('workOrder.orderno'), name: 'order_no', disabled: true,data:orders ,withAsterisk:true},
     { label: t('workOrder.cutterno'), name: 'cutter_no',data:cutters,withAsterisk:true,type:"select",disabled:true },
@@ -85,3 +85,4 @@ const Test=[{ value: "TRIAL", label: "Trial" },{value: "NONTRIAL", label: "Non T
 
   return fields;
 };
+

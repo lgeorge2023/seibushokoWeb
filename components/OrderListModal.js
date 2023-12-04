@@ -45,12 +45,17 @@ const columns=[
       let id =cell.row.original.id;
       handleRowClick(id);
     },
-  }),},
+  }),
+  Cell: ({
+    cell
+  }) => <span style={{
+    color: '#518FE2'
+  }}>{cell.getValue()}</span>},
   {header:t('cutter.Cutter No'),  accessorKey: 'cutter_no', },
-  {header:t('content.MFG'), accessorKey: 'mfg_no', },
+  { header:t('content.MFG'), accessorKey: 'mfg_no', },
   {header:t('MFG.Drawing No'),  accessorKey: 'drawing_no', },
-  {header:t('content.date'), accessorKey: 'order_date', },
-  {header:t('content.Product'), accessorKey: 'product', },
+  { header:t('content.date'), accessorKey: 'order_date', },
+  { header:t('content.Product'), accessorKey: 'product', },
   {header:t('content.remark'),  accessorKey: 'remarks', },
 
 ]

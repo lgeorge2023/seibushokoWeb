@@ -32,14 +32,13 @@ const MantineReactTables = (props) => {
   } = props;
   const { colorScheme } = useMantineTheme();
   const [columnvisibility, setColumnVisibility] = useState(columnVisibility);
-  const [dataLoad,setData]= useState([])
   useEffect(() => {
     UserManagement.setItem(page, JSON.stringify(columnvisibility));
   }, [columnvisibility,page]);
   const size = 23;
   const downloadExcelFile = async (id) => {
     const fileUrl = page=="workorder"?`/workorder/job_sheet/${language}/${id}`:`/report/print/${language}/${id}/`;
-    await downloadFile(fileUrl,page=="workorder"?"JobSheet.pdf":"InspectionReport.pdf");
+    await downloadFile(fileUrl,page=="workorder"?"JobSheet.pdf":"InspectionReport.pdf",t);
   };
   const table = useMantineReactTable({
     localization:{
@@ -125,7 +124,7 @@ const MantineReactTables = (props) => {
             </ActionIcon>
           </Tooltip>
         )}
-                {page == "workorder" && (
+        {page == "workorder" && (
           <Box>
             {row.original.inspection_report === 0 ?(
               (row.original.workorder_status === 'FINISHED'?
@@ -153,7 +152,7 @@ const MantineReactTables = (props) => {
         {page == "cutter" && (
           <Box>
             <Flex gap="sm" direction={row}>
-            <Tooltip label={t("MFG.Regrind")}>
+              <Tooltip label={t("MFG.Regrind")}>
                 <ActionIcon>
                   <IconFileAnalytics
                     size={size}

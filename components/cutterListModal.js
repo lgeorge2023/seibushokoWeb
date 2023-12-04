@@ -25,7 +25,11 @@ if(page=="addorder"){
         let row =cell.row.original;
         handleRowClick(row)
       },
-    }),},
+    }),Cell: ({
+      cell
+    }) => <span style={{
+      color: '#518FE2'
+    }}>{cell.getValue()}</span>},
     { header: t('cutter.Type'), accessorKey: "type" },
     { header: t('cutter.Cutter Drawing No'), accessorKey: "cutter_dwg_no" },
     { header: t('cutter.Module'), accessorKey: "module" },
