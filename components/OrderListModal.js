@@ -48,9 +48,9 @@ const columns=[
   }),
   Cell: ({
     cell
-  }) => <span style={{
+  }) => <b style={{
     color: '#518FE2'
-  }}>{cell.getValue()}</span>},
+  }}>{cell.getValue()}</b>},
   {header:t('cutter.Cutter No'),  accessorKey: 'cutter_no', },
   { header:t('content.MFG'), accessorKey: 'mfg_no', },
   {header:t('MFG.Drawing No'),  accessorKey: 'drawing_no', },

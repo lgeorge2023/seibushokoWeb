@@ -27,9 +27,9 @@ if(page=="addorder"){
       },
     }),Cell: ({
       cell
-    }) => <span style={{
+    }) => <b style={{
       color: '#518FE2'
-    }}>{cell.getValue()}</span>},
+    }}>{cell.getValue()}</b>},
     { header: t('cutter.Type'), accessorKey: "type" },
     { header: t('cutter.Cutter Drawing No'), accessorKey: "cutter_dwg_no" },
     { header: t('cutter.Module'), accessorKey: "module" },

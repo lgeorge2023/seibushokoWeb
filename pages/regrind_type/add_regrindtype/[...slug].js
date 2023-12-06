@@ -48,7 +48,7 @@ function AddRegrindType() {
   });
 
   const fields = [
-    { name: 'type', label: t('Regrind.Type'), required:true },
+    { name: 'type', label: t('Regrind.Type'), required:true,type:'string' },
     { name: 'feed_speed1', label: t('Regrind.Feed Speed1') },
     { name: 'horz_feed', label: t('Regrind.Horz Feed') },
     { name: 'axial_angle', label: t('Regrind.Axial Angle') },
@@ -59,11 +59,11 @@ function AddRegrindType() {
     { name: 'depth_times', label: t('Regrind.Depth Times') },
     { name: 'axial_minute', label: t('Regrind.Axial Minute') },
     { name: 't2', label: 'T2' },
-    { name: 'matagi', label: t('Matagi') },
+    { name: 'matagi', label: t('Regrind.Matagi') },
     { name: 'axial_second', label: t('Regrind.Axial Second') },
     { name: 't3', label: 'T3' },
     { name: 'no_of_teeth', label: t('Regrind.No Of Teeth') },
-    { name: 'diagonal_angle', label: t('Regrind.Diagonal Angle') },
+    { name: 'diagonal_angle', label: t('Regrind.Diagonal Angle'),type:'string'  },
     { name: 'bm', label: 'BM' },
     { name: 'obd', label: 'OBD' },
     { name: 'cutter_speed', label: t('Regrind.Cutter Speed') },
@@ -77,7 +77,6 @@ function AddRegrindType() {
       const nulltostring = removeNulls(data);
       form.setValues(nulltostring);
     } catch (error) {
-      console.error(error);
     }
   };
 
@@ -143,13 +142,12 @@ function AddRegrindType() {
         <form onSubmit={onSubmit} onKeyDown={onKeyDown}>
           <div className='container'>
             {fields.map((field) => (
-              (["Type", "Diagonal Angle"].includes(field.label)) ?<TextInput
+              (field.type=='string') ?<TextInput
                 key={field.name}
                 label={field.label}
                 withAsterisk={field?.required}
                 {...form.getInputProps(field.name)}
-              />:
-              <NumberInput 
+              />: <NumberInput 
                key={field.name}
                label={field.label}
                precision={6}
@@ -182,4 +180,4 @@ export const getStaticProps = async ({
     ])),
   },
 })
-export default ProtectedRoute(AddRegrindType) ;
+export default ProtectedRoute(AddRegrindType);

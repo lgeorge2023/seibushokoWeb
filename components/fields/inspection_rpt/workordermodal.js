@@ -81,9 +81,9 @@ const  columns=[{header: t('workOrder.workOrderNo'), accessorKey:"work_order_no"
 }),
 Cell: ({
   cell
-}) => <span style={{
+}) => <b style={{
   color: '#518FE2'
-}}>{cell.getValue()}</span>
+}}>{cell.getValue()}</b>
 },
 { header: t('content.cutter'),accessorKey:"cutter_no" },
 { header: t('content.MFG'), accessorKey:"mfg_no" },

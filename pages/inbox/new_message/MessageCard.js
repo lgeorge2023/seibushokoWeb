@@ -30,7 +30,7 @@ export default function MessageCard({value}) {
       },
       validate:{
         msg_title:(value)=> value.length == 0 && 'Message Subject Required',
-        msg_client:(value)=>value.length == 0 && 'To is Required',
+        msg_client:(value)=>value == '' && 'To is Required',
         msg_attach:(value) => value?.size > 2097152 && 'File size exceeds 2MB limit'
     }
     })
@@ -47,11 +47,11 @@ export default function MessageCard({value}) {
     }, [id]);
     useEffect(()=>{
       fetchClientData();
-      const id = UserManagement.getItem("id");
-      setId(id)
+      const id = JSON.parse(UserManagement.getItem("profile_data"));
+      setId(id.client)
       const username = UserManagement.getItem("username");
       setUserName(username);
-    },[id,fetchClientData])
+    },[fetchClientData])
 
     const sendMessage = async () =>{
       try{

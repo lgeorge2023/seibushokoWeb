@@ -14,7 +14,7 @@ const breadcrumbs = [
 const Dashboard =()=>{
   const profile_data = JSON.parse(UserManagement.getItem("profile_data") || '{}');
   const visible = profile_data?.client === 1;
-  const username = profile_data?.first_name + " " +profile_data.last_name;
+  const username = profile_data?.first_name + ' ' +profile_data.last_name;
   const [records,setRecords] = useState([]);
   const [tools,setTools] = useState([]);
   const [orderRecord, setOrderRecord] = useState([]);
@@ -27,6 +27,7 @@ const Dashboard =()=>{
       setTools(toolsCount)
       if(!visible){
         const orderData = await get(`/order/active`);
+        orderData?.reverse()
         setOrderRecord(orderData)
         setLoading(false);
       }

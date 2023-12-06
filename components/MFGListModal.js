@@ -7,8 +7,9 @@ import {useTranslation} from 'next-i18next'
 export default function MFGListModal({setMfgModal, mfgModal,cutterId }) {
     const [records, setRecords] = useState([]);
     const { t } = useTranslation("common");
+
     const columns = [
-        {header:t('content.MFG'), accessorKey:"mfg_no", size:100, Cell: ({ renderedCellValue }) => <strong style={{color:'#518FE2'}}>{renderedCellValue}</strong>},
+        {header:t('content.MFG'), accessorKey:"mfg_no", size:100, Cell: ({ renderedCellValue }) => <b style={{color:'#518FE2'}}>{renderedCellValue}</b>},
         {header:t('content.cutter'), accessorKey:"cutter_no", size:100},
         {header:t('status'), accessorKey:"status", size:100},
         {header:t('MFG.Drawing No'), accessorKey:"drawing_no", size:100},
@@ -27,7 +28,6 @@ export default function MFGListModal({setMfgModal, mfgModal,cutterId }) {
             const data = await get(`/mfg/cutter/${cutterId}/`);
             setRecords(data);
         }catch(error){
-            console.error(error);
         }
     }
 
