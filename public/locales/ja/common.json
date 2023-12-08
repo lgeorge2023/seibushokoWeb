@@ -413,6 +413,9 @@
   "Edit Work Order": "作業指示書を編集",
   "View Messge": "メッセージを見る",
   "Rows per page":"ページあたりの行数",
+  "Select":"選択する",
+  "Archived":"JP-Archived",
+  "Back":"JP-Back",
   
   "You don't have permission to download this file":"JP-You don't have permission to download this file",
   "INVALID_EXTENSION": "無効なファイルタイプ",

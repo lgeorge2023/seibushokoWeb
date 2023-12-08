@@ -208,7 +208,7 @@ const breadcrumbs = [
                         onClick={() => setShowModal(true)}
                         className='selectbutton'
                       >
-                        Select
+                          {t('Select')}
                       </UnstyledButton>
                     )}
                   </Box>

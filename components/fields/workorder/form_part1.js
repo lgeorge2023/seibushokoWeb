@@ -13,7 +13,10 @@ import OrderDataTable from "@/components/OrderListModal";
 import styles from "./add_workorder.module.css";
 import { UserManagement } from "@/utils/UserManagement";
 import { get } from "@/pages/api/apiUtils";
+import { useTranslation } from 'next-i18next'
+
 export default function FormPart1(props) {
+  const { t } = useTranslation("common");
   const [showOrderModal, setOrderShowModal] = useState(false);
   const [visible, setVisible] = useState(false);
   const [requesterData,setRequesterdata]=useState([])
@@ -126,7 +129,7 @@ export default function FormPart1(props) {
                     onClick={() => setOrderShowModal(true)}
                     className={styles.selectbutton}
                   >
-                    select
+                    {t('Select')}
                   </UnstyledButton>
                 )}
             </Box>

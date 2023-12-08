@@ -189,7 +189,7 @@ function AddMFG() {
                         onClick={() => setShowModal(true)}
                         className="selectbutton"
                       >
-                        Select
+                         {t('Select')}
                       </UnstyledButton>
                     )}
                   </Box>

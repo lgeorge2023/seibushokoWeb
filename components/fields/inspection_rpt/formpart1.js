@@ -4,7 +4,11 @@ import styles from './inspection.module.css'
 import { FieldsArray } from './fields1';
 import DatePicker from '@/components/DatePicker';
 import WorkOrderModal from './workordermodal';
+import { useTranslation } from "next-i18next";
+
 const Formpart1 = (props) => {
+
+    const { t } = useTranslation("common");
     const fields=FieldsArray();
     const [showModal, setShowModal] = useState(false);
     const {form,isEditing} =props;
@@ -26,7 +30,7 @@ const Formpart1 = (props) => {
                         onClick={() => setShowModal(true)}
                         className={styles.selectbutton}
                       >
-                        Select
+                        {t('Select')}
                       </UnstyledButton>
                     )}
                   </Grid.Col>

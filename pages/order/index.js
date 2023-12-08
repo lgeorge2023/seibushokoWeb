@@ -92,10 +92,10 @@ const hideColumn={mfg_no:false,drawing_no:false,cutter_no:false}
         <Flex>
           <Box mr='md' mt='sm'>
             <UnstyledButton onClick={(e) => archieve(e)}>
-            <Anchor  mt="sm" href="">{show_archive&& <IconArchiveFilled size={11} color="blue" />}{show_archive?"Archived":"Back"}</Anchor></UnstyledButton>
+            <Anchor  mt="sm" href="">{show_archive&& <IconArchiveFilled size={11} color="blue" />}{show_archive?t("Archived"):t("Back")}</Anchor></UnstyledButton>
           </Box>
           {visible == 1 ?
-            <Link href='order/addorder/new'><Button>Add New</Button></Link>
+            <Link href='order/addorder/new'><Button>{t('Add New')}</Button></Link>
             :null}
         </Flex>
       </Flex>

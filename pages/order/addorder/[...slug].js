@@ -313,7 +313,7 @@ const AddOrder = () => {
                         }}
                         className="selectbutton"
                       >
-                        Select
+                          {t('Select')}
                       </UnstyledButton>
                     </Box>
                   </Grid.Col>
