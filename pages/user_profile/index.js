@@ -14,20 +14,22 @@ function UserProfile() {
     const [fullName, setFullName] = useState('');
     const [roleName, setRoleName] = useState('')
     const breadcrumbs = [{ label: t('View Profile'), link: '/user_profile' },];
-    useEffect(()=>{
-        const profileData = UserManagement.getItem('profile_data')
-        const data = JSON.parse(profileData);
-        const username = data.username;
-        const emailU = data.email;
-        const name = data.first_name + " "+ data.last_name;
-        const client = data.client_name;
-        const role = data.role_name;
-        setUsername(username);
-        setFullName(name);
-        setClientName(client);
-        setEmail(emailU);
-        setRoleName(role)
-    },[])
+    useEffect(() => {
+      const profileData = UserManagement.getItem('profile_data');
+      if (profileData) {
+          const data = JSON.parse(profileData);
+          const username = data.username;
+          const emailU = data.email;
+          const name = data.first_name + " " + data.last_name;
+          const client = data.client_name;
+          const role = data.role_name;
+          setUsername(username);
+          setFullName(name);
+          setClientName(client);
+          setEmail(emailU);
+          setRoleName(role);
+      }
+  }, []);
   return (
     <Layout breadcrumbs={breadcrumbs}>
         <Title ml='md' order={3}>{t('Profile')}</Title>
@@ -35,11 +37,11 @@ function UserProfile() {
             <Group >
                     <Flex>
                         <Flex direction='column' justify='space-around'>
-                        <Text  size="md" p='lg'>User Name</Text>
-                        <Text  size="md"p='lg'>Full Name</Text>
-                        <Text  size="md"p='lg'>Role</Text>
-                        <Text  size="md"p='lg'>Email</Text>
-                        <Text  size="md"p='lg'>Client Name</Text>
+                        <Text  size="md" p='lg'>{t('User.User Name')}</Text>
+                        <Text  size="md"p='lg'>{t('User.Full Name')}</Text>
+                        <Text  size="md"p='lg'>{t('User.Role')}</Text>
+                        <Text  size="md"p='lg'>{t('User.Email')}</Text>
+                        <Text  size="md"p='lg'>{t('User.Client/Segment')}</Text>
                         </Flex>
                         <Flex ml='md' direction='column' >
                         <Text  size="md"p='lg'>: {userName}</Text>
@@ -64,4 +66,4 @@ export const getStaticProps = async ({
       ])),
     },
   })
-  export default ProtectedRoute (UserProfile)
+  export default ProtectedRoute(UserProfile);
