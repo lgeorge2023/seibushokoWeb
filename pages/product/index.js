@@ -11,8 +11,9 @@ import formatdate from '@/utils/formatdate';
 import MantineReactTables from '@/components/MantineReactTable';
 import { UserManagement } from '@/utils/UserManagement';
 import ProtectedRoute from '@/utils/ProtectedRoute';
-
- function ProductList() {
+import Link from 'next/link';
+import { handleApiError } from '@/utils/handleApiError';
+function ProductList() {
   const { t } = useTranslation('common')
   const [records, setRecords] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
@@ -28,7 +29,7 @@ import ProtectedRoute from '@/utils/ProtectedRoute';
       setRecords(data.reverse());
       setLoading(false) 
     } catch (error) {
-      console.error(error);
+      handleApiError(error, router, t);
       setLoading(false) 
     }
   };
@@ -55,11 +56,7 @@ import ProtectedRoute from '@/utils/ProtectedRoute';
         });
         fetchData();
       } catch (error) {
-        notifications.show({
-          title: t('Error'),
-          message: t(error.trim()),
-          color: 'red',
-        }); 
+        handleApiError(error, router, t);
          }    
       closeModal();
     };
@@ -68,8 +65,6 @@ import ProtectedRoute from '@/utils/ProtectedRoute';
     setIsOpen(false);
   };
   const router = useRouter();
-  const handleAddProduct =()=>{
-    router.push('/product/add_product/new');  }
   const editInfo=(row)=>{
     router.push(`/product/add_product/edit/${row.id}`);
     
@@ -105,7 +100,7 @@ const  columns=[
     <Flex justify='space-between' mb='sm'>
       <Title order={3}>{t('content.productList')}</Title>
       {visible == 1 ?<Box>
-        <Button onClick={handleAddProduct}>{t('Add New')}</Button>
+        <Button component={Link} href="/product/add_product/new" >{t('Add New')}</Button>
         </Box>:null}
     </Flex>
 <MantineReactTables column={columns} data={records} deleteData={deleteData} editInfo={editInfo} columnVisibility={hideColumn} visible={visible} loading={loading}/>
@@ -122,4 +117,5 @@ export const getStaticProps = async ({
     ])),
   },
 })
-export default ProtectedRoute(ProductList)
+
+export default ProtectedRoute(ProductList);

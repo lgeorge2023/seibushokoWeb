@@ -9,6 +9,7 @@ import ProtectedRoute from '@/utils/ProtectedRoute';
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import SubmitButtons from '@/components/SubmitButtons';
+import { handleApiError } from '@/utils/handleApiError';
 
 function AddClient() {
   const { t } = useTranslation('common')
@@ -66,8 +67,8 @@ function AddClient() {
     try {
       const data = await get(`client/${id}/`);
       form.setValues(data);
-    } catch (error) {
-      console.error(error);
+    } catch(error) {
+      handleApiError(error, router, t);
     }
   };
   useEffect(() => {
@@ -90,11 +91,7 @@ function AddClient() {
       form.reset()
       addanother?null: router.push("/client");
     } catch (error) {
-      notifications.show({
-        title: t('Error'),
-        message: t(error.trim()),
-        color: 'red',
-      });
+      handleApiError(error, router, t);
     }
     finally {
       setIsSubmitting(false); // Reset the submission state

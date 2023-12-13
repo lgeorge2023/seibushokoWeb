@@ -9,6 +9,8 @@ import formatdate from '@/utils/formatdate';
 import MantineReactTables from '@/components/MantineReactTable';
 import { UserManagement } from '@/utils/UserManagement';
 import ProtectedRoute from '@/utils/ProtectedRoute';
+import Link from 'next/link';
+import { handleApiError } from '@/utils/handleApiError';
 
 
 function WorkOrderList() {
@@ -20,18 +22,14 @@ function WorkOrderList() {
 
 
   const router = useRouter();
-  const handleAddWorkOrder =()=>{
-    router.push('/work_order/add_workorder/new')
-  }
-
   const fetchData = async () =>{
     try{
       const data = await get('/workorder/all');
       setRecords(data.reverse());
       setLoading(false);
     }catch(error){
-      console.error(error);
-      setLoading(false);
+        handleApiError(error, router, t);
+        setLoading(false);
     }
   };
   const fetchClientId = () =>{
@@ -83,10 +81,9 @@ function WorkOrderList() {
     <Box>
       <Flex justify='space-between'mb='sm'>
       <Title order={3}>{t('content.workOrderList')}</Title>
-  {visible == 1 ?<Box>
-  <Button onClick={handleAddWorkOrder}>{t('Add New')}</Button>
-  </Box>:null}
- 
+  {visible == 1 &&
+  <Button component={Link} href='/work_order/add_workorder/new'>{t('Add New')}</Button>
+  }
   </Flex>
   <MantineReactTables column={columns} data={records}  editInfo={editInfo} columnVisibility={hideColumn} page={"workorder"} visible={visible} loading={loading}/>
 </Box>
@@ -102,4 +99,4 @@ export const getStaticProps = async ({
     ])),
   },
 })
-export default ProtectedRoute(WorkOrderList)
+export default ProtectedRoute(WorkOrderList);

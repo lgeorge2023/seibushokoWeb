@@ -74,7 +74,7 @@ export default function Index() {
         } catch(error){
             notifications.show({
                 title: t('Error'),
-                message:t(error.trim()),
+                message:t(error?.trim()),
                 color:'red',
             })
         }

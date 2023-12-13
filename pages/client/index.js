@@ -13,6 +13,7 @@ import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import MantineReactTables from '@/components/MantineReactTable';
 import { UserManagement } from '@/utils/UserManagement';
+import { handleApiError } from '@/utils/handleApiError';
 
 
 function ClientList() {
@@ -46,11 +47,8 @@ function ClientList() {
       });
       fetchData();
     } catch (error) {
-      notifications.show({
-        title: t('Error'),
-        message: t(error.trim()),
-        color: 'red',
-      });    }    
+      handleApiError(error, router, t);
+    }    
     closeModal();
   };
   const fetchData = async () => {
@@ -59,7 +57,7 @@ function ClientList() {
       setRecords(data.reverse()); 
       setLoading(false);
     } catch (error) {
-      console.error(error);
+      handleApiError(error, router, t);
       setLoading(false);
     }
   };
@@ -72,7 +70,7 @@ function ClientList() {
 
   const router = useRouter();
   const handleAddClient = () => {
-    router.push('/client/addclient/new');
+    router.push({pathname:'/client/addclient/new'});
   };
 const hideColumn={active:false,contact_person1_phone:false,address:false}
   const columns=[

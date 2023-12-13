@@ -12,6 +12,8 @@ import formatdate from '@/utils/formatdate';
 import MantineReactTables from '@/components/MantineReactTable';
 import { UserManagement } from '@/utils/UserManagement';
 import ProtectedRoute from '@/utils/ProtectedRoute';
+import Link from 'next/link';
+import { handleApiError } from '@/utils/handleApiError';
 
 
 function Machines() {
@@ -40,6 +42,7 @@ function Machines() {
       setRecords(data.reverse()); 
       setLoading(false);
     } catch (error) {
+      handleApiError(error, router, t);
       setLoading(false);
     }
   };
@@ -49,10 +52,6 @@ function Machines() {
     const visible = profile_data?.client === 1;    
    setVisible(visible)
   }
-  
-  const handleAddClient = () => {
-    router.push('/machines/add_machines/new');
-  };
   const closeModal = () => {
     setIsOpen(false);
   };
@@ -67,11 +66,8 @@ function Machines() {
         });
         fetchData();
       } catch (error) {
-        notifications.show({
-          title: "Error",
-          message: t(error.trim()),
-          color: 'red',
-        });    }    
+        handleApiError(error, router, t);
+      }    
       closeModal();
     };
 useEffect(() => {
@@ -104,9 +100,9 @@ const columns=[
     <DeleteModal isOpen={isOpen} onClose={closeModal}  onConfirm={handleDelete}/>
       <Flex justify='space-between' mb='sm'>
         <Title order={3}> {t('content.machines')}  </Title>
-          {visible == 1 ?<Box>
-            <Button onClick={handleAddClient}>{t('Add New')}</Button>
-            </Box>:null}
+          {visible == 1 &&
+            <Button component={Link} href='/machines/add_machines/new'>{t('Add New')}</Button>
+            }
       </Flex>
 <MantineReactTables column={columns} data={records} deleteData={deleteData} editInfo={editInfo} columnVisibility={hideColumn} visible={visible} loading={loading}/>
     </Box>

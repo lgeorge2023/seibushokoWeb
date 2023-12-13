@@ -10,6 +10,7 @@ import  { useState ,useEffect } from 'react';
 import { fetchAndTransformClientData,fetchAndTransformRoleData } from '@/pages/api/Select';
 import SubmitButtons from "@/components/SubmitButtons";
 import ProtectedRoute from "@/utils/ProtectedRoute";
+import { handleApiError } from "@/utils/handleApiError";
 
 const AddUser = () => {
   const [clients, setClient] = useState([]);
@@ -69,7 +70,6 @@ const AddUser = () => {
         client_id:data.client
       })
     } catch (error) {
-      console.error(error);
     }
   };
   const dropdownClient = () =>{
@@ -113,11 +113,7 @@ const AddUser = () => {
     form.reset();
     addanother?null: router.push("/user");
     }catch(error){
-      notifications.show({
-        title: t('Error'),
-        message: t(error.trim()),
-        color:'red',
-      });
+      handleApiError(error, router, t);
     }
     finally {
       setIsSubmitting(false); // Reset the submission state
@@ -232,4 +228,4 @@ export const getStaticProps = async ({
   },
 })
 
-export default ProtectedRoute(AddUser) ;
+export default ProtectedRoute(AddUser);

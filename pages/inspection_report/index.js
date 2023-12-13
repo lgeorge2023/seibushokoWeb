@@ -9,24 +9,23 @@ import formatdate from "@/utils/formatdate";
 import MantineReactTables from "@/components/MantineReactTable";
 import { UserManagement } from "@/utils/UserManagement";
 import ProtectedRoute from "@/utils/ProtectedRoute";
+import Link from "next/link";
+import { handleApiError } from "@/utils/handleApiError";
 
 
- function InspectionReport() {
+function InspectionReport() {
   const router=useRouter();
     const { t } = useTranslation('common')
     const [records, setRecords] = useState([]);
     const [visible, setVisible] = useState(false);
     const [loading, setLoading] = useState(true);
-    const handleAddNew = () => {
-      router.push('/inspection_report/add/new');
-    };
     const fetchData = async ()=>{
       try{
         const data = await get('/report/');
         setRecords(data.reverse());
         setLoading(false)
       }catch(error){
-        console.error(error)
+        handleApiError(error, router, t);
         setLoading(false)
       }
     };
@@ -74,9 +73,9 @@ import ProtectedRoute from "@/utils/ProtectedRoute";
             <Box>
                 <Flex justify='space-between' mb='sm'>
                   <Title order={3}>{t('inspectionReport')}</Title>
-                    {visible == 1 ?<Box>
-                        <Button onClick={handleAddNew}>{t('Add New')}</Button>
-                      </Box> :null}
+                    {visible == 1 &&
+                        <Button component={Link} href="/inspection_report/add/new" >{t('Add New')}</Button>
+                     }
                 </Flex>
                     <MantineReactTables column={columns} data={records}  editInfo={editInfo}   columnVisibility={hideColumn} visible={visible} loading={loading} page={"inspection"}/>
             </Box>
@@ -93,4 +92,4 @@ export const getStaticProps = async ({
       ])),
     },
   })
-  export default ProtectedRoute(InspectionReport)
+  export default ProtectedRoute(InspectionReport);

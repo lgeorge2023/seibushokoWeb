@@ -12,6 +12,8 @@ import WorkOrderListModal from '@/components/WorkOrderListModal';
 import MFGListModal from '@/components/MFGListModal';
 import { UserManagement } from '@/utils/UserManagement';
 import ProtectedRoute from '@/utils/ProtectedRoute';
+import Link from 'next/link';
+import { handleApiError } from '@/utils/handleApiError';
  
 function CutterList() {
   const { t } = useTranslation('common')
@@ -19,8 +21,8 @@ function CutterList() {
   const [isOpen, setIsOpen] = useState(false);
   const [id,setId] = useState(false);
   const [cutterId, setCutterId] = useState(0);
-  const [loading, setLoading] = useState(true);
   const [mfgCutterId,setMfgCutterId] = useState(0)
+  const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [mfgModal, setMfgModal] = useState(false);
   const [visible, setVisible] = useState(0);
@@ -31,9 +33,6 @@ const breadcrumbs = [
     setIsOpen(false);
   };
   const router = useRouter();
-  const handleAddCutter =()=>{
-    router.push('cutter/addcutter/new')
-  }
   const editInfo=(row)=>{
     router.push(`/cutter/addcutter/edit/${row.id}`);  
   }
@@ -43,7 +42,7 @@ const breadcrumbs = [
       setRecords(data.reverse()); 
       setLoading(false);
     } catch (error) {
-      console.error(error);
+      handleApiError(error, router, t);
       setLoading(false);
     }
   };
@@ -69,11 +68,8 @@ const hideColumn={cutter_dwg_no:false,pressure_ang:false,helix_angle:false,hardn
         });
         fetchData();
       } catch (error) {
-        notifications.show({
-          title: t('Error'),
-          message: t(error.trim()),
-          color: 'red',
-        });    }    
+        handleApiError(error, router, t);
+      }    
       closeModal();
     };
   const deleteData = async (row) => {
@@ -107,7 +103,7 @@ const hideColumn={cutter_dwg_no:false,pressure_ang:false,helix_angle:false,hardn
         <DeleteModal isOpen={isOpen} onClose={closeModal}  onConfirm={handleDelete}/>
         <Flex justify='space-between'>
           <Title order={3}>{t('content.cutterList')}</Title>
-          <Button mb='sm' onClick={handleAddCutter}>{t('Add New')}</Button>
+          <Button component={Link} mb='sm' href='cutter/addcutter/new'>{t('Add New')}</Button>
         </Flex>
         <MantineReactTables column={columns} data={records} deleteData={deleteData} editInfo={editInfo} columnVisibility={hideColumn} page={"cutter"} listWorkOrders={listWorkOrders} listMfg={listMfg} visible={visible} loading={loading}/>
     </Box>

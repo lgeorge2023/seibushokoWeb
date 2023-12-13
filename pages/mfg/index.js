@@ -12,6 +12,8 @@ import MantineReactTables from '@/components/MantineReactTable';
 import { UserManagement } from '@/utils/UserManagement';
 import WorkOrderListModal from '@/components/WorkOrderListModal';
 import ProtectedRoute from '@/utils/ProtectedRoute';
+import Link from 'next/link';
+import { handleApiError } from '@/utils/handleApiError';
 
 function MFG() {
   const { t } = useTranslation('common')
@@ -39,7 +41,7 @@ function MFG() {
       setRecords(data.reverse());
       setLoading(false) 
     } catch (error) {
-      console.error(error);
+      handleApiError(error, router, t);
       setLoading(false);
     }
   };
@@ -66,18 +68,11 @@ function MFG() {
        });
        fetchData();   
      } catch (error) {
-       notifications.show({
-         title:t('Error'),
-         message: t(error.trim()),
-         color: 'red',
-       });    
+      handleApiError(error, router, t);
       }
       closeModal();
   };
   const router = useRouter();
-  const handleAddClient = () => {
-    router.push('/mfg/add_mfg/new');
-  };
 const hideColumn={drawing_no:false,process_type:false,register_date:false,location:false,regrind_count:false,status:false}
 useEffect(() => {
   fetchData();
@@ -111,7 +106,7 @@ const  columns=[
       <Flex justify='space-between' mb='sm'>
        <Title order={3}> {t('mfg')}  </Title>
         {visible == 1 ?  <Box>
-        <Button onClick={handleAddClient}>{t('Add New')}</Button>
+        <Button component={Link} href='/mfg/add_mfg/new'>{t('Add New')}</Button>
       </Box>:null}
       </Flex>
     <MantineReactTables column={columns} data={records} deleteData={deleteData} editInfo={editInfo}  columnVisibility={hideColumn} listWorkOrders={listWorkOrders} page="mfg" visible={visible} loading={loading}/>
@@ -128,4 +123,4 @@ export const getStaticProps = async ({
     ])),
   },
 })
-export default ProtectedRoute(MFG) ;
+export default ProtectedRoute(MFG);

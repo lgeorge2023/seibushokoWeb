@@ -2,7 +2,7 @@ import Layout from "@/components/layout/Layout";
 import { Box, TextInput, Title, Grid } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useState } from "react";
+import {  useEffect, useState } from "react";
 import { get, post, put } from "@/pages/api/apiUtils";
 import { notifications } from "@mantine/notifications";
 import { useTranslation } from "next-i18next";
@@ -12,6 +12,7 @@ import { stringtoNull } from "@/utils/stringtoNull";
 import FormInput from "@/components/FormInput";
 import SubmitButtons from "@/components/SubmitButtons";
 import ProtectedRoute from "@/utils/ProtectedRoute";
+import { handleApiError } from "@/utils/handleApiError";
 
 const AddCutter = () => {
   const { t } = useTranslation("common");
@@ -67,7 +68,8 @@ const AddCutter = () => {
       const nulltostring = removeNulls(data);
       form.setValues(nulltostring);
     } catch (error) {
-      console.error(error);
+      handleApiError(error, router, t);
+
     }
   };
   useEffect(() => {
@@ -180,11 +182,8 @@ const AddCutter = () => {
       form.reset();
       addanother ? null : router.push("/cutter");
     } catch (error) {
-      notifications.show({
-        title: t("Error"),
-        message: t(error.trim()),
-        color: "red",
-      });
+      handleApiError(error, router, t);
+
     }
     finally {
       setIsSubmitting(false); // Reset the submission state
@@ -273,4 +272,4 @@ export const getStaticProps = async ({ locale }) => ({
   },
 });
 
-export default ProtectedRoute(AddCutter) ;
+export default ProtectedRoute(AddCutter);

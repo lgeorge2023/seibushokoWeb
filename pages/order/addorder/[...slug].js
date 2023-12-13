@@ -28,6 +28,7 @@ import { UserManagement } from "@/utils/UserManagement";
 import SubmitButtons from "@/components/SubmitButtons";
 import ProtectedRoute from "@/utils/ProtectedRoute";
 import CustomDataTable from "@/components/cutterListModal";
+import { handleApiError } from "@/utils/handleApiError";
 
 
 const AddOrder = () => {
@@ -111,6 +112,7 @@ const AddOrder = () => {
         form.setFieldValue(`order_lines.${i}.mfg_no`, mfgValue);
       }
     } catch (error) {
+      handleApiError(error, router, t);
     }
   };
   const [mfgData, setMFGData] = useState(Array.from({ length: numForms }, () => []));
@@ -193,11 +195,8 @@ const AddOrder = () => {
       form.reset();
       addanother?form.setFieldValue("placed_by",userId): router.push("/order");
     } catch (error) {
-      notifications.show({
-        title: t('Error'),
-        message: t(error.trim()),
-        color: "red",
-      });
+      handleApiError(error, router, t);
+
     }
     finally {
       setIsSubmitting(false); // Reset the submission state
@@ -313,7 +312,7 @@ const AddOrder = () => {
                         }}
                         className="selectbutton"
                       >
-                          {t('Select')}
+                        {t('Select')}
                       </UnstyledButton>
                     </Box>
                   </Grid.Col>

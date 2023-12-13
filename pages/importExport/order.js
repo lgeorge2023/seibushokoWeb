@@ -6,9 +6,12 @@ import { notifications } from "@mantine/notifications";
 import { useTranslation } from 'next-i18next'
 import { IconUpload } from "@tabler/icons-react";
 import { useState } from "react";
+import { useRouter } from "next/router";
+import { handleApiError } from "@/utils/handleApiError";
 
 const ImportOrder = () => {
   const { t } = useTranslation('common');
+  const router =useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const form = useForm({
     initialValues: {
@@ -51,12 +54,7 @@ const ImportOrder = () => {
     form.reset();
       }
       catch(error){
-        notifications.show({
-          title: t('Error'),
-          message: t(error.trim()),
-          color:'red',
-        });
-      }
+        handleApiError(error, router, t);}
       finally {
         setIsSubmitting(false); // Reset the submission state
       }

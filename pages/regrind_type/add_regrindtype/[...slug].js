@@ -11,6 +11,7 @@ import { stringtoNull } from '@/utils/stringtoNull';
 import { removeNulls } from '@/utils/removeNulls';
 import SubmitButtons from '@/components/SubmitButtons';
 import ProtectedRoute from '@/utils/ProtectedRoute';
+import { handleApiError } from '@/utils/handleApiError';
 
 
 function AddRegrindType() {
@@ -77,6 +78,7 @@ function AddRegrindType() {
       const nulltostring = removeNulls(data);
       form.setValues(nulltostring);
     } catch (error) {
+      handleApiError(error, router, t);
     }
   };
 
@@ -100,11 +102,7 @@ function AddRegrindType() {
       form.reset();
       addanother?null: router.push("/regrind_type");
     } catch (error) {
-      notifications.show({
-        title: t('Error'),
-        message: t(error.trim()),
-        color: 'red',
-      });
+      handleApiError(error, router, t);
     }
     finally {
       setIsSubmitting(false); // Reset the submission state

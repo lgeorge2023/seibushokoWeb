@@ -10,8 +10,10 @@ import DeleteModal from '@/components/DeleteModal';
 import MantineReactTables from '@/components/MantineReactTable';
 import { UserManagement } from '@/utils/UserManagement';
 import ProtectedRoute from '@/utils/ProtectedRoute';
+import Link from 'next/link';
+import { handleApiError } from '@/utils/handleApiError';
 
-function ClientList() {
+function UserList() {
   const { t } = useTranslation('common')
   const [records, setRecords] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
@@ -21,17 +23,13 @@ function ClientList() {
   const breadcrumbs = [{ label: t('User Management'), link: '/user' },];
 
   const router = useRouter();
-  const handleAddUser = () => {
-    router.push('/user/adduser/new')
-  }
-
   const fetchData = async () =>{
     try{
       const data = await get('/staff/');
       setRecords(data.reverse());
       setLoading(false);
     }catch(error){
-      console.error(error);
+      handleApiError(error, router, t);
       setLoading(false);
     }
   };
@@ -57,11 +55,7 @@ function ClientList() {
       });
       fetchData();
     }catch(error){
-      notifications.show({
-        title:t("Error"),
-        message: t(error.trim()),
-        color:'red'
-      })
+      handleApiError(error, router, t);
     }
     closeModal();
   }
@@ -88,13 +82,13 @@ function ClientList() {
     { header:t("User.Client/Segment"),accessorKey: 'client', size:100 },
     { header:"CC",accessorKey: 'email_cc', size:100 },]
   return (
-    <Layout breadcrumbs={breadcrumbs}>
+    <Layout breadcrumbs ={breadcrumbs}>
     <Box>
       <DeleteModal isOpen={isOpen} onClose={closeModal} onConfirm={handleDelete} name={"user"}/>
       <Flex justify='space-between' mb='sm'>
         <Title order={3}> {t('content.userList')} </Title>
           {visible == 1 ?<Box>
-            <Button onClick={handleAddUser}>{t('Add New')}</Button>
+            <Button component={Link} href='/user/adduser/new'>{t('Add New')}</Button>
             </Box>:null}
       </Flex>
     <MantineReactTables column={columns} data={records} deleteData={deleteUser} editInfo={editInfo} columnVisibility={hideColumn} visible={visible} loading={loading}/>
@@ -111,4 +105,4 @@ export const getStaticProps = async ({
     ])),
   },
 })
-export default ProtectedRoute(ClientList)
+export default ProtectedRoute(UserList);

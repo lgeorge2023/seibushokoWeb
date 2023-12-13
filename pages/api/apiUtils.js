@@ -1,17 +1,19 @@
 import instance from "./axiosInstance";
-
 // Function to format error messages
-const formatErrorMessage = (errorData) => {
-  if (typeof errorData === 'object' && Object.keys(errorData).length === 1) {
-    // Handle single key-value pair
-    const key = Object.keys(errorData)[0];
-    return ` ${errorData[key]}`;
-  } else {
-    // Handle multiple key-value pairs
-    return Object.keys(errorData)
-      .map(key => ` ${errorData[key]}`)
-      .join(', ');
+const formatErrorMessage = (error) => {
+  if (!error.response) {
+    return 500; // Internal Server Error
   }
+  const { status, data } = error.response;
+
+  if (status === 404) {
+    return 404; // Not Found
+  }
+  if (typeof data === 'object') {
+    const errorMessages = Object.values(data).map(value => ` ${value}`);
+    return errorMessages.join(', ');
+  }
+  return 'ERROR_OCCURED';
 };
 
 // Common function to handle requests and errors
@@ -20,7 +22,7 @@ const handleRequest = async (requestFn, ...params) => {
     const response = await requestFn(...params);
     return response.data;
   } catch (error) {
-    throw formatErrorMessage(error.response.data);
+    throw formatErrorMessage(error);
   }
 };
 

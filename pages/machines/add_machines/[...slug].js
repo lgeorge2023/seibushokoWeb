@@ -22,6 +22,7 @@ import ImageFile from "@/components/ImageFile";
 import { UserManagement } from "@/utils/UserManagement";
 import { removeNulls } from "@/utils/removeNulls";
 import SubmitButtons from "@/components/SubmitButtons";
+import { handleApiError } from "@/utils/handleApiError";
 const id = UserManagement.getItem("id");
 const parsedid = parseInt(id)
 function AddMachines() {
@@ -62,7 +63,7 @@ function AddMachines() {
       const nulltostring = removeNulls(data);
       form.setValues(nulltostring);
     } catch (error) {
-      console.error(error);
+      handleApiError(error, router, t);
     }
   }
 
@@ -94,11 +95,7 @@ function AddMachines() {
       form.reset();
       addanother? form.setFieldValue("registeredby", parsedid):router.push('/machines');
     } catch (error) {
-      notifications.show({
-        title: t('Error'),
-        message: t(error.trim()),
-        color: "red",
-      });
+      handleApiError(error, router, t);
     }
     finally {
       setIsSubmitting(false); // Reset the submission state

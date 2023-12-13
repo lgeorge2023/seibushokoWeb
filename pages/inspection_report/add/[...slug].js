@@ -22,6 +22,7 @@ import FormPart6 from "@/components/fields/inspection_rpt/formpart6";
 import FormPart7 from "@/components/fields/inspection_rpt/formpart7";
 import SubmitButtons from "@/components/SubmitButtons";
 import ProtectedRoute from "@/utils/ProtectedRoute";
+import { handleApiError } from "@/utils/handleApiError";
 
 const registerBy = UserManagement.getItem("id");
 const userid = parseInt(registerBy);
@@ -119,6 +120,7 @@ const AddInspectionReport = () => {
     { label: t('inspectionReport'), link: "/inspection_report" },
     { label: isEditing?t("edit_inspectionreport"):t("add__inspectionreport"), link: "" },
   ];
+
   const autofillReport = (id) =>{
     let reportData = get(`/workorder/${id}`);
     reportData.then(
@@ -135,13 +137,14 @@ const AddInspectionReport = () => {
       }
     )
   }
+
   const fetchData  = async () => {
     try {
       const api_data = await get(`report/${id}/`);
       const nulltostring = removeNulls(api_data);
       form.setValues(nulltostring);
     } catch (error) {
-      console.error(error);
+      handleApiError(error, router, t);
     }
   };
 
@@ -206,11 +209,7 @@ const AddInspectionReport = () => {
       form.reset();
       addanother? form.setFieldValue("person_charge",userid): router.push("/inspection_report");
     } catch (error) {
-      notifications.show({
-        title: t('Error'),
-        message: t(error.trim()),
-        color: "red",
-      });
+      handleApiError(error, router, t);
     }
     finally {
       setIsSubmitting(false); // Reset the submission state
@@ -260,4 +259,4 @@ export const getStaticProps = async ({ locale }) => ({
     ...(await serverSideTranslations(locale ?? "en", ["common"])),
   },
 });
-export default ProtectedRoute(AddInspectionReport) ;
+export default ProtectedRoute(AddInspectionReport);

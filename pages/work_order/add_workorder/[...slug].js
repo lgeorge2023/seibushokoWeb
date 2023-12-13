@@ -17,6 +17,7 @@ import FormPart3 from "@/components/fields/workorder/form_part3";
 import FormPart4 from "@/components/fields/workorder/form_part4";
 import SubmitButtons from "@/components/SubmitButtons";
 import ProtectedRoute from "@/utils/ProtectedRoute";
+import { handleApiError } from "@/utils/handleApiError";
 
 const registerBy = UserManagement.getItem("id");
 const userId = parseInt(registerBy);
@@ -136,6 +137,7 @@ const AddWorkOrder = () => {
       form.setValues(nulltostring);
       form.setValues({ "work_order_no": workorderno });
     } catch (error) {
+      handleApiError(error, router, t);
     }
   };
   const autofilWorkOrder = (id) => {
@@ -198,11 +200,7 @@ const AddWorkOrder = () => {
       addanother ? form.setValues({ work_order_no: workorder, created_by:userId}) : router.push("/work_order");
    
     } catch (error) {
-      notifications.show({
-        title: t("Error"),
-        message: t(error.trim()),
-        color: "red",
-      });
+      handleApiError(error, router, t);
     }
     finally {
       setIsSubmitting(false); // Reset the submission state

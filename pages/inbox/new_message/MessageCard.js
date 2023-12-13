@@ -11,6 +11,8 @@ import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { format } from 'date-fns';
 import { UserManagement } from "@/utils/UserManagement";
+import { handleApiError } from "@/utils/handleApiError";
+import { useRouter } from "next/router";
 
 export default function MessageCard({value}) {
     const {classes} = useStyles();
@@ -20,7 +22,7 @@ export default function MessageCard({value}) {
     const { t } = useTranslation("common");
     const currentDate = new Date();
     const formattedDate = format(currentDate, 'dd/MM/yyyy');
-
+    const router =useRouter();
     const form = useForm({
       initialValues:{
         msg_attach: '',
@@ -42,7 +44,6 @@ export default function MessageCard({value}) {
         });
         setClient(updatedClientList);
       } catch (error) {
-        console.error(error);
       }
     }, [id]);
     useEffect(()=>{
@@ -68,11 +69,7 @@ export default function MessageCard({value}) {
         })
         form.reset();
       }catch(error){
-        notifications.show({
-          title:t('Error'),
-          message:t(error),
-          color:'red'
-        })
+        handleApiError(error, router, t);
       }
     }
 

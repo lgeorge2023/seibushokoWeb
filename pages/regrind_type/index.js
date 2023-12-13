@@ -10,6 +10,8 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import MantineReactTables from '@/components/MantineReactTable';
 import { UserManagement } from '@/utils/UserManagement';
 import ProtectedRoute from '@/utils/ProtectedRoute';
+import Link from 'next/link';
+import { handleApiError } from '@/utils/handleApiError';
 
 function RegrindType() {
   const { t } = useTranslation('common')
@@ -39,11 +41,7 @@ function RegrindType() {
         });
         fetchData();
       } catch (error) {
-        notifications.show({
-          title:t('Error'),
-          message: t(error.trim()),
-          color: 'red',
-        }); 
+        handleApiError(error, router, t);
          }    
       closeModal();
     };
@@ -57,14 +55,11 @@ function RegrindType() {
       setRecords(data.reverse()); 
       setLoading(false);
     } catch (error) {
-      console.error(error);
+      handleApiError(error, router, t);
       setLoading(false);
     }
   };
   const router = useRouter();
-  const handleAddClient = () => {
-    router.push('regrind_type/add_regrindtype/new');
-  };
   const fetchClientId = () =>{
     const profile_data = JSON.parse(UserManagement.getItem("profile_data") || '{}');
     const visible = profile_data?.client === 1;    
@@ -84,9 +79,9 @@ const columns=[
     <DeleteModal isOpen={isOpen} onClose={closeModal}  onConfirm={handleDelete}/>
     <Flex justify='space-between' mb='sm'>
       <Title order={3}> {t('regrindType')}</Title>
-      <Button onClick={handleAddClient}>{t('Add New')}</Button>
+      <Button component={Link} href='regrind_type/add_regrindtype/new'>{t('Add New')}</Button>
     </Flex>
-<MantineReactTables column={columns} data={records} deleteData={deleteData} editInfo={editInfo} visible={visible} loading={loading}/>
+ <MantineReactTables column={columns} data={records} deleteData={deleteData} editInfo={editInfo} visible={visible} loading={loading}/>
     </Box>
      </Layout>
   );
@@ -100,4 +95,4 @@ export const getStaticProps = async ({
     ])),
   },
 })
-export default ProtectedRoute(RegrindType) ;
+export default ProtectedRoute(RegrindType);

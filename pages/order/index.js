@@ -11,6 +11,7 @@ import formatdate from '@/utils/formatdate';
 import MantineReactTables from '@/components/MantineReactTable';
 import { UserManagement } from '@/utils/UserManagement';
 import ProtectedRoute from '@/utils/ProtectedRoute';
+import { handleApiError } from '@/utils/handleApiError';
 
 
 
@@ -34,7 +35,7 @@ import ProtectedRoute from '@/utils/ProtectedRoute';
       setRecords(data); 
       setshowArchived(!show_archive);
     } catch (error) {
-      console.error(error);
+      handleApiError(error, router, t);
     }
   }
   const fetchData = async () => {
@@ -43,7 +44,7 @@ import ProtectedRoute from '@/utils/ProtectedRoute';
       setRecords(data.reverse());
       setLoading(false); 
     } catch (error) {
-      console.error(error);
+      handleApiError(error, router, t);
       setLoading(false);
     }
   };
@@ -94,9 +95,8 @@ const hideColumn={mfg_no:false,drawing_no:false,cutter_no:false}
             <UnstyledButton onClick={(e) => archieve(e)}>
             <Anchor  mt="sm" href="">{show_archive&& <IconArchiveFilled size={11} color="blue" />}{show_archive?t("Archived"):t("Back")}</Anchor></UnstyledButton>
           </Box>
-          {visible == 1 ?
-            <Link href='order/addorder/new'><Button>{t('Add New')}</Button></Link>
-            :null}
+          {visible == 1 &&
+            <Button component={Link} href="/order/addorder/new">{t('Add New')}</Button>}
         </Flex>
       </Flex>
   <MantineReactTables column={columns} data={records}  editInfo={editInfo} page={"order"}  columnVisibility={hideColumn} visible={visible} loading={loading}/>

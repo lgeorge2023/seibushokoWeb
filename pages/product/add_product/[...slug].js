@@ -23,6 +23,7 @@ import { UserManagement } from "@/utils/UserManagement";
 import { removeNulls } from "@/utils/removeNulls";
 import SubmitButtons from "@/components/SubmitButtons";
 import ProtectedRoute from "@/utils/ProtectedRoute";
+import { handleApiError } from "@/utils/handleApiError";
 
 const registerBy = UserManagement.getItem("id");
 const userId = parseInt(registerBy);
@@ -104,11 +105,7 @@ const AddProduct = () => {
    addanother?form.setFieldValue("register_by", userId)
    : router.push("/product");
     } catch (error) {
-      notifications.show({
-        title: t('Error'),
-        message: t(error.trim()),
-        color: "red",
-      });
+      handleApiError(error, router, t);
     }
     finally {
       setIsSubmitting(false); // Reset the submission state
@@ -136,7 +133,7 @@ const AddProduct = () => {
       const nulltostring = removeNulls(data);
       form.setValues(nulltostring);
     } catch (error) {
-      console.error(error);
+      handleApiError(error, router, t);
     }
   };
 useEffect(() => {
@@ -208,7 +205,7 @@ const breadcrumbs = [
                         onClick={() => setShowModal(true)}
                         className='selectbutton'
                       >
-                          {t('Select')}
+                        {t('Select')}
                       </UnstyledButton>
                     )}
                   </Box>
@@ -246,4 +243,4 @@ export const getStaticProps = async ({
     ])),
   },
 })
-export default ProtectedRoute(AddProduct) ;
+export default ProtectedRoute(AddProduct);
