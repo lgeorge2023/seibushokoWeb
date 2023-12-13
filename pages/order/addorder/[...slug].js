@@ -69,16 +69,16 @@ const AddOrder = () => {
     validate: {
       order_no: (value) => {
         if(!value){
-          return 'Order No is required'
+          return t('Order No is required')
         }
         if(!/^\d+$/.test(value)){
-          return 'Order No must contain only numbers'
+          return t('Order No must contain only numbers')
         }
       },
-      client: (value) => value === 0 && `Client is required`,
+      client: (value) => value === 0 && t('Client is required'),
       order_lines: {
-        mfg_no: (value) => value === 0 && `MFG No is required for order line`,
-        cutter_no: (value) => value === 0 && `Cutter No is required`,
+        mfg_no: (value) => value === 0 && t('MFG No is required for order line'),
+        cutter_no: (value) => value === 0 && t('Cutter No is required'),
       },
     },
   });

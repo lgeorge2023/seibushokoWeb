@@ -65,14 +65,14 @@ const AddProduct = () => {
     validate: {
       client: (value) => {
         if (value==0) {
-          return "Client is required";
+          return t("Client is required");
         }
         // Add additional validation logic for the product ID if needed
         return null;
       },
       product_id: (value) => {
         if (!value) {
-          return "Product ID is required";
+          return t("Product ID is required");
         }
         // Add additional validation logic for the product ID if needed
         return null;

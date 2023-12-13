@@ -44,10 +44,10 @@ const AddCutter = () => {
       type: 0,
     },
     validate: {
-      cutter_no: (value) => value.length < 1 && "Cutter is required",
+      cutter_no: (value) => value.length < 1 && t("Cutter No is required"),
       cutter_dwg_no: (value) =>
-        value.length < 1 && "Cutter drawing number is required",
-      type: (value) => value == 0 && "Type is required",
+        value.length < 1 && t("Cutter drawing number is required"),
+      type: (value) => value == 0 && t("Type is required"),
     },
   });
   const regrindType = async () => {

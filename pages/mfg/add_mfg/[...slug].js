@@ -61,11 +61,11 @@ function AddMFG() {
       client: 0
     },
     validate: {
-      cutter_no:(value) => value == 0 && 'Cutter no is required',
-      mfg_no: (value) => value.length < 1 && 'MFG No is required',
-      client: (value) => value == 0 && 'Client is required',
-      manager: (value) => value == 0 && 'Manager is required',
-      module: (value) => value.length == 0 && 'Module is required',
+      cutter_no:(value) => value == 0 && t('Cutter No is required'),
+      mfg_no: (value) => value.length < 1 && t('MFG no is required'),
+      client: (value) => value == 0 && t('Client is required'),
+      manager: (value) => value == 0 && t('Manager is required'),
+      module: (value) => value.length == 0 && t('Module is required'),
     },
   }); 
   const fetchData = async () => {

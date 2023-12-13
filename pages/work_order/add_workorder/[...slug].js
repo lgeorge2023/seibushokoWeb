@@ -111,12 +111,12 @@ const AddWorkOrder = () => {
       created_by: userId,
     },
     validate: {
-      order_no: (value) => value == 0 && "Order no is required",
-      cutter_no: (value) => value == 0 && "Cutter no is required",
-      mfg_no: (value) => value == 0 && "MFG no is required",
-      client_id: (value) => value == 0 && "Client is required",
-      work_order_no: (value) => value.length == 0 && "Workorder no is required",
-      workorder_status: (value) =>value.length == 0 && "Workorder status is required",
+      order_no: (value) => value == 0 && t("Order No is required"),
+      cutter_no: (value) => value == 0 && t("Cutter No is required"),
+      mfg_no: (value) => value == 0 && t("MFG no is required"),
+      client_id: (value) => value == 0 && t("Client is required"),
+      work_order_no: (value) => value.length == 0 && t("Workorder no is required"),
+      workorder_status: (value) => value.length == 0 && t("Workorder status is required"),
     },
   });
   const workOrderNo = async () => {

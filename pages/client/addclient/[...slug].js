@@ -38,11 +38,11 @@ function AddClient() {
       active: 1,
     },
     validate: {
-      segment_name: (value) => value.length < 1 && 'Name is required',
-      email: (value) => (!value ? 'Email is required' : /^\S+@\S+$/.test(value) ? null : 'Invalid email'),
+      segment_name: (value) => value.length < 1 && t('Client is required'),
+      email: (value) => (!value ? t('Email is required') : /^\S+@\S+$/.test(value) ? null : 'Invalid email'),
       contact_phone_no: (value) => {
         if (!value) {
-          return 'Phone Number is required';
+          return t('Phone Number is required');
         }
         return null;
       },

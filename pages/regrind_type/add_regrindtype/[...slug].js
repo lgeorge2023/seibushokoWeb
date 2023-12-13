@@ -43,7 +43,7 @@ function AddRegrindType() {
       obd_dia: '',
     },
     validate: {
-      type: (value) => value.length < 1 && 'Type is required',
+      type: (value) => value.length < 1 && t('Type is required'),
     },
   });
 

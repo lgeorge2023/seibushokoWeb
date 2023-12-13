@@ -29,9 +29,9 @@ export default function MessageCard({value}) {
         msg_client:'',
       },
       validate:{
-        msg_title:(value)=> value.length == 0 && 'Message Subject Required',
-        msg_client:(value)=>value == '' && 'To is Required',
-        msg_attach:(value) => value?.size > 2097152 && 'File size exceeds 2MB limit'
+        msg_title:(value)=> value.length == 0 && t('Message Subject Required'),
+        msg_client:(value)=>value == '' && t('To is Required'),
+        msg_attach:(value) => value?.size > 2097152 && t('File size exceeds 2MB limit')
     }
     })
     const fetchClientData = useCallback(async () => {

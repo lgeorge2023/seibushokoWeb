@@ -52,8 +52,8 @@ function AddMachines() {
       client: 0,
     },
     validate: {
-      machineid: (value) => value.length < 1 && "Machine id is required",
-      client: (value) => value == 0 && "Client is required",
+      machineid: (value) => value.length < 1 && t("Machine id is required"),
+      client: (value) => value == 0 && t("Client is required"),
     },
   });
   const fetchData = async () => {

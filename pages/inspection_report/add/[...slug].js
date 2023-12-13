@@ -111,8 +111,8 @@ const AddInspectionReport = () => {
         ...(isEditing &&{ delete_image: [] }),
        },
     validate: {
-      trial:(value)=> value==null && 'Trial is required',
-      work_order:(value)=>value==0 && 'Work Order is required',
+      trial:(value)=> value==null && t('Trial is required'),
+      work_order:(value)=>value==0 && t('Work Order is required'),
     },
   });
   const breadcrumbs = [

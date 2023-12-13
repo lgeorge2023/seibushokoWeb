@@ -38,25 +38,25 @@ const AddUser = () => {
       active:"",
     },
     validate: {
-      username:(value)=>value.length==0?"Username is required":null,
+      username:(value)=>value.length==0?t("Username is required"):null,
       first_name:(value)=>{
         if(value.length == 0){
-          return 'First Name is required'
+          return t('First Name is required')
         }
         if (!/^[a-zA-Z. ]+$/.test(value)) {
-          return 'Only alphabets are allowed';
+          return t('Only alphabets are allowed');
         }
       },
       last_name:(value)=>{
         if (value?!/^[a-zA-Z. ]+$/.test(value):null) {
-          return 'Only alphabets are allowed';
+          return t('Only alphabets are allowed');
         }
       },
-      password:(value)=>value.length==0 && !isEditing?"Password is required":null,
-      email: (value) => value?(/^\S+@\S+$/.test(value) ? null : "Invalid email"):"Email is required",
-      email_cc: (value) => value?(/^\S+@\S+$/.test(value) ? null : "Invalid email"):null,
-      roles:(value)=>value.length==0?"Please select a role":null,
-      client_id:(value)=>value==0?"Please select a client":null,
+      password:(value)=>value.length==0 && !isEditing?t("Password is required"):null,
+      email: (value) => value?(/^\S+@\S+$/.test(value) ? null : t("Invalid email")):t("Email is required"),
+      email_cc: (value) => value?(/^\S+@\S+$/.test(value) ? null : t("Invalid email")):null,
+      roles:(value)=>value.length==0?t("Please select a role"):null,
+      client_id:(value)=>value==0?t("Please select a client"):null,
     },
   });
 

@@ -17,11 +17,11 @@ const ImportOrder = () => {
     validate: {
       file: (value) => {
         if(value==null ||value.length === 0){
-          return "File is required"
+          return t("File is required")
         }
         const fileExtension = value.name.split('.').pop().toLowerCase();
         if (fileExtension !== 'csv') {
-          return "Invalid file format. Only csv files are allowed.";
+          return t("Invalid file format. Only csv files are allowed.");
         }
       },
     },
