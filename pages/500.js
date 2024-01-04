@@ -9,7 +9,7 @@ const Custom500 = () => {
 
   return (
     <div className="error-container">
-    <h1>No Response from Server</h1>
+    <h1 className='error-text'>No Response from Server</h1>
   </div>
   );
 };

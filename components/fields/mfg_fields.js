@@ -26,7 +26,6 @@ export const FieldsArray = () => {
       setManager(managerData);
       setUserdata(userData);
     } catch (error) {
-      console.error(error);
     }
   };
 
@@ -46,7 +45,7 @@ export const FieldsArray = () => {
       label: t('MFG.Cutter No'),
       withAsterisk: true,
       data: cutters,
-      disabled: true,
+      readOnly: true,
     },
     { name: "register_date", label:t('MFG.Registration Date'), type: "date" },
     {
@@ -60,7 +59,7 @@ export const FieldsArray = () => {
     { name: "process_no", label: t('MFG.Processing No') },
     { name: "supplier", label: t('MFG.Supplier') },
     { name: "module", label: t('MFG.Module'), type: "number", withAsterisk: true,precision:6 },
-    { name:"register_by",label: t('MFG.Registered By'), type: "select", data:userData,disabled:true,},
+    { name:"register_by",label: t('MFG.Registered By'), type: "select", data:userData,readOnly:true,},
     { name: "drawing_no", label: t('MFG.Drawing No') },
     { name: "location", label: t('MFG.Location') },
     { name: "status", label: t('MFG.Status'), type: "select", data: status },

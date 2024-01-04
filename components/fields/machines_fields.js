@@ -18,7 +18,6 @@ export const  FieldsArray= ()=>{
         setClient(clientData);
         setUserdata(userData);
       } catch (error) {
-        console.error(error);
       }}
     useEffect(() => {
       fetchAllData();
@@ -27,7 +26,7 @@ export const  FieldsArray= ()=>{
     { label: t('Machine.Machine Id'), placeholder: '', name: 'machineid' ,withAsterisk:true },
     { label: t('Machine.Registration Date'), placeholder: 'Pick a date', name: 'registrationdate', type: 'date',withAsterisk:true },
     { label: t('Machine.Description'), placeholder: '', name: 'description' },
-    { name:"registeredby",label: t('Machine.Registered By'),type: "select", data:userData,disabled:true,},
+    { name:"registeredby",label: t('Machine.Registered By'),type: "select", data:userData,readOnly:true,},
     { label: t('Machine.Machine Line'), placeholder: '', name: 'machineline',type:"number" },
     {
         name: 'client',

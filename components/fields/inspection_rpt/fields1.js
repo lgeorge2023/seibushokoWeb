@@ -30,7 +30,6 @@ export const FieldsArray = () => {
       setWorkOrder(workOrderData);
       setMFGData(mfgData)
     } catch (error) {
-      console.error(error);
     }
   };
 
@@ -43,7 +42,7 @@ useEffect(() => {
       name: "work_order",
       label: t('inspection.Work Order'),
       withAsterisk: true,
-      disabled: true,
+      readOnly: true,
       type:"select",
       data:workOrder
     },
@@ -55,7 +54,7 @@ useEffect(() => {
       type:"select",
       data:cutters
     },
-    { name: "order_no", label: t('inspection.Order No'), withAsterisk: true ,type:"select",data:order,disabled:true},
+    { name: "order_no", label: t('inspection.Order No'), withAsterisk: true ,type:"select",data:order,readOnly:true},
     { name: "serial_no", label: t('inspection.Serial No'),data:mfgData,type:"select" },
     { name: "order_date", label: t('inspection.Order Date'), type: "date" },
     { name: "gear_dwg_no", label: t('inspection.Gear Dwg No') },

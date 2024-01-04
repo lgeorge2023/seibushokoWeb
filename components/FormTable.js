@@ -51,7 +51,7 @@ const FormTable = (props) => {
                      {...form.getInputProps(name)}
                      data={data}
                      placeholder={placeholder}
-                     disabled={disabled}
+                     readOnly={disabled}
                      />
                     </td> 
                   );

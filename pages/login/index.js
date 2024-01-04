@@ -112,6 +112,7 @@ const Login = () => {
   ];
   return (
     <Container size={420} my={40}>
+       <form onSubmit={handleSubmit}>
       <Title
         align="center"
         sx={(theme) => ({
@@ -138,6 +139,7 @@ const Login = () => {
           value={formData.username}
           onChange={(e) => setFormData((prevData) => ({ ...prevData, username: e.target.value }))}
           onKeyPress={handleKeyPress}
+          autoComplete="current-password"
         />
         <PasswordInput
           label={t('Password')}
@@ -147,6 +149,7 @@ const Login = () => {
           value={formData.password}
           onChange={(e) => setFormData((prevData) => ({ ...prevData, password: e.target.value }))}
           onKeyPress={handleKeyPress}
+          autoComplete="current-password"
         />
         <Group position="apart" mt="lg">
           <Checkbox
@@ -168,10 +171,11 @@ const Login = () => {
             defaultValue={currentLocale}
             onChange={(value) => onToggleLanguageClick(value)} />
         </Group>
-        <Button fullWidth mt="xl" loading={isSubmitting} onClick={handleSubmit}>
+        <Button fullWidth mt="xl" loading={isSubmitting} type="submit">
           {t("Sign in")}
         </Button>
       </Paper>
+      </form>
     </Container>
   );
 };

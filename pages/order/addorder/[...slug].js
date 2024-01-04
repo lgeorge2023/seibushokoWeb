@@ -83,10 +83,11 @@ const AddOrder = () => {
       },
     },
   });
-  const handleChange =  useCallback(async (value, index) => {
+  const handleChange =  useCallback(async (value, index,client) => {
     form.setFieldValue(`order_lines.${index}.cutter_no`, value);
     form.setFieldValue(`order_lines.${index}.mfg_no`, 0);
-    let client_id=form.values.client;
+    let client_id=client||form.values.client;
+    if(value!=0){
     const data = await get(`/mfg/select/${client_id}/${value}`);
     setMFGData((prevMfgData) => {
       const updatedMfgData = [...prevMfgData];
@@ -97,6 +98,7 @@ const AddOrder = () => {
       }));
       return updatedMfgData;
     });
+  }
   }, [form]);
   const fetchData  =async () => {
     try {
@@ -219,6 +221,16 @@ const AddOrder = () => {
     }
   };
  
+  const clientChange = (val) => {
+    if (!form || typeof handleChange !== 'function') {
+      return null;
+    } 
+    form.setFieldValue('client', val);
+    const orderLines = form.values.order_lines;
+    orderLines.forEach(({ cutter_no }, index) => {
+      handleChange(cutter_no, index, val);
+    });
+  };
   
     const breadcrumbs = [
       { label: t('order'), link: "/order" },
@@ -249,7 +261,8 @@ const AddOrder = () => {
                   label={t('content.client')}
                   placeholder="Please Select"
                   data={client}
-                  {...form.getInputProps(`client`)}
+                  value={form.values['client']}
+                  onChange={clientChange}
                   withAsterisk
                 />
               </Grid.Col>
@@ -257,7 +270,7 @@ const AddOrder = () => {
                 <Select
                   label={t('content.registedBy')}
                   data={managerData}
-                  disabled
+                  readOnly
                   {...form.getInputProps(`placed_by`)}
                 />
               </Grid.Col>
@@ -303,7 +316,7 @@ const AddOrder = () => {
                       onClick={() => {setShowModal(true)
                         setIndex(index)
                       }}
-                      disabled
+                      readOnly
               />
                     {/* {cutter} */}
                       <UnstyledButton
