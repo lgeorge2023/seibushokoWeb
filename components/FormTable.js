@@ -5,7 +5,7 @@ import { parseISO } from 'date-fns';
 import ImageFile from './ImageFile';
 import { IconCalendar } from '@tabler/icons-react';
 const FormTable = (props) => {
-    const {column,data,header,form}=props;
+    const {column,data,header,form,style}=props;
     const handleDateChange = (e,name) => {
       const formattedDate = e ? e.toISOString().split('T')[0] : '';
       form.setFieldValue(name, formattedDate);
@@ -14,7 +14,7 @@ const FormTable = (props) => {
       const formattedDate = selectedDate ? selectedDate.toISOString().split('T')[0] : '';
       form.setFieldValue('regrind_work_order.regrind_date', formattedDate);
     }; 
-    return (<Box>
+    return (<Box style={style}>
       { header && <Title order={5}>{header}</Title>}
       <Table withColumnBorders withBorder style={{marginTop:"30px"}}>
         <thead>

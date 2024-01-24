@@ -1,9 +1,13 @@
-import { Box, Card, Space, Title, createStyles, rem, Flex} from '@mantine/core'
+import { Box, Card, Title, createStyles, Flex} from '@mantine/core'
 import { StatusGroup } from './StatusGroup'
 import Link from 'next/link';
 import { useTranslation } from "next-i18next";
-import BasicTable from '../BasicTable';
 import { WelcomeCard } from './WelcomeCard';
+import { MonthPickerInput } from '@mantine/dates';
+import { useEffect, useState } from 'react';
+import { format } from 'date-fns';
+import MantineReactTables from '../MantineReactTable';
+import { get } from '@/pages/api/apiUtils';
 
 const useStyle = createStyles(theme => ({
 	section: {
@@ -29,8 +33,33 @@ const useStyle = createStyles(theme => ({
 export default function ClientDashboard({records,tools,username,orderRecord}) {
 	const { classes } = useStyle();
     const { t } = useTranslation("common");
+    const [workdate,setWorkDate] = useState( new Date());
+    const [orderdate,setOrderDate] = useState( new Date());
     const tableData = records.slice(0,7)
     const orderData = orderRecord.slice(0,7)
+    const [workrecords,setWorkRecords] = useState([]);
+    const [orderecords,setOrderRecords]=useState([]);
+    useEffect(() => {
+      dateWiseWorkorder(workdate);
+      dateWiseOrder(orderdate)
+    }, [])
+
+    const dateWiseWorkorder=(e)=>{
+     let date = format(e,'yyyy-MM-dd')
+      try {
+        const data = get(`/workorder/all/${date}`);
+        data.then((data)=>  setWorkRecords(data));;
+      } catch (error) {
+      }
+    }
+    const dateWiseOrder=(e)=>{
+        let date = format(e,'yyyy-MM-dd')
+         try {
+           const data = get(`/workorder/all/${date}`);
+           data.then((data)=>  setOrderRecords(data));;
+         } catch (error) {
+         }
+       }
 
  const  columns=[
     { header: t('workOrder.workOrderNo'), accessorKey: "work_order_no", size:100 },
@@ -56,20 +85,60 @@ const  orderColumns=[
 		<Card radius="md" shadow='xl' mt='lg'>
 			<Card.Section>
                 <Flex justify='space-between'>
-				<Title className={classes.section} order={5}>Work order</Title>
-                <Link href='/work_order'className={classes.link}> {t('view All')}</Link>
+                    <Flex>
+				        <Title className={classes.section} order={5}>Work order</Title>
+                        <MonthPickerInput
+                            size='xs' 
+                            mt="md"
+                            mr='md'  
+                            placeholder="Pick date"
+                            value={workdate}
+                            maxDate={new Date}
+                            onChange={(e)=>
+                                {
+                                setWorkDate(e);
+                                dateWiseWorkorder(e)
+                        }
+                        }
+                    />
+                    </Flex>
+                  <Flex>
+                    <Box>  
+                      <Link href='/work_order'className={classes.link}> {t('view All')}</Link>
+                    </Box>
+                  </Flex>
                 </Flex>
             </Card.Section>
-            <BasicTable columns={columns} data={tableData} search={false} pagination={false}/>
+            <MantineReactTables column={columns} data={workrecords} search={false} pagination={false} noaction={true}/>
 		</Card>
 		<Card radius="md" shadow='xl' mt='lg'>
 			<Card.Section>
             <Flex justify='space-between'>
-				<Title className={classes.section} order={5}>Order</Title>
-                <Link href='/order'className={classes.link}> {t('view All')}</Link>
+                <Flex>
+                    <Title className={classes.section} order={5}>Order</Title>
+                    <MonthPickerInput
+                        size='xs'
+                        mt="md"
+                        mr='md'    
+                        placeholder="Pick date"
+                        value={orderdate}
+                        maxDate={new Date}
+                        onChange={(e)=>
+                        {
+                            setOrderDate(e);
+                            dateWiseOrder(e)
+                    }
+                    }
+                />
                 </Flex>
+              <Flex>
+                <Box>  
+                  <Link href='/order'className={classes.link}> {t('view All')}</Link>
+                </Box>  
+              </Flex>
+            </Flex>
 			</Card.Section>
-            <BasicTable columns={orderColumns} data={orderData} search={false} pagination={false}/>
+            <MantineReactTables column={orderColumns} data={orderecords} search={false} pagination={false} noaction={true}/>
 		</Card>
     </Box>
   )

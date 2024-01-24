@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import {  Box, Button,  Flex, Title, Loader } from '@mantine/core';
+import {  Box, Button,  Flex, Title } from '@mantine/core';
 import Layout from '@/components/layout/Layout';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next'
@@ -76,6 +76,18 @@ function WorkOrderList() {
       { header: t('client'), accessorKey:"client_name", size:100 },
  
   ]
+ const rowStyle =(row) => ({
+    sx: {
+      "&>td": {
+        background:
+          row.row.original.regrind_from == "CUSTOMERRETURN"
+            ? "#facbcb"
+            : row.row.original.urgency == "LIMITEDEXPRESS"
+            ? "#F7DC6F"
+            : undefined,
+      },
+    },
+  })
   return (
     <Layout  breadcrumbs={breadcrumbs}>
     <Box>
@@ -85,7 +97,7 @@ function WorkOrderList() {
   <Button component={Link} href='/work_order/add_workorder/new'>{t('Add New')}</Button>
   }
   </Flex>
-  <MantineReactTables column={columns} data={records}  editInfo={editInfo} columnVisibility={hideColumn} page={"workorder"} visible={visible} loading={loading}/>
+  <MantineReactTables column={columns} data={records}  editInfo={editInfo} columnVisibility={hideColumn} page={"workorder"} visible={visible} loading={loading} TableRowStyle= {rowStyle}/>
 </Box>
      </Layout>
   );

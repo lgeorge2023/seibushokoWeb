@@ -1,5 +1,5 @@
 import Layout from "@/components/layout/Layout";
-import { Title,  } from "@mantine/core";
+import { Flex, Title } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { getFormattedDate } from "@/utils/dateUtils";
@@ -116,26 +116,29 @@ const AddWorkOrder = () => {
       cutter_no: (value) => value == 0 && t("Cutter No is required"),
       mfg_no: (value) => value == 0 && t("MFG no is required"),
       client_id: (value) => value == 0 && t("Client is required"),
-      work_order_no: (value) => value.length == 0 && t("Workorder no is required"),
-      workorder_status: (value) => value.length == 0 && t("Workorder status is required"),
+      work_order_no: (value) =>
+        value.length == 0 && t("Workorder no is required"),
+      workorder_status: (value) =>
+        value.length == 0 && t("Workorder status is required"),
     },
   });
   const workOrderNo = async () => {
     let data = await get(`workorder/new`);
     let Workorder = data?.new_workorder_no.split("-");
     form.setValues({
-      "work_order_no": data?.new_workorder_no,
-      "workorder_no": Workorder[0],
-      "workorder_mcode": Workorder[1]
-    });    setWorkorderValue(data?.new_workorder_no);
+      work_order_no: data?.new_workorder_no,
+      workorder_no: Workorder[0],
+      workorder_mcode: Workorder[1],
+    });
+    setWorkorderValue(data?.new_workorder_no);
   };
   const fetchData = async () => {
     try {
       const data = await get(`workorder/${id}`);
       const nulltostring = removeNulls(data);
-      const workorderno=data?.workorder_no+"-"+data?.workorder_mcode;
+      const workorderno = data?.workorder_no + "-" + data?.workorder_mcode;
       form.setValues(nulltostring);
-      form.setValues({ "work_order_no": workorderno });
+      form.setValues({ work_order_no: workorderno });
     } catch (error) {
       handleApiError(error, router, t);
     }
@@ -157,8 +160,7 @@ const AddWorkOrder = () => {
           regrind_type: data.regrind_type,
         });
       },
-      (error) => {
-      }
+      (error) => {}
     );
     form.setValues({});
   };
@@ -183,7 +185,7 @@ const AddWorkOrder = () => {
     if (order_id && slug[0] != "new") autofilWorkOrder(slug[0]);
   }, []);
   const createOrUpdateData = async (addanother, values) => {
-    const newdata = {...values};
+    const newdata = { ...values };
     let data = stringtoNull(newdata);
     try {
       const endpoint = isEditing ? `/workorder/${id}` : "/workorder/all";
@@ -197,12 +199,12 @@ const AddWorkOrder = () => {
         color: "green",
       });
       form.reset();
-      addanother ? form.setValues({ work_order_no: workorder, created_by:userId}) : router.push("/work_order");
-   
+      addanother
+        ? form.setValues({ work_order_no: workorder, created_by: userId })
+        : router.push("/work_order");
     } catch (error) {
       handleApiError(error, router, t);
-    }
-    finally {
+    } finally {
       setIsSubmitting(false); // Reset the submission state
     }
   };
@@ -223,7 +225,14 @@ const AddWorkOrder = () => {
   };
   const breadcrumbs = [
     { label: t("Work_Order_Regrind"), link: "/work_order" },
-    { label: isEditing ? visible == 1? t("edit_workorder"):t("View Work order") : t("add_workorder"), link: "" },
+    {
+      label: isEditing
+        ? visible == 1
+          ? t("edit_workorder")
+          : t("View Work order")
+        : t("add_workorder"),
+      link: "",
+    },
   ];
   return (
     <Layout breadcrumbs={breadcrumbs}>
@@ -235,11 +244,18 @@ const AddWorkOrder = () => {
         <Title order={3}>Work Order</Title>
       )}
       <FormPart1 form={form} isEditing={isEditing} />
-      <FormPart2 form={form} />
-      <FormPart3 form={form} />
+      <Flex style={{gap:"20px"}}>
+        <FormPart2 form={form} />
+        <FormPart3 form={form} />
+      </Flex>
       <FormPart4 form={form} />
-      {visible == 1 &&
-          <SubmitButtons isEditing={isEditing} onSubmit={onSubmit} isSubmitting={isSubmitting}/>}
+      {visible == 1 && (
+        <SubmitButtons
+          isEditing={isEditing}
+          onSubmit={onSubmit}
+          isSubmitting={isSubmitting}
+        />
+      )}
     </Layout>
   );
 };

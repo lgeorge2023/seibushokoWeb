@@ -44,14 +44,6 @@ const AddUser = () => {
         if(value.length == 0){
           return t('First Name is required')
         }
-        if (!/^[a-zA-Z. ]+$/.test(value)) {
-          return t('Only alphabets are allowed');
-        }
-      },
-      last_name:(value)=>{
-        if (value?!/^[a-zA-Z. ]+$/.test(value):null) {
-          return t('Only alphabets are allowed');
-        }
       },
       password:(value)=>value.length==0 && !isEditing?t("Password is required"):null,
       email: (value) => value?(/^\S+@\S+$/.test(value) ? null : t("Invalid email")):t("Email is required"),

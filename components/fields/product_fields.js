@@ -26,7 +26,7 @@ export const FieldsArray = () => {
 }, [])
   const measuretypes = [
     { value: "OBD", label: "OBD" },
-    { value: "tooth_thickness", label: "Tooth Thickness" }
+    { value:"TOOTH_THICKNESS", label: "Tooth Thickness" }
   ];
 
   const twistData = [

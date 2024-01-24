@@ -78,6 +78,13 @@ function AddMFG() {
       handleApiError(error, router, t);
     }
   };
+  const fetchClientDatabyManager=async(id)=>{
+    try {
+      const data = await get(`/staff/belong/${id}`);
+      form.setFieldValue("client",data.client_id)
+    } catch (error) {
+    }
+  }
   useEffect(() => {
     if (isEditing && id) {
       fetchData();
@@ -126,8 +133,6 @@ function AddMFG() {
       setIsSubmitting(false);
     }
   };
-
-
   return (
     <Layout breadcrumbs={breadcrumbs}>
       <Box>
@@ -137,12 +142,29 @@ function AddMFG() {
           <div className="container">
           {fields.map((field) => {
               const {  name, type, ...props } = field;
-
+              if (name === "manager") {
+                return (
+                  <Select
+                    key={name}
+                    placeholder="Pick one"
+                    searchable
+                    nothingFound="Nothing found..."
+                    value={form.values[field.name]}
+                    onChange={(value) => {
+                      form.setFieldValue(field.name, value);
+                      fetchClientDatabyManager(value)
+                    }}
+                    {...props}
+                  />
+                );
+              }
               if (type === "select") {
                 return (
                   <Select
                     key={name}
                     placeholder="Pick one"
+                    searchable
+                    nothingFound="Nothing found..."
                     value={form.values[field.name]}
                     onChange={(value) => {
                       form.setFieldValue(field.name, value);

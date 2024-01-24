@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Flex, Grid, Group, Paper, Text, Textarea } from "@mantine/core";
+import { Box, Button, Divider, FileInput, Flex, Grid, Group, Paper, Text, Textarea } from "@mantine/core";
 import {useStyles} from '../../../styles/newmsg_style'
 import { get, put } from "@/pages/api/apiUtils";
 import { useCallback, useEffect, useState } from "react";
@@ -6,7 +6,7 @@ import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { IconFile } from "@tabler/icons-react";
+import { IconFile, IconUpload } from "@tabler/icons-react";
 import { UserManagement } from "@/utils/UserManagement";
 
 const id= UserManagement.getItem("id");
@@ -19,11 +19,13 @@ export default function ViewMessageCard({value}) {
     const [staffId, setStaffId] = useState(false)
     const { t } = useTranslation("common");
     const [subject, setSubject] = useState('');
+    const [connecting, setConnecting] = useState(false)
     let formattedDate = new Date(date).toLocaleDateString();
 
     const form = useForm({
       initialValues:{
-        msg_content:""
+        msg_content:"",
+        msg_attach: '',
       },
       validate:{
         msg_content:(value)=> value.length == 0 && 'Message Content Required'
@@ -39,7 +41,6 @@ export default function ViewMessageCard({value}) {
         setFromEmail(from_mail);
         setSubject(msg_title);
       }catch(error){
-        console.error(error);
       }
     }, [value]);
     useEffect(()=>{
@@ -48,9 +49,11 @@ export default function ViewMessageCard({value}) {
     },[fetchMessage])
 
     const updateMessage = async()=>{
+      setConnecting(true)
       try{
         let formData = new FormData();
         formData.append('msg_content',form.values.msg_content)
+        formData.append('msg_attach',form.values.msg_attach)
         const response = await put(`/message/${value}`,formData)
         notifications.show({
           title:t("Success"),
@@ -58,6 +61,7 @@ export default function ViewMessageCard({value}) {
           color:'green'
         })
         form.reset();
+        setConnecting(false)
         fetchMessage();
       }catch(error){
         notifications.show({
@@ -65,6 +69,7 @@ export default function ViewMessageCard({value}) {
           message:t(error),
           color:'red'
         })
+        setConnecting(false)
       }
     }
 
@@ -72,14 +77,8 @@ export default function ViewMessageCard({value}) {
       event.preventDefault()
       if(!form.validate().hasErrors){
         updateMessage();
-      }
-      
+      }      
     }
-
-    const downloadAttachment = (url)=>{
-      window.location.href = url;
-    }
-
   return (
     <Box >
     <form className={classes.form} >
@@ -105,7 +104,9 @@ export default function ViewMessageCard({value}) {
                 {message.msg_attach == null ? 
                 null:
                 <Group p='xs' bg='white' position="left">
-                <IconFile cursor='pointer' onClick={()=>downloadAttachment(message.msg_attach)}/>
+                  <a href={message.msg_attach} target="_blank">
+                  <IconFile cursor='pointer'/>
+                  </a>
                 </Group>}
             </Paper>:
             
@@ -119,7 +120,9 @@ export default function ViewMessageCard({value}) {
               {message.msg_attach == null ? 
                 null:
                 <Group p='xs' bg='white' position="left">
-                <IconFile/>
+                  <a href={message.msg_attach} target="_blank">
+                    <IconFile cursor='pointer'/>
+                  </a>
                 </Group>}
             </Paper>}
           </Box>
@@ -130,6 +133,15 @@ export default function ViewMessageCard({value}) {
 
     <Grid mt='xs' ml='xl' justify='center' align='center'>
             <Grid.Col span={10}>
+            <FileInput 
+                mb="lg"
+                name="msg_attach" 
+                clearable={true} icon={<IconUpload size="0.4cm"/>} 
+                mt="md" 
+                label='Attachment'
+                accept="image/png,image/jpeg,image/jpg"
+                placeholder="Upload File" 
+                {...form.getInputProps('msg_attach')}/>
                 <Textarea  
                 placeholder="Type your message here" 
                 name="msg_content"
@@ -140,6 +152,7 @@ export default function ViewMessageCard({value}) {
                 <Button 
                 color="green"
                 type="submit"
+                loading={connecting}
                 onClick={submitHandler}
                 >
                 {t('Send')}

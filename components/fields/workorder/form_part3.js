@@ -55,6 +55,6 @@ export default function FormPart3(props) {
 ],  
   ];
   return (
-    <FormTable  header={null} column={column} data={data} form={form}/>
+    <FormTable  header={null} column={column} data={data} form={form} style={{display:"flex"}}/>
   );
 }

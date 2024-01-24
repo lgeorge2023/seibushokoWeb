@@ -28,7 +28,9 @@ const MantineReactTables = (props) => {
     columnVisibility,
     page,
     visible,
-    loading
+    loading,
+    noaction,
+    TableRowStyle
   } = props;
   const { colorScheme } = useMantineTheme();
   const [columnvisibility, setColumnVisibility] = useState(columnVisibility);
@@ -68,18 +70,7 @@ const MantineReactTables = (props) => {
       withBorder: colorScheme === "light",
     },
     enableRowVirtualization: false,
-    mantineTableBodyRowProps: (row) => ({
-      sx: {
-        "&>td": {
-          background:
-            row.row.original.regrind_from == "CUSTOMERRETURN"
-              ? "#facbcb"
-              : row.row.original.urgency == "LIMITEDEXPRESS"
-              ? "#F7DC6F"
-              : undefined,
-        },
-      },
-    }),
+    mantineTableBodyRowProps:TableRowStyle,
     initialState: {
       showGlobalFilter: true,
       density: "xs",
@@ -87,7 +78,7 @@ const MantineReactTables = (props) => {
     },
     enableDensityToggle: false,
     enableFullScreenToggle: false,
-    enableRowActions: true,
+    enableRowActions: noaction?false:true,
     renderRowActions: ({ row }) => (
       <Box sx={{ display: "flex", flexWrap: "nowrap", gap: "8px" }}>
         <Tooltip label={visible == 1?t('Edit'):t('View')}>
@@ -100,7 +91,6 @@ const MantineReactTables = (props) => {
           </ActionIcon>
         </Tooltip>
         {(page == "workorder"|| page=="inspection") && (
-          visible == 1 &&
           <Tooltip label={t("Print")}>
             <ActionIcon>
               <IconPrinter
@@ -127,7 +117,7 @@ const MantineReactTables = (props) => {
         {page == "workorder" && (
           <Box>
             {row.original.inspection_report === 0 ?(
-              (row.original.workorder_status === 'FINISHED'?
+              (row.original.workorder_status === 'FINISHED' || row.original.workorder_status === 'DELIVERED' || row.original.workorder_status === 'INSPECTIONRPT' ?
               <Tooltip label={t("add__inspectionreport")}>
                 <Link href={`/inspection_report/add/${row.original.id}`}>
                   <IconFileAnalytics

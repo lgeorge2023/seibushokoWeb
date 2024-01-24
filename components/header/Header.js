@@ -3,7 +3,6 @@ import {
   Group,
   UnstyledButton,
   Box,
-  Burger,
   rem,
   Menu,
   Text,
@@ -115,7 +114,6 @@ export const HeaderMenu = ({ breadcrumbs }) => {
           </Menu.Dropdown>
         </Box>  
         </Menu>
-          <Burger opened={drawerOpened} onClick={toggleDrawer} className={classes.hiddenDesktop} />
         </Group>
       </Header>
     </Box>

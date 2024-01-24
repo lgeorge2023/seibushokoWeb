@@ -26,7 +26,6 @@ const FormPart2 = (props) => {
       ]);
       setregrindData(regindData);
     } catch (error) {
-      console.error(error);
     }
   };
   useEffect(() => {
@@ -69,7 +68,7 @@ const FormPart2 = (props) => {
     ],
     [
       { type:"text", label: t('inspection.Shaving Method') },
-      { type: "select",label: "",name:"ts_shaving_method",data:regrind },
+      { type: "select",label: "",name:"ts_shaving_method",data:regrind,disabled:true },
       { },
       { },
       {  rowspan: 2 },

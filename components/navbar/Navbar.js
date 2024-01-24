@@ -1,6 +1,23 @@
 import { useState, useEffect } from "react";
+import { UserManagement } from "@/utils/UserManagement";
+import {
+    IconFileAnalytics,
+    IconTool,
+    IconNorthStar,
+    IconFridge,
+    IconSquareLetterC,
+    IconUser,
+    IconPlayerPlay,
+    IconCheckbox,
+    IconFolder,
+    IconDashboard,
+    IconInbox,
+    IconSettings,
+    IconFileImport,
+  } from "@tabler/icons-react";
 import {
   Avatar,
+  Badge,
   Box,
   Burger,
   Flex,
@@ -11,32 +28,69 @@ import {
   ThemeIcon,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import navlinks from "../fields/navlinks";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
-import { UserManagement } from "@/utils/UserManagement";
 import { useNavigation } from "@/context/NavigationContext";
+import Link from "next/link";
+import { get } from "@/pages/api/apiUtils";
 
 export function NavbarNav() {
   const { t } = useTranslation("common");
   const [expanded, setExpanded] = useState(true);
-  const [visible, setVisible] = useState(false);
+  const [read,setunread]=useState(0);
   const [clientName, setClientName] = useState("");
   const { navLinkStates, setNavLinkStates } = useNavigation();
-  const mockdata=navlinks();
   const profile_data = JSON.parse(
     UserManagement.getItem("profile_data") || "{}"
   );
   useEffect(() => {
-    let visible = profile_data?.client === 1;
-    setVisible(visible);
+const response=get('/message/unread')
+console.log('response', response)
+response.then((res)=>setunread(res.unread_msgs))
+
+  }, [])
+  
+  const mockdata = [
+    { label: "order", icon: IconCheckbox, link: "/order" },
+    {
+      label: "Work_Order_Regrind",
+      link: "/work_order",
+      icon: IconFileAnalytics,
+    },
+    {
+      label: "Inspection_Report",
+      icon: IconFolder,
+      link: "/inspection_report",
+    },
+    {
+      label: "Registration",
+      icon: IconPlayerPlay,
+      visible: profile_data?.client == 1 ,
+      link:"null",
+      links: [
+        { label: "Cutter", icon: IconTool, link: "/cutter" },
+        { label: "MFG", icon: IconNorthStar, link: "/mfg" },
+        { label: "Regrind Type", icon: IconSettings, link: "/regrind_type" },
+        { label: "Product", icon: IconSettings, link: "/product" },
+        { label: "Machines", icon: IconFridge, link: "/machines" },
+        { label: "Client", icon: IconSquareLetterC, link: "/client" },
+        { label: "User Management", icon: IconUser, link: "/user" },
+      ],
+    },
+    {label: "Import/Export",icon: IconFileImport, visible: profile_data?.client == 1, link:"/importExport"},
+    {
+      label: "Dashboard",
+      icon: IconDashboard,
+      link: "/client_dashboard",
+    },
+    { label: "Inbox", icon: IconInbox, link: "/inbox",  rightSection:<Badge>{read}</Badge> },
+  ];
+  useEffect(() => {
     const client = profile_data.client_name;
     setClientName(client);
   }, []);
   const router = useRouter();
-  const [opened, { toggle }] = useDisclosure(false);
-  // Function to toggle the state of a top-level link
- 
+  const [opened, { toggle }] = useDisclosure(true); 
   const [translatedMockdata, setTranslatedMockdata] = useState(mockdata);
   const handleToggleSidebar = () => {
     setExpanded((prevExpanded) => !prevExpanded);
@@ -45,7 +99,7 @@ export function NavbarNav() {
 
   useEffect(() => {
     setMockdataWithTranslatedLabels();
-  }, [t]);
+  }, [t,read]);
 
   const setMockdataWithTranslatedLabels = () => {
     const translateItem = (item) => {
@@ -75,21 +129,19 @@ export function NavbarNav() {
     <NavLink
       opened={navLinkStates[item.label]}
       onChange={(e) => {
-        handleToggleNavLink(item.label); // Toggle the specific NavLink's state when clicked
+        handleToggleNavLink(item.label); 
       }}
       key={item.label}
       variant="filled"
       label={expanded && item.label}
       active={item.link === router.pathname}
-      onClick={(e) => {
-        e.preventDefault();
-        item.link && router.push(item.link);
-      }}
+      component={Link} href={item.link }
       icon={
         <ThemeIcon variant="light" size={30}>
           <item.icon size="1rem" stroke={1.5} />
         </ThemeIcon>
       }
+      rightSection={expanded && read!==0 &&item.rightSection}
     >
       {item.links &&
         item.links.map((subItem) => (
@@ -103,11 +155,8 @@ export function NavbarNav() {
                 <subItem.icon size=".9rem" />
               </ThemeIcon>
             }
-            onClick={(e) => {
-              e.preventDefault();
-              subItem.link && router.push(subItem.link);
-            }}
-          />
+            component={Link} href={subItem.link} 
+  />
         ))}
     </NavLink>
   );

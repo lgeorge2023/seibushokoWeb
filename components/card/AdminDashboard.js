@@ -3,8 +3,13 @@ import Link from "next/link";
 import { StatusGroup } from "./StatusGroup";
 import { WelcomeCard } from "./WelcomeCard";
 import { useTranslation } from "next-i18next";
-import BasicTable from "../BasicTable";
 import formatdate from "@/utils/formatdate";
+import {  MonthPickerInput } from "@mantine/dates";
+import { useEffect, useState } from "react";
+import { parseISO } from "date-fns";
+import { format } from "date-fns";
+import { get } from "@/pages/api/apiUtils";
+import MantineReactTables from "../MantineReactTable";
 
 
 const useStyle = createStyles(theme => ({
@@ -32,7 +37,21 @@ const useStyle = createStyles(theme => ({
 export default function AdminDashboard({records,tools,username}) {
     const { classes } = useStyle();
     const { t } = useTranslation("common");
-    const tableData = records.slice(0,6)
+    const [date,setDate] = useState( new Date());
+    const tableData = records.slice(0,6);
+    const [workrecords,setWorkRecords] = useState([]);
+    useEffect(() => {
+      dateWiseWorkorder(date)
+    }, [])
+
+    const dateWiseWorkorder=(e)=>{
+     let date = format(e,'yyyy-MM-dd')
+      try {
+        const data = get(`/workorder/all/${date}`);
+        data.then((data)=>  setWorkRecords(data));;
+      } catch (error) {
+      }
+    }
  const columns=[
       { header: t('workOrder.workOrderNo'), accessorKey: "work_order_no", size:100  },
       { header: t('Client Name'), accessorKey: "client_name", size:80 },
@@ -51,11 +70,31 @@ export default function AdminDashboard({records,tools,username}) {
         <Card radius="md" shadow='xl' mt='lg'>
 			<Card.Section >
                 <Flex justify='space-between'>
-                <Title className={classes.section} order={5}>{t('Workorder')}</Title>
-                    <Link href='/work_order'className={classes.link}> {t('view All')}</Link>
+                  <Flex>
+                    <Title className={classes.section} order={5}>{t('Workorder')}</Title>
+                    <MonthPickerInput
+                        size="xs"  
+                        mt="md"
+                        mr='md' 
+                        placeholder="Pick date"
+                        maxDate={new Date}
+                        value={date}
+                        onChange={(e)=>
+                          {
+                            setDate(e);
+                            dateWiseWorkorder(e)
+                      }
+                      }
+                     />
+                    </Flex>
+                  <Flex>
+                    <Box> 
+                      <Link  href='/work_order'className={classes.link}> {t('view All')}</Link>
+                    </Box>
+                     </Flex>
                 </Flex>
 			</Card.Section>
-      <BasicTable columns={columns} data={tableData} search={false} pagination={false}/>
+      <MantineReactTables column={columns} data={workrecords} search={false} pagination={false} noaction={true}/>
 		</Card>
     </Box>
   )

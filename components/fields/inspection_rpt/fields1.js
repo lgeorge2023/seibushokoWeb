@@ -49,16 +49,16 @@ useEffect(() => {
     {
       name: "cutter_no",
       label: t('inspection.Tool No'),
-      type: "text",
       withAsterisk: true,
       type:"select",
-      data:cutters
+      data:cutters,
+      readOnly:true
     },
     { name: "order_no", label: t('inspection.Order No'), withAsterisk: true ,type:"select",data:order,readOnly:true},
-    { name: "serial_no", label: t('inspection.Serial No'),data:mfgData,type:"select" },
+    { name: "serial_no", label: t('inspection.Serial No'),data:mfgData,type:"select",readOnly:true },
     { name: "order_date", label: t('inspection.Order Date'), type: "date" },
-    { name: "gear_dwg_no", label: t('inspection.Gear Dwg No') },
-    { name: "client", label: t('inspection.Customer'),type:"select",data:clients },
+    { name: "gear_dwg_no", label: t('inspection.Gear Dwg No'),readOnly:true},
+    { name: "client", label: t('inspection.Customer'),type:"select",data:clients,readOnly:true },
   ];
 
   return fields;
