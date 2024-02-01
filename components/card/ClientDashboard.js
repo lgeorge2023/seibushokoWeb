@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import { format } from 'date-fns';
 import MantineReactTables from '../MantineReactTable';
 import { get } from '@/pages/api/apiUtils';
+import formatdate from '@/utils/formatdate';
 
 const useStyle = createStyles(theme => ({
 	section: {
@@ -35,13 +36,13 @@ export default function ClientDashboard({records,tools,username,orderRecord}) {
     const { t } = useTranslation("common");
     const [workdate,setWorkDate] = useState( new Date());
     const [orderdate,setOrderDate] = useState( new Date());
-    const tableData = records.slice(0,7)
-    const orderData = orderRecord.slice(0,7)
+    const [mfgRecords, setMfgRecords] = useState([]);
     const [workrecords,setWorkRecords] = useState([]);
     const [orderecords,setOrderRecords]=useState([]);
     useEffect(() => {
+      mfgTableData();
       dateWiseWorkorder(workdate);
-      dateWiseOrder(orderdate)
+      dateWiseOrder(orderdate);
     }, [])
 
     const dateWiseWorkorder=(e)=>{
@@ -61,6 +62,14 @@ export default function ClientDashboard({records,tools,username,orderRecord}) {
          }
        }
 
+    const mfgTableData = async() =>{
+      try {
+        const data = await get('/mfg/');
+        setMfgRecords(data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
  const  columns=[
     { header: t('workOrder.workOrderNo'), accessorKey: "work_order_no", size:100 },
     { header: t('workOrder.cutterno'), accessorKey: "cutter_no", size:100 },
@@ -78,6 +87,22 @@ const  orderColumns=[
     {header: t('content.Product'), accessorKey: 'product', size:100 },
     {header: t('content.remark'),  accessorKey: 'remarks', size:100 },
     ]
+    const  mfgColumns=[
+      { header: t('MFG.MFG No'),accessorKey:"mfg_no", size:100 },
+      { header: t('MFG.Cutter No'), accessorKey:"cutter_no", size:100 },
+      { header: t('MFG.Processing Type'), accessorKey:"process_type", size:100 },
+      { header: t('MFG.Registration Date'),
+      accessorFn: (row) => {
+        //convert to Date for sorting and filtering
+        const sDay = new Date(row.register_date);
+        sDay.setHours(0, 0, 0, 0); // remove time from date (useful if filter by equals exact date)
+        return sDay;
+      },  
+      filterVariant: 'date',
+      Cell: ({ renderedCellValue }) => formatdate(renderedCellValue), size:100 },  
+      { header: t('MFG.Registered By'), accessorKey:"register_by", size:100},
+      { header: t('MFG.Status'), accessorKey:"status", size:100 },
+      { header: t('MFG.Client'),accessorKey:"client_name", size:100 },]
   return (
     <Box>
         <WelcomeCard username={username}/>
@@ -86,7 +111,7 @@ const  orderColumns=[
 			<Card.Section>
                 <Flex justify='space-between'>
                     <Flex>
-				        <Title className={classes.section} order={5}>Work order</Title>
+				        <Title className={classes.section} order={5}>{t('Workorder')}</Title>
                         <MonthPickerInput
                             size='xs' 
                             mt="md"
@@ -115,7 +140,7 @@ const  orderColumns=[
 			<Card.Section>
             <Flex justify='space-between'>
                 <Flex>
-                    <Title className={classes.section} order={5}>Order</Title>
+                    <Title className={classes.section} order={5}>{t('order')}</Title>
                     <MonthPickerInput
                         size='xs'
                         mt="md"
@@ -139,6 +164,14 @@ const  orderColumns=[
             </Flex>
 			</Card.Section>
             <MantineReactTables column={orderColumns} data={orderecords} search={false} pagination={false} noaction={true}/>
+		</Card>
+    <Card radius="md" shadow='xl' mt='lg'>
+			<Card.Section>
+            <Flex justify='space-between'>
+              <Title className={classes.section} order={5}>{t('mfg')}</Title>       
+            </Flex>
+			</Card.Section>
+            <MantineReactTables column={mfgColumns} data={mfgRecords} search={false} pagination={false} noaction={true}/>
 		</Card>
     </Box>
   )

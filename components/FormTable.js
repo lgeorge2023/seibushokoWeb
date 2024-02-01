@@ -30,7 +30,7 @@ const FormTable = (props) => {
           {data.map((row, i) => (
             <tr key={i}>
               {row.map((cell, colIndex) => {
-                const { label, type, rowspan,name,data,defaultValue,colspan,placeholder,precision,disabled } = cell;
+                const { label, type, rowspan,name,data,defaultValue,colspan,placeholder,precision,disabled,onchange,value } = cell;
                 if (type=="number") {
                   return (
                     <td key={colIndex} rowSpan={rowspan} colSpan={colspan}>
@@ -40,6 +40,19 @@ const FormTable = (props) => {
                      removeTrailingZeros
                       precision={precision}
                        placeholder={placeholder}
+                     />
+                    </td> 
+                  );
+                }  
+                if (type=="select" && onchange) {
+                  return (
+                    <td key={colIndex} rowSpan={rowspan}>
+                     <Select label={label}
+                     onChange={onchange}
+                     value={value}
+                     data={data}
+                     placeholder={placeholder}
+                     readOnly={disabled}
                      />
                     </td> 
                   );
@@ -63,6 +76,7 @@ const FormTable = (props) => {
                      {...form.getInputProps(name)}
                        defaultValue={defaultValue}
                        placeholder={placeholder}
+                       readOnly={disabled}
                      />
                     </td> 
                   );

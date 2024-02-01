@@ -24,9 +24,13 @@ function WorkOrderModal({ form, setShowModal, showModal }) {
     let trialConditionData = get(`workorder/report/${id}`);
       trialConditionData.then((data)=>{
         removeNulls(data);
-        if(data.regrind_type == "Conventional"){
+        //set values in tool specification row
+        form.setValues({"ts_pressure_angle":data.pressure_ang,"ts_no_teeth":data.no_teeth_span,"ts_helix_angle":data.helix_angle,"ts_material":data.hardness});
+        //for reset values in target work
+        form.setValues({"tw_work_no": "","tw_disloc_coeff":"","tw_no_teeth":"",
+        "tw_helix_angle":"","tw_twist_direction":"LEFT", "tw_material":"",})
+        if (data.regrind_type.includes('Conventional')){
           form.setFieldValue('report_trial',{
-            ...form.values.report_trial,
             cc_angle_axial_cross: data.angle_axial_cross,
             cc_diagonal_angle:data.diagonal_angle,
             cc_cutter_speed: data.cutter_speed,
@@ -37,10 +41,9 @@ function WorkOrderModal({ form, setShowModal, showModal }) {
             cc_no_teeth: data.no_teeth,
             cc_obd: data.obd,
             cc_obd_dia: data.obd_dia,
-            //more feilds will be added, once api has it. 
           })
         }
-        if(data.regrind_type == "Plunge"){
+          if (data.regrind_type.includes('Plunge')){
           form.setFieldValue('report_trial',{
             ...form.values.report_trial,
             pc_angle_axial_cross: data.angle_axial_cross,

@@ -23,6 +23,7 @@ import FormPart7 from "@/components/fields/inspection_rpt/formpart7";
 import SubmitButtons from "@/components/SubmitButtons";
 import ProtectedRoute from "@/utils/ProtectedRoute";
 import { handleApiError } from "@/utils/handleApiError";
+import { fetchAndTransformRegrindData, fetchAndTransformWorkNo } from "@/pages/api/Select";
 
 const registerBy = UserManagement.getItem("id");
 const userid = parseInt(registerBy);
@@ -36,6 +37,8 @@ const AddInspectionReport = () => {
   const id = slug && slug[1]; // Extract the id from the slug array
   const { t } = useTranslation('common');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [regrinddata,setregrindData]=useState([]);
+  const [cutterData,setCutterData]=useState([]);
   const form = useForm({
     initialValues: {
         report_trial: {
@@ -81,7 +84,7 @@ const AddInspectionReport = () => {
         tw_helix_angle: "",
         tw_twist_direction: "LEFT",
         tw_material: "",
-        specified_profile: "",
+        specified_profile: "False",
         trial: "TRIAL",
         tooth_profile_err: "",
         profile_err_img: '',
@@ -112,7 +115,6 @@ const AddInspectionReport = () => {
         ...(isEditing &&{ delete_image: [] }),
        },
     validate: {
-      trial:(value)=> value==null && t('Trial is required'),
       work_order:(value)=>value==0 && t('Work Order is required'),
     },
   });
@@ -126,7 +128,6 @@ const AddInspectionReport = () => {
     reportData.then(
       (data) =>{
         removeNulls(data);
-        console.log("api data",data);
         form.setValues({"work_order":data.id,"client":data.client_id,"cutter_no":data.cutter_no ,
         "order_no":data.order_no,"serial_no":data.mfg_no, "gear_dwg_no":data.geardrawing_no,
         "ts_module":data.module, 
@@ -137,6 +138,16 @@ const AddInspectionReport = () => {
       }
     )
   }
+  const fetchWorkNoData = async (cutter_no) => {
+    try {
+      const data = await fetchAndTransformWorkNo(cutter_no);
+      setCutterData(data)
+    } catch (error) {
+    }
+  }; 
+useEffect(() => {
+  fetchWorkNoData(form.values.cutter_no)
+}, [form.values.cutter_no])
 
   const fetchData  = async () => {
     try {
@@ -147,7 +158,20 @@ const AddInspectionReport = () => {
       handleApiError(error, router, t);
     }
   };
-
+  const fetchAllData = async () => {
+    try {
+      const [
+       regindData,
+      ] = await Promise.all([
+        fetchAndTransformRegrindData(),
+      ]);
+      setregrindData(regindData);
+    } catch (error) {
+    }
+  };
+  useEffect(() => {
+    fetchAllData()
+  }, [])
   useEffect(() => {
     if (isEditing && id) {
       fetchData();
@@ -230,16 +254,36 @@ const AddInspectionReport = () => {
       setIsSubmitting(false);
     }
   };
+  let resultLabel = 'no';
+  
+  const result = regrinddata.find(entry => {
+    if (entry.value === form.values.ts_shaving_method) {
+      if (entry.label.includes('Conventional')) {
+        resultLabel = 'Conventional';
+        return true;
+      } else if (entry.label.includes('Plunge')) {
+        resultLabel = 'PlungeCut';
+        return true;
+      }
+      else{
+        resultLabel = 'Both';
+        return true;
+      }
+    }
+    return false;
+  });
+  
   return (
     <Layout breadcrumbs={breadcrumbs}>
       <Title order={3}>{isEditing?t("edit_inspectionreport"):t("add__inspectionreport")}</Title>
       <Formpart1 form={form} isEditing={isEditing}/>
-      <FormPart2 form={form} />
+      <FormPart2 form={form} cutterData={cutterData}/>
       <FormPart3 form={form} />
       <FormPart4 form={form} />
       <Flex>
-      <FormPart5 form={form} />
-      <FormPart6 form={form} /></Flex>
+      {(resultLabel==='Conventional'||resultLabel==='Both') && <FormPart5 form={form} />}
+      {(resultLabel==='PlungeCut'||resultLabel==='Both')&&<FormPart6 form={form} />}
+</Flex>
       <FormPart7 form={form} />
       {visible == 1 &&
           <SubmitButtons isEditing={isEditing} onSubmit={onSubmit} isSubmitting={isSubmitting}/>}

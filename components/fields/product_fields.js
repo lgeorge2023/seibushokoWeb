@@ -35,6 +35,11 @@ export const FieldsArray = () => {
     { value: "SPUR", label: "SPUR" }
   ];
 
+  const dislocationData = [
+    {value:"Dislocation Amount", label:t("product.Dislocation amount")},
+    {value:"Dislocation Coefficient",label:t("product.Dislocation Coefficient")},
+  ]
+
   const fields = [
     { label: t('Product.Cutter No'), name: 'cutter_no', readOnly: true,data:cutters },
     { label: t('Product.Pressure Angle'), name: 'pressure_ang' ,type:'number', precision:6},
@@ -56,9 +61,10 @@ export const FieldsArray = () => {
     { label: t('Product.Tooth Thickness'), name: 'tooth_thickness', type: 'number' , precision:6},
     { label: 'OBD', name: 'obd', type: 'text' },
     { label: t('Product.Span Measurement'), name: 'span_measurement', type: 'number', precision:6 },
-    { label: t('Product.Product Image'), name: 'product_image', type: 'file'},
+    { label: t('product.Dislocation Coefficient'), name:'disloc_coeff', type:'select', data: dislocationData},
     { label: t('Product.Gear Width'), name: 'gear_width', type: 'number', precision:6 },
-    { label: t('Product.Twist Direction'), name: 'twist_direction', type: 'select', data: twistData }
+    { label: t('Product.Twist Direction'), name: 'twist_direction', type: 'select', data: twistData },
+    { label: t('Product.Product Image'), name: 'product_image', type: 'file'},
   ];
 
   return fields;

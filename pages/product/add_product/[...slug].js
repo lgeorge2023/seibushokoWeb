@@ -60,6 +60,7 @@ const AddProduct = () => {
       span_measurement: "",
       gear_width: "",
       twist_direction: "",
+      disloc_coeff:"",
       register_date: format(startOfDay(new Date()), "yyyy-MM-dd"),
       product_image: "",
     },

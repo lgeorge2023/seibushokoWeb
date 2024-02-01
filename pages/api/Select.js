@@ -63,3 +63,9 @@ export const fetchAndTransformRoleData = async () => {
     label: item.name,
   }));
 };
+export const fetchAndTransformWorkNo = async (cutter_id) => {
+  return fetchAndTransformData(`/product/select/${cutter_id}`, (item) => ({
+    value: item.id,
+    label: item.product_id,
+  }));
+};

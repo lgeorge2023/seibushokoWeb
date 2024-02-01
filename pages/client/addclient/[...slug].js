@@ -55,12 +55,12 @@ function AddClient() {
     { name: 'address', label: t('Client.Address') },
     { name: 'email', label: t('Client.General Email'),required :true},
     { name: 'contact_phone_no', label: t('Client.General Contact No'),required:true,},
-    { name: 'contact_person1', label: t('Client.Person In Charge 1') },
-    { name: 'contact_person2', label: t('Client.Person In Charge 2')},
-    { name: 'contact_person1_email', label: t('Client.Email')},
-    { name: 'contact_person2_email', label: t('Client.Email')},
-    { name: 'contact_person1_phone', label: t('Client.Phone No'),type:'number'},
-    { name: 'contact_person2_phone', label: t('Client.Phone No'),type:'number' },
+    { name: 'contact_person1', label: t('Client.Person In Charge 1') ,hidden:!isEditing},
+    { name: 'contact_person2', label: t('Client.Person In Charge 2'),hidden:!isEditing},
+    { name: 'contact_person1_email', label: t('Client.Email'),hidden:!isEditing},
+    { name: 'contact_person2_email', label: t('Client.Email'),hidden:!isEditing},
+    { name: 'contact_person1_phone', label: t('Client.Phone No'),type:'number',hidden:!isEditing},
+    { name: 'contact_person2_phone', label: t('Client.Phone No'),type:'number' ,hidden:!isEditing},
   ];
 
   const fetchData = async () => {
@@ -133,7 +133,7 @@ function AddClient() {
         <form onSubmit={onSubmit} onKeyDown={onKeyDown}>
           <div className="clientContainer">
             {fields.map((field) => (
-              <TextInput key={field.name} label={field.label}   withAsterisk={field?.required} {...form.getInputProps(field.name)} />
+            field.hidden!=true &&   <TextInput key={field.name} label={field.label}   withAsterisk={field?.required} {...form.getInputProps(field.name)} />
             ))}
             <Checkbox
               label={t('User.Active')}

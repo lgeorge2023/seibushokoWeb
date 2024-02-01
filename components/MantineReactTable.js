@@ -114,7 +114,8 @@ const MantineReactTables = (props) => {
             </ActionIcon>
           </Tooltip>
         )}
-        {page == "workorder" && (
+        {page == "workorder" &&  (
+          visible == 1 ?
           <Box>
             {row.original.inspection_report === 0 ?(
               (row.original.workorder_status === 'FINISHED' || row.original.workorder_status === 'DELIVERED' || row.original.workorder_status === 'INSPECTIONRPT' ?
@@ -137,7 +138,7 @@ const MantineReactTables = (props) => {
                 </Link>
               </Tooltip>
             )}
-          </Box>
+          </Box>:null
         )}
         {page == "cutter" && (
           <Box>

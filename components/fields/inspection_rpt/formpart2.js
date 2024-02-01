@@ -2,11 +2,13 @@ import FormTable from "@/components/FormTable";
 import { fetchAndTransformRegrindData } from "@/pages/api/Select";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "next-i18next";
+import { get } from "@/pages/api/apiUtils";
+import { removeNulls } from "@/utils/removeNulls";
 
 const FormPart2 = (props) => {
   const { t } = useTranslation("common");
   const [regrind,setregrindData]=useState([]);
-
+  const {form,cutterData}= props;
   const column = [
     { colspan: 2, label: t('inspection.TOOL SPESIFICATION') },
     { colspan: 2, label: t('inspection.TARGET WORK') },
@@ -31,13 +33,27 @@ const FormPart2 = (props) => {
   useEffect(() => {
     fetchAllData()
   }, [])
+
+  const onchange  = async (product_id) => {
+      try {
+      const data = await get(`/product/report/${product_id}`);
+      const newdata =removeNulls(data)
+      console.log('newdata', newdata)
+      form.setValues({"tw_work_no": newdata.id,"tw_disloc_coeff":newdata.coeff_add_mod,"tw_no_teeth":newdata.no_of_teeth ,
+      "tw_helix_angle":newdata.helix,"tw_twist_direction":newdata.twist_direction, "tw_material":newdata.material,})
+    } catch (error) {
+    }
+  };
+  const onTrialchange=(e)=>{
+      form.setValues({"trial":e,"specified_profile":e=='TRIAL'?"False":"True"})
+  }
   const data = [
     [
       { type:"text", label:t('inspection.Module') },
       { type: "number",label: "",name:"ts_module",precision:6 },
       { type:"text", label: t('inspection.Work No') },
-      { type: "input" , label: "",name:"tw_work_no"},
-      {  label: "",type: "input", rowspan: 2 ,name:"specified_profile"},
+      { type:"select" , label: "",data:cutterData,  name:"tw_work_no",onchange:onchange,value:parseInt(form.values.tw_work_no)},
+      {  label: "",type: "input", rowspan: 2 ,name:"specified_profile",disabled:true},
     ],
      [
       { type:"text", label: t('inspection.Pressure Angle')},
@@ -57,7 +73,7 @@ const FormPart2 = (props) => {
       { type: "number",label: "",name:"ts_helix_angle",precision:6 },
       { type:"text", label: t('inspection.Helix Angle') },
       { type: "number" , label: "",name:"tw_helix_angle",precision:6},
-      { type: "select" , label: "",name:"trial",data:trial},
+      { type: "select" , label: "",name:"trial",data:trial,onchange:onTrialchange,value:form.values.trial},
     ],
     [
       { type:"text", label: t('inspection.Helix Direction') },
@@ -81,7 +97,6 @@ const FormPart2 = (props) => {
     ],
   ];
   
-  const {form}= props;
   return (
     <FormTable header={null} column={column} data={data} form={form}/>
   );
