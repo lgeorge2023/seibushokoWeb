@@ -144,7 +144,7 @@ function AddClient() {
             {fields.map((field) => (
             field.hidden!=true &&   <TextInput key={field.name} label={field.label}   withAsterisk={field?.required} {...form.getInputProps(field.name)} />
             ))}
-            {visible != 1?<Checkbox
+            {id != 1?<Checkbox
               label={t('User.Active')}
               checked={form.values.active === 1}
               onChange={handleActiveChange}
