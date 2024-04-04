@@ -26,7 +26,8 @@ function UserList() {
   const fetchData = async () =>{
     try{
       const data = await get('/staff/');
-      setRecords(data.reverse());
+      const superAdminRemoved = data.filter((item)=> item.id != 1 );
+      setRecords(superAdminRemoved.reverse());
       setLoading(false);
     }catch(error){
       handleApiError(error, router, t);

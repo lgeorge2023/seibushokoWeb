@@ -10,12 +10,14 @@ import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import SubmitButtons from '@/components/SubmitButtons';
 import { handleApiError } from '@/utils/handleApiError';
+import { UserManagement } from '@/utils/UserManagement';
 
 function AddClient() {
   const { t } = useTranslation('common')
   const router = useRouter();
   const { slug } = router.query;
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [visible,setVisible] = useState(0)
   const isEditing = slug?.[0] === 'edit';
   const id = slug?.[1]; // Extract the id from the slug array
 
@@ -74,8 +76,15 @@ function AddClient() {
   useEffect(() => {
     if (isEditing && id) {
       fetchData();
+      fetchClientId();
     }
   }, [isEditing, id]);
+
+  const fetchClientId = () =>{
+    const profile_data = JSON.parse(UserManagement.getItem("profile_data") || '{}');
+    const visible = profile_data?.client === 1;    
+   setVisible(visible)
+  }
 
   const createOrUpdateData = async (addanother) => {
     try {
@@ -135,11 +144,11 @@ function AddClient() {
             {fields.map((field) => (
             field.hidden!=true &&   <TextInput key={field.name} label={field.label}   withAsterisk={field?.required} {...form.getInputProps(field.name)} />
             ))}
-            <Checkbox
+            {visible != 1?<Checkbox
               label={t('User.Active')}
               checked={form.values.active === 1}
               onChange={handleActiveChange}
-            />
+            />:null }
           </div>
           <SubmitButtons isEditing={isEditing} onSubmit={onSubmit} isSubmitting={isSubmitting}/>
         </form>

@@ -114,6 +114,23 @@ const MantineReactTables = (props) => {
             </ActionIcon>
           </Tooltip>
         )}
+        { page =="client" && (
+          <Box>
+            {row.original.id != 1 ? (
+              <Tooltip label={t("Delete")}>
+              <ActionIcon
+                color="red"
+                onClick={() => {
+                  deleteData(row.original);
+                }}
+              >
+                <IconTrash size={size} />
+              </ActionIcon>
+            </Tooltip>
+            ):null}
+          
+          </Box>
+        )}
         {page == "workorder" &&  (
           visible == 1 ?
           <Box>
