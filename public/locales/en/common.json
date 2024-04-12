@@ -294,6 +294,7 @@
   "cutter.Gear No":"Gear No",
   "cutter.Life Span":"Life Span",
   "cutter.Base Circle Diameter":"Base Circle Diameter",
+  "cutter.dwgfile":"Cutter Drawing File",
 
 
   "MFG.MFG No":"MFG No",
@@ -316,6 +317,7 @@
   "MFG.Processing No":"Processing No",
   "MFG.Supplier":"Supplier",
   "MFG.Remarks":"Remarks",
+  "MFG.EOL":"EOL",
 
 
   "Regrind.Type":"Type",
@@ -426,8 +428,10 @@
   "Select":"Select",
   "Archived":"Archived",
   "Back":"Back",
+  "True":"True",
+  "False":"False",
 
-
+  "An unexpected error occurred":"An unexpected error occurred",
   "Order No is required":"Order No is required",
   "Order No must contain only numbers":"Order No must contain only numbers",
   "Client is required":"JP-Client is required",
@@ -587,6 +591,7 @@
 
   "ORDER_IMPORT_SUCCESS":"Order Imported",
   "WORKORDER_IMPORT_SUCCESS":"WorkOrder Imported",
+  "failed_rows_all":"Failed Rows",
   "MESSAGE_SENT_SUCCESS":"Message Sent Successfully",
   "REPLY_SENT_SUCCESS":"Reply Sent Successfully",
   "CLIENT_NAME_EXIST" :"Client Name already exists",

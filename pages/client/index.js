@@ -98,7 +98,7 @@ useEffect(() => {
         <Title order={3}> {t('content.clientList')} </Title>
         <Button mb='sm' onClick={handleAddClient}>{t('Add New')}</Button>
       </Flex>
-      <MantineReactTables column={columns} data={records}  page={"client"} editInfo={editInfo} columnVisibility={hideColumn} visible={visible} loading={loading}/>
+<MantineReactTables column={columns} data={records}  page={"client"} editInfo={editInfo} columnVisibility={hideColumn} visible={visible} loading={loading}/>
     </Box>
      </Layout>
   );

@@ -36,6 +36,10 @@ export const FieldsArray = () => {
     { value: "REQUIREFIX", label: t('MFG.Require Fix') },
     { value: "FINISHED", label: t('MFG.Finished') },
   ];
+  const eol = [
+    {value:"TRUE", label:t('True')},
+    {value:"FALSE", label:t('False')}
+  ]
   const fields = [
     {
       name: "cutter_no",
@@ -64,7 +68,7 @@ export const FieldsArray = () => {
     { name: "client", label: t('MFG.Client'), type: "select", data: clients, withAsterisk: true,readOnly:true },
     { name: "remarks", label: t('MFG.Remarks'), type: "text" },
     { name: "regrind_count", label: t('MFG.Regrind Count'), type: "number" },
-    ,
+    { name: "EOL", label: t('MFG.EOL'), type: "select", data: eol },
   ];
 
   return fields;

@@ -291,6 +291,8 @@
   "cutter.Gear No": "ワーク",
   "cutter.Life Span": "寿命",
   "cutter.Base Circle Diameter": "基円径",
+  "cutter.dwgfile":"JP-Cutter Drawing File",
+
 
   "MFG.MFG No": "製造番号",
   "MFG.Cutter No": "工具番号",
@@ -312,6 +314,7 @@
   "MFG.Processing No": "研磨回数 (#)",
   "MFG.Supplier": "サプライヤー",
   "MFG.Remarks": "備考",
+  "MFG.EOL":"EOL",
 
   "Regrind.Type": "タイプ",
   "Regrind.Axial Angle": "JP-Axial Angle",
@@ -418,7 +421,10 @@
   "Select":"選択する",
   "Archived":"JP-Archived",
   "Back":"JP-Back",
+  "True":"JP-True",
+  "False":"JP-False",
 
+  "An unexpected error occurred":"JP-An unexpected error occurred",
   "Order No is required":"JP-Order No is required",
   "Order No must contain only numbers":"JP-Order No must contain only numbers",
   "Client is required":"JP-Client is required",
@@ -576,6 +582,7 @@
   "NO_PERM_ORDER_IMPORT" :"JP-You do not have permission to Import Order",
   "NO_PERM_WORKORDER_IMPORT":"JP-You do not have permission to Import WorkOrder",
   "ORDER_IMPORT_SUCCESS": "注文：インポートが完了",
+  "failed_rows_all":"JP-Failed Rows",
   "WORKORDER_IMPORT_SUCCESS": "成績表：インポートが完了",
   "MESSAGE_SENT_SUCCESS": "メッセージ：送りが完了",
   "REPLY_SENT_SUCCESS": "メッセージ：送りが完了",

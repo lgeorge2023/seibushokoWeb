@@ -61,7 +61,7 @@ const ImageFile = (props) => {
       <FileInput
         key={name}
         label={label}
-        accept="image/png,image/jpeg,image/jpg"
+        accept=".pdf,.jpg,.png,.jpeg"
         clearable={typeof form.values[name]=="object"}
         icon={<IconUpload size="0.4cm" />}
         value={typeof form.values[name] == "object" ? form.values[name] : ""}

@@ -22,7 +22,7 @@ export const fetchAndTransformMFGData = async () => {
 };
 
 export const fetchAndTransformOrderData = async () => {
-  return fetchAndTransformData("/order/active", (item) => ({
+  return fetchAndTransformData("/order/select", (item) => ({
     value: item.id,
     label: item.order_no,
   }));

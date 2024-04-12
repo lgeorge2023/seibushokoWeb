@@ -9,6 +9,7 @@ import {
   NumberInput,
   Paper,
   UnstyledButton,
+  Checkbox,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useEffect, useState } from "react";
@@ -47,7 +48,8 @@ const AddOrder = () => {
   const [numForms, setNumForms] = useState(1);
   const [visible,setVisible]=useState(0);
   const [showModal, setShowModal] = useState(false);
-  const [index,setIndex]=useState(null)
+  const [index,setIndex]=useState(null);
+  const [changeOrderStatus, setChangeOrderStatus] = useState('NEW')
     const form = useForm({
     initialValues: {
       order_no: "",
@@ -100,23 +102,53 @@ const AddOrder = () => {
     });
   }
   }, [form]);
-  const fetchData  =async () => {
+  // const fetchData  =async () => {
+  //   try {
+  //     const data = await get(`order/${id}/`);
+  //     data.delete_order_lines = [];
+  //     form.setValues(data);
+  //     let formsCount = data.order_lines.length;
+  //     setNumForms(formsCount);
+  //     for (let i = 0; i < formsCount; i++) {
+  //       const cutterValue = data?.order_lines[i].cutter_no;
+  //       const mfgValue = data?.order_lines[i].mfg_no;
+  //       handleChange(cutterValue, i); // Update mfgData based on the cutter
+  //       form.setFieldValue(`order_lines.${i}.mfg_no`, mfgValue);
+  //     }
+  //   } catch (error) {
+  //     handleApiError(error, router, t);
+  //   }
+  // };
+  const fetchData = async () => {
     try {
       const data = await get(`order/${id}/`);
+      
       data.delete_order_lines = [];
+      // Filter out null elements from order_lines array
+      const filteredOrderLines = data.order_lines.filter(line => line !== null);
+      
+      // Update data object with filtered order_lines
+      data.order_lines = filteredOrderLines;
+      
+      // Set form values with updated data
       form.setValues(data);
-      let formsCount = data.order_lines.length;
+      
+      // Update the number of forms
+      const formsCount = filteredOrderLines.length;
       setNumForms(formsCount);
-      for (let i = 0; i < formsCount; i++) {
-        const cutterValue = data?.order_lines[i].cutter_no;
-        const mfgValue = data?.order_lines[i].mfg_no;
+      
+      // Update mfgData based on the cutter for non-null order lines
+      filteredOrderLines.forEach((line, i) => {
+        const cutterValue = line.cutter_no;
+        const mfgValue = line.mfg_no;
         handleChange(cutterValue, i); // Update mfgData based on the cutter
         form.setFieldValue(`order_lines.${i}.mfg_no`, mfgValue);
-      }
+      });
     } catch (error) {
       handleApiError(error, router, t);
     }
   };
+  
   const [mfgData, setMFGData] = useState(Array.from({ length: numForms }, () => []));
 
   const { t } = useTranslation("common");
@@ -184,9 +216,15 @@ const AddOrder = () => {
   const createOrUpdateData = async (addanother) => {
     try {
       const data = form.values;
+      const modifiedOrderLines = form.values.order_lines.map((orderLine)=>({
+        ...orderLine,
+        order_status:orderLine.order_status === true ? 'CANCELLED' : orderLine.order_status,
+      }))
+      const modifiedFormValues = {...form.values, order_lines:modifiedOrderLines}
+
       const endpoint = isEditing ? `/order/${id}/` : "/order/undefined";
       const response = isEditing
-        ? await put(endpoint, data)
+        ? await put(endpoint, modifiedFormValues)
         : await post(endpoint, data);
       const message = isEditing ? t('Update') : t('Success');
       notifications.show({
@@ -354,8 +392,9 @@ const AddOrder = () => {
                       {...form.getInputProps(`order_lines.${index}.remarks`)}
                     />
                   </Grid.Col>
-                  {(!isEditing &&index !== 0 || (isEditing && form.values.order_lines[index]?.order_status  == 'NEW'))&&(
-                    visible == 1?
+                  {(((isEditing && form.values.order_lines[index]?.order_status == 'NEW' ))&&(
+                    visible == 1) || !isEditing ?
+
                       <Button
                         variant="subtle"
                         color="red"
@@ -372,7 +411,16 @@ const AddOrder = () => {
                         }}>
                        {t('content.remove')}
                       </Button>
-                    :null
+                      :
+                      <Grid.Col  md={6} lg={3}>                   
+                      <Checkbox
+                      color="red"
+                      iconColor = "dark.8"
+                      label="Do you want to cancel this order?"
+                      {...form.getInputProps(`order_lines.${index}.order_status`)}
+                      />
+                    </Grid.Col>                 
+                    
                   )}
                 </Grid>
                   </Paper>

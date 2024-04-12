@@ -79,7 +79,7 @@ function AddClient() {
       fetchClientId();
     }
   }, [isEditing, id]);
-
+  
   const fetchClientId = () =>{
     const profile_data = JSON.parse(UserManagement.getItem("profile_data") || '{}');
     const visible = profile_data?.client === 1;    
@@ -149,6 +149,7 @@ function AddClient() {
               checked={form.values.active === 1}
               onChange={handleActiveChange}
             />:null }
+            
           </div>
           <SubmitButtons isEditing={isEditing} onSubmit={onSubmit} isSubmitting={isSubmitting}/>
         </form>

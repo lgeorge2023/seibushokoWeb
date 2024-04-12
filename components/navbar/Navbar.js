@@ -45,17 +45,21 @@ export function NavbarNav() {
   );
   useEffect(() => {
 const response=get('/message/unread')
-console.log('response', response)
 response.then((res)=>setunread(res.unread_msgs))
 
   }, [])
   
   const mockdata = [
-    { label: "order", icon: IconCheckbox, link: "/order" },
+    { label: "order",
+      icon: IconCheckbox,
+      link: "/order",
+      visible: profile_data?.client == 1,
+     },
     {
       label: "Work_Order_Regrind",
       link: "/work_order",
       icon: IconFileAnalytics,
+      visible: profile_data?.client == 1,
     },
     {
       label: "Inspection_Report",

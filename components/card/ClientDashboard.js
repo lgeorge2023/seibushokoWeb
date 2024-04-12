@@ -7,8 +7,9 @@ import { MonthPickerInput } from '@mantine/dates';
 import { useEffect, useState } from 'react';
 import { format } from 'date-fns';
 import MantineReactTables from '../MantineReactTable';
-import { get } from '@/pages/api/apiUtils';
+import { get, put } from '@/pages/api/apiUtils';
 import formatdate from '@/utils/formatdate';
+import { notifications } from '@mantine/notifications';
 
 const useStyle = createStyles(theme => ({
 	section: {
@@ -70,11 +71,37 @@ export default function ClientDashboard({records,tools,username,orderRecord}) {
         console.error(error);
       }
     }
+    const updateUrgency = async (id, urgency) => {      
+      try{
+        const response = await put(`/workorder/urgency/${id}/${urgency}`)
+        console.log("response",response);
+        notifications.show({
+          title: t('Success'),
+          message: t(response),
+          color: "green",
+        });
+      }
+      catch(error){
+        console.log(error);
+      }
+    
+    }
+
+ const dropdata = ['LIMITEDEXPRESS','USUALLY']
+ const hideColumn = {delivery_date:false}
  const  columns=[
     { header: t('workOrder.workOrderNo'), accessorKey: "work_order_no", size:100 },
     { header: t('workOrder.cutterno'), accessorKey: "cutter_no", size:100 },
     { header: t('workOrder.mfgno'), accessorKey: "mfg_no", size:100 },
     { header: t('workOrder.orderno'), accessorKey: "order_no", size:100 },
+    { header: t('workOrder.urgency'),accessorKey:"urgency", size:100,editVariant: 'select',
+    mantineEditSelectProps:({row})=>({
+      data: dropdata,
+      onChange: (value) => {
+        const { id } = row.original;
+        updateUrgency(id, value);
+      }
+      })  },
     { header: t('workOrder.orderdate'), accessorKey: "workorder_date", size:100 },
     { header: t('Estimated Finish'), accessorKey: "delivery_date", size:100 },
     { header: t('status'), accessorKey: "workorder_status", size:100 },
@@ -129,12 +156,12 @@ const  orderColumns=[
                     </Flex>
                   <Flex>
                     <Box>  
-                      <Link href='/work_order'className={classes.link}> {t('view All')}</Link>
+                      {/* <Link href='/work_order'className={classes.link}> {t('view All')}</Link> */}
                     </Box>
                   </Flex>
                 </Flex>
             </Card.Section>
-            <MantineReactTables column={columns} data={workrecords} search={false} pagination={false} noaction={true}/>
+            <MantineReactTables column={columns} page={"dash-wo"} data={workrecords} columnVisibility={hideColumn} search={false} pagination={false} />
 		</Card>
 		<Card radius="md" shadow='xl' mt='lg'>
 			<Card.Section>
@@ -158,7 +185,7 @@ const  orderColumns=[
                 </Flex>
               <Flex>
                 <Box>  
-                  <Link href='/order'className={classes.link}> {t('view All')}</Link>
+                  {/* <Link href='/order'className={classes.link}> {t('view All')}</Link> */}
                 </Box>  
               </Flex>
             </Flex>

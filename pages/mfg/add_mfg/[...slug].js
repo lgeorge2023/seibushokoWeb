@@ -59,7 +59,8 @@ function AddMFG() {
       cutter_no: 0,
       register_by: userid,
       manager: 0,
-      client: 0
+      client: 0,
+      EOL:"FALSE"
     },
     validate: {
       cutter_no:(value) => value == 0 && t('Cutter No is required'),

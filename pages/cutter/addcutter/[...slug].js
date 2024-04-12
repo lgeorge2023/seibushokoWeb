@@ -13,6 +13,7 @@ import FormInput from "@/components/FormInput";
 import SubmitButtons from "@/components/SubmitButtons";
 import ProtectedRoute from "@/utils/ProtectedRoute";
 import { handleApiError } from "@/utils/handleApiError";
+import ImageFile from "@/components/ImageFile";
 
 const AddCutter = () => {
   const { t } = useTranslation("common");
@@ -43,6 +44,7 @@ const AddCutter = () => {
       hardness: "",
       lifespan: "",
       type: 0,
+      cutter_dwg_file:''
     },
     validate: {
       cutter_no: (value) => value.length < 1 && t("Cutter No is required"),
@@ -162,17 +164,29 @@ const AddCutter = () => {
       type: "number",
       precision: 6,
     },
+    {
+      name: "cutter_dwg_file",
+      label: t("cutter.dwgfile"),
+      type: "file",
+    },
   ];
 
  
   const createOrUpdateData = async (addanother, values) => {
-    const newdata = {...values};
-    let data = stringtoNull(newdata);
+    const formData = new FormData();
+    let data = values;
+    // let data = stringtoNull(data);
+    if (typeof(data.cutter_dwg_file)!= 'object' || data.cutter_dwg_file==null ) {
+      data = { ...data, cutter_dwg_file: "" };
+    }
+    for (const key in data) {
+        formData.append(key,data[key]);
+    }
     try {
       const endpoint = isEditing ? `/cutter/${id}/` : "/cutter/";
       const response = isEditing
-        ? await put(endpoint, data)
-        : await post(endpoint, data);
+        ? await put(endpoint, formData)
+        : await post(endpoint, formData);
       const message = isEditing ? t("Update") : t("Success");
       notifications.show({
         title: message,
@@ -219,7 +233,7 @@ const AddCutter = () => {
         <form>
           <div className="container">
             {fields.map((field) => {
-              const { ...props } = field;
+              const {  ...props } = field;
 
               if (props.name === "helix_degree") {
                 return (
@@ -249,6 +263,11 @@ const AddCutter = () => {
                   </Grid>
                 );
               }
+              if (props.type === "file") {
+                return (
+               <ImageFile key={props.name} name={props.name} form={form}  {...props}/>)
+             }
+
 
               return <FormInput {...props} form={form} key={props.name} />;
             })}

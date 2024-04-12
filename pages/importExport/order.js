@@ -48,7 +48,13 @@ const ImportOrder = () => {
 
     notifications.show({
       title: t('Success'),
-      message: response[0].success_count+" "+t(response[0].mesage),
+      message:(
+        <>
+          {t(response[0].mesage)}:{response[0].success_count}
+          <br />
+          {t('failed_rows_all')}: {t(response[0].failed_rows_all)}
+        </>
+      ),
       color:'green',
     });
     form.reset();

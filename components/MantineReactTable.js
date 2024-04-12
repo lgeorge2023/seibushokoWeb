@@ -55,9 +55,14 @@ const MantineReactTables = (props) => {
           borderRight: '1px solid rgba(224, 224, 224, 1)',
           color: '#facbcb',
         },
+        editVariant:col.editVariant,
+        mantineEditSelectProps:col.mantineEditSelectProps,
+        editVariant:col.editVariant,
       },
     })),
     data: data,
+    editDisplayMode: 'cell',
+    enableEditing: page == 'dash-wo'? true : false,
     state: { columnVisibility: columnvisibility || {} , isLoading: loading,},
     onColumnVisibilityChange: (state) => {
       setColumnVisibility(state);
@@ -81,16 +86,17 @@ const MantineReactTables = (props) => {
     enableRowActions: noaction?false:true,
     renderRowActions: ({ row }) => (
       <Box sx={{ display: "flex", flexWrap: "nowrap", gap: "8px" }}>
-        <Tooltip label={visible == 1?t('Edit'):t('View')}>
+        {visible == 1?
+        <Tooltip label={t('Edit')}>
           <ActionIcon
             onClick={() => {
               editInfo(row.original);
             }}
           >
-          {visible == 1?<IconEdit color=" #4a4747" size={size} />:<IconEye color="#4a4747" size={size}/>}  
+          <IconEdit color=" #4a4747" size={size} />  
           </ActionIcon>
-        </Tooltip>
-        {(page == "workorder"|| page=="inspection") && (
+        </Tooltip>:null}
+        {(page == "workorder"|| page=="inspection" || page == "dash-wo") && (
           <Tooltip label={t("Print")}>
             <ActionIcon>
               <IconPrinter
@@ -99,18 +105,6 @@ const MantineReactTables = (props) => {
                 size={size}
                 onClick={() => downloadExcelFile(row.original.id)}
               />
-            </ActionIcon>
-          </Tooltip>
-        )}
-        {deleteData && (
-          <Tooltip label={t("Delete")}>
-            <ActionIcon
-              color="red"
-              onClick={() => {
-                deleteData(row.original);
-              }}
-            >
-              <IconTrash size={size} />
             </ActionIcon>
           </Tooltip>
         )}
@@ -131,10 +125,22 @@ const MantineReactTables = (props) => {
           
           </Box>
         )}
-        {page == "workorder" &&  (
-          visible == 1 ?
+        {deleteData && (
+          <Tooltip label={t("Delete")}>
+            <ActionIcon
+              color="red"
+              onClick={() => {
+                deleteData(row.original);
+              }}
+            >
+              <IconTrash size={size} />
+            </ActionIcon>
+          </Tooltip>
+        )}
+        {page == "workorder" && (
           <Box>
-            {row.original.inspection_report === 0 ?(
+            {visible == 1 ?(
+            row.original.inspection_report === 0 ?(
               (row.original.workorder_status === 'FINISHED' || row.original.workorder_status === 'DELIVERED' || row.original.workorder_status === 'INSPECTIONRPT' ?
               <Tooltip label={t("add__inspectionreport")}>
                 <Link href={`/inspection_report/add/${row.original.id}`}>
@@ -154,8 +160,8 @@ const MantineReactTables = (props) => {
                   ></IconFileAnalytics>
                 </Link>
               </Tooltip>
-            )}
-          </Box>:null
+            )):null}
+          </Box>
         )}
         {page == "cutter" && (
           <Box>

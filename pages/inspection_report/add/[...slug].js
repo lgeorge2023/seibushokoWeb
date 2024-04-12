@@ -24,6 +24,7 @@ import SubmitButtons from "@/components/SubmitButtons";
 import ProtectedRoute from "@/utils/ProtectedRoute";
 import { handleApiError } from "@/utils/handleApiError";
 import { fetchAndTransformRegrindData, fetchAndTransformWorkNo } from "@/pages/api/Select";
+import { autofilInspectionReport } from "@/components/fields/inspection_rpt/workordermodal";
 
 const registerBy = UserManagement.getItem("id");
 const userid = parseInt(registerBy);
@@ -84,7 +85,7 @@ const AddInspectionReport = () => {
         tw_helix_angle: "",
         tw_twist_direction: "LEFT",
         tw_material: "",
-        specified_profile: "False",
+        specified_profile: "",
         trial: "TRIAL",
         tooth_profile_err: "",
         profile_err_img: '',
@@ -123,21 +124,21 @@ const AddInspectionReport = () => {
     { label: isEditing?t("edit_inspectionreport"):t("add__inspectionreport"), link: "" },
   ];
 
-  const autofillReport = (id) =>{
-    let reportData = get(`/workorder/${id}`);
-    reportData.then(
-      (data) =>{
-        removeNulls(data);
-        form.setValues({"work_order":data.id,"client":data.client_id,"cutter_no":data.cutter_no ,
-        "order_no":data.order_no,"serial_no":data.mfg_no, "gear_dwg_no":data.geardrawing_no,
-        "ts_module":data.module, 
-        "ts_shaving_method":data.regrind_type,
-        "trial":data.test,"no_polishing_times":data.regrind_count,
-       "product_no":data.product,"regrind_count":data.regrind_count,
-        "regrind_type":data.regrind_type})
-      }
-    )
-  }
+  // const autofillReport = (id) =>{
+  //   let reportData = get(`/workorder/${id}`);
+  //   reportData.then(
+  //     (data) =>{
+  //       removeNulls(data);
+  //       form.setValues({"work_order":data.id,"client":data.client_id,"cutter_no":data.cutter_no ,
+  //       "order_no":data.order_no,"serial_no":data.mfg_no, "gear_dwg_no":data.geardrawing_no,
+  //       "ts_module":data.module, 
+  //       "ts_shaving_method":data.regrind_type,
+  //       "trial":data.test,"no_polishing_times":data.regrind_count,
+  //      "product_no":data.product,"regrind_count":data.regrind_count,
+  //       "regrind_type":data.regrind_type})
+  //     }
+  //   )
+  // }
   const fetchWorkNoData = async (cutter_no) => {
     try {
       const data = await fetchAndTransformWorkNo(cutter_no);
@@ -178,7 +179,10 @@ useEffect(() => {
     }
   }, [id,isEditing]);
   useEffect(()=>{
-    if(report_id && slug[0] != "new") autofillReport(slug[0])
+    if(report_id && slug[0] != "new"){
+    //  autofillReport(slug[0])
+     autofilInspectionReport(slug[0],form);
+     }
   }
   ,[])
   const fetchClientId = () =>{
