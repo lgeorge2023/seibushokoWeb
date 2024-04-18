@@ -44,7 +44,7 @@ export const fetchAndTransformStaffData = async (manager) => {
 };
 
 export const fetchAndTransformWorkOrderData = async () => {
-  return fetchAndTransformData("/workorder/all", (item) => ({
+  return fetchAndTransformData("/workorder/select", (item) => ({
     value: item.id,
     label: item.work_order_no,
   }));
