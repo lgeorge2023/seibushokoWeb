@@ -265,7 +265,7 @@ const AddCutter = () => {
               }
               if (props.type === "file") {
                 return (
-               <ImageFile key={props.name} name={props.name} form={form}  {...props}/>)
+               <ImageFile key={props.name} name={props.name} form={form} isEditing={isEditing}  {...props}/>)
              }
 
 

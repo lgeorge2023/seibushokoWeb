@@ -594,5 +594,11 @@
   "MFG_NO_EXIST": "MFG番号はすでに存在",
   "ORDER_NO_EXIST": "注文番号はすでに存在します",
   "PRODUCT_ID_EXIST": "商品はすでに存在します",
-  "REGRIND_TYPE_NAME_EXIST": "タイプはすでに存在します"
+  "REGRIND_TYPE_NAME_EXIST": "タイプはすでに存在します",
+  "UPLOAD_VALID_FILE":"JP-Upload Valid File",
+  "DOC_UPD_SUCCESS":"JP-Document uploaded successfully",
+  "CANT_UPD_DOC":"JP-This document cannot be uploaded",
+  "MSG_UPDATE_SUCCESS":"JP-Message Upadted Successfully",
+  "DOC_DLT_SUCCESS":"JP-Document Deleted Successfully",
+  "NO_PERM_EDIT_INSPCTN_REPORT":"JP-No permission to edit the inspection report"
 }
