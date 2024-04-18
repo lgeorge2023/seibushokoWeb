@@ -272,10 +272,10 @@ const AddInspectionReport = () => {
   }
 
   const handleMultipleFileUpload = async (id) => {
+    if(newFiles.length >0){
     try {
         const formData = new FormData();
         if(isEditing){
-          console.log("in post data",droppedData);
           formData.append("workorder_id", id);
           formData.append("delete",deletedFiles)
           newFiles.length > 0 ?
@@ -294,7 +294,6 @@ const AddInspectionReport = () => {
         const endpoint = '/report/files/';
         const response = isEditing ? await put(endpoint, formData) : await post(endpoint, formData);
         const message = isEditing ? t('Update') : t('Success');
-
         notifications.show({
             title: message,
             message: t(response),
@@ -303,6 +302,7 @@ const AddInspectionReport = () => {
     } catch (error) {
         handleApiError(error, router, t);
     }
+  }
 }
 
 
@@ -312,7 +312,6 @@ const AddInspectionReport = () => {
     form.validate();
     if (!form.validate().hasErrors) {
       createOrUpdateData(addanother);
-      // handleMultipleFileUpload();
     } else {
       notifications.show({
         title: t("Error"),
