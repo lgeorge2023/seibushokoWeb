@@ -272,7 +272,7 @@ const AddInspectionReport = () => {
   }
 
   const handleMultipleFileUpload = async (id) => {
-    if(newFiles.length >0){
+    if(newFiles.length > 0 || deletedFiles.length > 0){
     try {
         const formData = new FormData();
         if(isEditing){
