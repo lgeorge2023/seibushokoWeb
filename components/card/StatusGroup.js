@@ -5,7 +5,7 @@ import {
     SimpleGrid,
 } from '@mantine/core';
 export function StatusGroup ({data}){
-    const stats = data.map(stat => {
+    const stats = data?.map(stat => {
     return (
         <Paper key={stat.title} p="md" radius="md" withBorder shadow="xl">
             <Group position="apart">

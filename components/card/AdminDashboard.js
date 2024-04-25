@@ -34,21 +34,24 @@ const useStyle = createStyles(theme => ({
 	},
 }));
 
-export default function AdminDashboard({records,tools,username}) {
+export default function AdminDashboard({records,username}) {
     const { classes } = useStyle();
     const { t } = useTranslation("common");
     const [date,setDate] = useState( new Date());
+    const [toolsCount, setToolsCount] = useState([])
     const tableData = records.slice(0,6);
     const [workrecords,setWorkRecords] = useState([]);
     useEffect(() => {
-      dateWiseWorkorder(date)
+      dateWiseWorkorder(date);
     }, [])
 
     const dateWiseWorkorder=(e)=>{
      let date = format(e,'yyyy-MM-dd')
       try {
         const data = get(`/workorder/all/${date}`);
-        data.then((data)=>  setWorkRecords(data));;
+        data.then((data)=>  setWorkRecords(data));
+        const toolsData = get(`/workorder/tools/${date}`);
+        toolsData.then((data)=> setToolsCount(data))
       } catch (error) {
       }
     }
@@ -66,7 +69,7 @@ export default function AdminDashboard({records,tools,username}) {
   return (
     <Box>
         <WelcomeCard username={username}/>
-        <StatusGroup data={tools}/>
+        <StatusGroup data={toolsCount}/>
         <Card radius="md" shadow='xl' mt='lg'>
 			<Card.Section >
                 <Flex justify='space-between'>

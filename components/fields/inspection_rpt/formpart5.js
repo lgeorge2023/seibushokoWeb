@@ -14,7 +14,7 @@ const FormPart5 = (props) => {
   const data = [
     [
       { type:"text", label: t('inspection.Angle of Axial Crossing') },
-      { type: "number",label: "" ,name:"report_trial.cc_angle_axial_cross",precision:6},
+      { type: "input",label: "" ,name:"report_trial.cc_angle_axial_cross",precision:6},
     ],
      [
       { type:"text", label: t('inspection.Diagonal Angle') },
@@ -25,7 +25,7 @@ const FormPart5 = (props) => {
       { type: "number",label: "" ,name:"report_trial.cc_cutter_speed",precision:6},
     ],
     [
-      { type:"text", label: t('inspection.Transverse Feed Rate 2') },
+      { type:"text", label: t('inspection.Transverse Feed Rate 1') },
       { type: "number",label: "",name:"report_trial.cc_tranverse_feed1",precision:6 },
     ],
     [

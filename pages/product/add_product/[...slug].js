@@ -180,17 +180,6 @@ const breadcrumbs = [
                   <DatePicker key={name} name={name} form={form} {...props} />
                 );
               }
-              if (type === "number") {
-                return (
-                    <NumberInput
-                      key={name}
-                      min={0}
-                      removeTrailingZeros
-                      {...form.getInputProps(name)}
-                      {...props}
-                    />
-                );
-              }
               if (name == "cutter_no") {
                 return (
                   <Box key={name}>

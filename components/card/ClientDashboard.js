@@ -32,7 +32,7 @@ const useStyle = createStyles(theme => ({
         },
 	},
 }));
-export default function ClientDashboard({records,tools,username,orderRecord}) {
+export default function ClientDashboard({records,username,orderRecord}) {
 	const { classes } = useStyle();
     const { t } = useTranslation("common");
     const [workdate,setWorkDate] = useState( new Date());
@@ -40,6 +40,8 @@ export default function ClientDashboard({records,tools,username,orderRecord}) {
     const [mfgRecords, setMfgRecords] = useState([]);
     const [workrecords,setWorkRecords] = useState([]);
     const [orderecords,setOrderRecords]=useState([]);
+    const [toolsCount, setToolsCount] = useState([])
+
     useEffect(() => {
       mfgTableData();
       dateWiseWorkorder(workdate);
@@ -50,7 +52,9 @@ export default function ClientDashboard({records,tools,username,orderRecord}) {
      let date = format(e,'yyyy-MM-dd')
       try {
         const data = get(`/workorder/all/${date}`);
-        data.then((data)=>  setWorkRecords(data));;
+        data.then((data)=>  setWorkRecords(data));
+        const toolsData = get(`/workorder/tools/${date}`);
+        toolsData.then((data)=> setToolsCount(data));
       } catch (error) {
       }
     }
@@ -133,7 +137,7 @@ const  orderColumns=[
   return (
     <Box>
         <WelcomeCard username={username}/>
-        <StatusGroup data={tools}/>
+        <StatusGroup data={toolsCount}/>
 		<Card radius="md" shadow='xl' mt='lg'>
 			<Card.Section>
                 <Flex justify='space-between'>

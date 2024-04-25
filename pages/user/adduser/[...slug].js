@@ -146,12 +146,12 @@ const AddUser = () => {
               label={t('User.User Name')}
               {...form.getInputProps("username")}
             />
-            {!isEditing ?<PasswordInput
+            <PasswordInput
             withAsterisk
               name="password"
               label={t('User.Password')}
               {...form.getInputProps("password")}
-            />:null}
+            />
             <TextInput
               name="first_name"
               label={t('User.First Name')}
