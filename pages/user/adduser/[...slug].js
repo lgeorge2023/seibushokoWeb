@@ -90,10 +90,11 @@ const AddUser = () => {
   const createOrUpdateData = async (addanother) =>{
     try{ 
       const data = form.values;
-      const {password,id,client,role,...putData} = {...data,roles:[data.roles]};
+      const {id,client,role,...putData} = {...data,roles:[data.roles]};
       const encodedPassword = btoa(data.password);
       const postData = {...data,roles:[data.roles]}
       postData.password = encodedPassword;
+      putData.password = encodedPassword;
       const endpoint = isEditing ? `/staff/${user_id}/` : '/staff/';
       const response = isEditing ? await put(endpoint, putData) : await post(endpoint,postData);
       const message = isEditing ? t('Update') : t('Success');
