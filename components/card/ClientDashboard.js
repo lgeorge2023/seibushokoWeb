@@ -41,27 +41,40 @@ export default function ClientDashboard({records,username,orderRecord}) {
     const [workrecords,setWorkRecords] = useState([]);
     const [orderecords,setOrderRecords]=useState([]);
     const [toolsCount, setToolsCount] = useState([])
+    const [date, setDate] = useState(new Date());
+    const [clearMonth, setClearMonth] = useState(true);
 
     useEffect(() => {
       mfgTableData();
-      dateWiseWorkorder(workdate);
+      dateWiseWorkorder(date,date);
       dateWiseOrder(orderdate);
     }, [])
-
-    const dateWiseWorkorder=(e)=>{
-     let date = format(e,'yyyy-MM-dd')
-      try {
-        const data = get(`/workorder/all/${date}`);
-        data.then((data)=>  setWorkRecords(data));
-        const toolsData = get(`/workorder/tools/${date}`);
-        toolsData.then((data)=> setToolsCount(data));
-      } catch (error) {
-      }
+    function isValidDateFormat(dateString) {
+      const dateFormatRegex = /^\d{4}-\d{2}-\d{2}$/;
+      return dateFormatRegex.test(dateString);
     }
+
+    const dateWiseWorkorder = (fromDate, toDate) => {
+      try {
+        if (!isValidDateFormat(fromDate) || !isValidDateFormat(toDate)) {
+          fromDate = format(fromDate, "yyyy-MM-dd");
+          toDate = format(toDate, "yyyy-MM-dd");
+        }
+        console.log("from and to ",fromDate,toDate);
+  
+        const data = get(`/workorder/all/${fromDate}/${toDate}`);
+        data.then((data) => setWorkRecords(data));
+  
+        const toolsData = get(`/workorder/tools/${fromDate}/${toDate}`);
+        toolsData.then((data) => setToolsCount(data));
+      } catch (error) {
+        // console.error("Error:", error);
+      }
+    };
     const dateWiseOrder=(e)=>{
         let date = format(e,'yyyy-MM-dd')
          try {
-           const data = get(`/workorder/all/${date}`);
+           const data = get(`/workorder/all/${date}/${date}`);
            data.then((data)=>  setOrderRecords(data));;
          } catch (error) {
          }
@@ -143,20 +156,46 @@ const  orderColumns=[
                 <Flex justify='space-between'>
                     <Flex>
 				        <Title className={classes.section} order={5}>{t('Workorder')}</Title>
-                        <MonthPickerInput
-                            size='xs' 
-                            mt="md"
-                            mr='md'  
-                            placeholder="Pick date"
-                            value={workdate}
-                            maxDate={new Date}
-                            onChange={(e)=>
-                                {
-                                setWorkDate(e);
-                                dateWiseWorkorder(e)
-                        }
-                        }
-                    />
+                <MonthPickerInput
+                size="xs"
+                mt="md"
+                mr="md"
+                placeholder="Pick a month"
+                clearable
+                maxDate={new Date()}
+                value={clearMonth ? date : null}
+                onChange={(e) => {
+                  setClearMonth(true);
+                  let date = e !== null && format(e, "yyyy-MM-dd");
+                  setDate(e);
+                  dateWiseWorkorder(date, date);
+                  // if (e == null) {
+                  //   setWorkRecords([]);
+                  // }
+                }}
+              />
+              <Title size=".80rem" mt="xl" mr="sm" c>
+                OR
+              </Title>
+              <MonthPickerInput
+                size="xs"
+                mt="md"
+                mr="md"
+                type="range"
+                clearable
+                placeholder="Pick month range"
+                maxDate={new Date()}
+                onChange={(e) => {
+                  let firstDate = e[0] !== null && format(e[0], "yyyy-MM-dd");
+                  let secondDate = e[1] !== null && format(e[1], "yyyy-MM-dd");
+                  dateWiseWorkorder(firstDate, secondDate);
+                  if (e[0] == null && e[1] == null) {
+                    setWorkRecords([]);
+                    setClearMonth(false);
+                    // setToolsCount([])
+                  }
+                }}
+              />
                     </Flex>
                   <Flex>
                     <Box>  

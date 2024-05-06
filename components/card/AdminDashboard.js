@@ -132,9 +132,9 @@ export default function AdminDashboard({ records, username }) {
                   let date = e !== null && format(e, "yyyy-MM-dd");
                   setDate(e);
                   dateWiseWorkorder(date, date);
-                  // if (e == null) {
-                  //   setWorkRecords([]);
-                  // }
+                  if (e == null) {
+                    setWorkRecords([]);
+                  }
                 }}
               />
               <Title size=".80rem" mt="xl" mr="sm" c>
