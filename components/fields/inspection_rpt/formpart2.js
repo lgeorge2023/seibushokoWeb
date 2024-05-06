@@ -38,7 +38,6 @@ const FormPart2 = (props) => {
       try {
       const data = await get(`/product/report/${product_id}`);
       const newdata =removeNulls(data)
-      console.log('newdata', newdata)
       form.setValues({"tw_work_no": newdata.id,"tw_disloc_coeff":newdata.coeff_add_mod,"tw_no_teeth":newdata.no_of_teeth ,
       "tw_helix_angle":newdata.helix,"tw_twist_direction":newdata.twist_direction, "tw_material":newdata.material,})
     } catch (error) {
@@ -50,29 +49,29 @@ const FormPart2 = (props) => {
   const data = [
     [
       { type:"text", label:t('inspection.Module') },
-      { type: "number",label: "",name:"ts_module",precision:6 },
+      { type: "input",label: "",name:"ts_module",precision:6 },
       { type:"text", label: t('inspection.Work No') },
       { type:"select" , label: "",data:cutterData,  name:"tw_work_no",onchange:onchange,value:parseInt(form.values.tw_work_no)},
       {  label: "",type: "input", rowspan: 2 ,name:"specified_profile",disabled:true},
     ],
      [
       { type:"text", label: t('inspection.Pressure Angle')},
-      { type: "number",label: "",name:"ts_pressure_angle",precision:6 },
+      { type: "input",label: "",name:"ts_pressure_angle",precision:6 },
       { type:"text", label: t('inspection.Dislocation Coefficient')},
-      { type: "number" , label: "",name:"tw_disloc_coeff",precision:6},
+      { type: "input" , label: "",name:"tw_disloc_coeff",precision:6},
     ],
      [
       { type:"text", label: t('inspection.No Of Teeth/Gear') },
-      { type: "number",label: "" ,name:"ts_no_teeth"},
+      { type: "input",label: "" ,name:"ts_no_teeth"},
       { type:"text", label: t('inspection.No Of Teeth') },
-      { type: "number" , label: "",name:"tw_no_teeth"},
+      { type: "input" , label: "",name:"tw_no_teeth"},
       { type:"text", label: t('inspection.Trial')},
     ],
     [
       { type:"text", label: t('inspection.Helix Angle') },
-      { type: "number",label: "",name:"ts_helix_angle",precision:6 },
+      { type: "input",label: "",name:"ts_helix_angle",precision:6 },
       { type:"text", label: t('inspection.Helix Angle') },
-      { type: "number" , label: "",name:"tw_helix_angle",precision:6},
+      { type: "input" , label: "",name:"tw_helix_angle",precision:6},
       { type: "select" , label: "",name:"trial",data:trial,onchange:onTrialchange,value:form.values.trial},
     ],
     [

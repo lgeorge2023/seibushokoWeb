@@ -1,12 +1,29 @@
-import React from "react";
-import { Table, TextInput } from "@mantine/core";
+import React, { useEffect, useState } from "react";
+import { Select, Table, TextInput } from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
 import { parseISO } from "date-fns";
 import { useTranslation } from "next-i18next";
+import { fetchAndTransformStaffData } from "@/pages/api/Select";
 
 export default function FormPart4(props) {
   const form = props.form;
   const { t } = useTranslation("common");
+  const [ technician, setTechnician ] = useState([]);
+
+  const fetchAllData = async () => {
+    try{
+      const [technicianData] = await Promise.all([
+        fetchAndTransformStaffData(),
+      ]);
+      setTechnician(technicianData)
+    }catch (error) {
+      console.error(error);
+    }
+  }
+
+  useEffect (()=>{
+    fetchAllData();
+  },[])
 
 
   const handleChange = (selectedDate) => {
@@ -40,7 +57,7 @@ export default function FormPart4(props) {
               onChange={handleChange}
             />
           </td>
-          <td rowSpan={5}><TextInput placeholder={t('workOrder.Technician')} {...form.getInputProps("regrind_work_order.technician")} /></td>
+          <td rowSpan={5}><Select value={form.values.regrind_work_order.technician} data={technician} placeholder={t('workOrder.Technician')} {...form.getInputProps("regrind_work_order.technician")} /></td>
         </tr>
         <tr>
           <th>{t('workOrder.Relational Speed')}</th>

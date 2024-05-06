@@ -362,7 +362,7 @@ const AddInspectionReport = () => {
           setDroppedData((prevDroppedData) => [...prevDroppedData, ...droppedFiles]);
           setNewFiles((prevFiles) => [...prevFiles,...droppedFiles])
         }}
-        accept={['image/png','	image/jpeg' ,'application/pdf']}
+        accept={['image/png','	image/jpeg' ,'application/pdf','	text/csv', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel']}
         mt="md"
       >
         <Group
