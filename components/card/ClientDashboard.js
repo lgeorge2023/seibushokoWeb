@@ -43,6 +43,8 @@ export default function ClientDashboard({records,username,orderRecord}) {
     const [toolsCount, setToolsCount] = useState([])
     const [date, setDate] = useState(new Date());
     const [clearMonth, setClearMonth] = useState(true);
+    const [dateRange,setDateRange] = useState([]);
+    const [clearMonthRange,setClearMonthRange] = useState(true);
 
     useEffect(() => {
       mfgTableData();
@@ -169,9 +171,10 @@ const  orderColumns=[
                   let date = e !== null && format(e, "yyyy-MM-dd");
                   setDate(e);
                   dateWiseWorkorder(date, date);
-                  // if (e == null) {
-                  //   setWorkRecords([]);
-                  // }
+                  if (e == null) {
+                    setWorkRecords([]);
+                    setClearMonthRange(false)
+                  }
                 }}
               />
               <Title size=".80rem" mt="xl" mr="sm" c>
@@ -184,8 +187,11 @@ const  orderColumns=[
                 type="range"
                 clearable
                 placeholder="Pick month range"
+                value={clearMonthRange ? dateRange : []}
                 maxDate={new Date()}
                 onChange={(e) => {
+                  setDateRange(e)
+                  setClearMonthRange(true)
                   let firstDate = e[0] !== null && format(e[0], "yyyy-MM-dd");
                   let secondDate = e[1] !== null && format(e[1], "yyyy-MM-dd");
                   dateWiseWorkorder(firstDate, secondDate);

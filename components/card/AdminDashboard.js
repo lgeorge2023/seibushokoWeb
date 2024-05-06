@@ -46,7 +46,9 @@ export default function AdminDashboard({ records, username }) {
   const { classes } = useStyle();
   const { t } = useTranslation("common");
   const [date, setDate] = useState(new Date());
+  const [dateRange,setDateRange] = useState([])
   const [clearMonth, setClearMonth] = useState(true);
+  const [clearMonthRange,setClearMonthRange] = useState(true);
   const [toolsCount, setToolsCount] = useState([]);
   const tableData = records.slice(0, 6);
   const [workrecords, setWorkRecords] = useState([]);
@@ -134,6 +136,7 @@ export default function AdminDashboard({ records, username }) {
                   dateWiseWorkorder(date, date);
                   if (e == null) {
                     setWorkRecords([]);
+                    setClearMonthRange(false)
                   }
                 }}
               />
@@ -147,8 +150,11 @@ export default function AdminDashboard({ records, username }) {
                 type="range"
                 clearable
                 placeholder="Pick month range"
+                value={clearMonthRange ? dateRange : []}
                 maxDate={new Date()}
                 onChange={(e) => {
+                  setDateRange(e)
+                  setClearMonthRange(true)
                   let firstDate = e[0] !== null && format(e[0], "yyyy-MM-dd");
                   let secondDate = e[1] !== null && format(e[1], "yyyy-MM-dd");
                   dateWiseWorkorder(firstDate, secondDate);
