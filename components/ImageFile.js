@@ -16,7 +16,7 @@ const ImageFile = (props) => {
   };
 
   useEffect(() => {
-    if (name === "product_image" || name === "specimage") {
+    if (name == "product_image" || name == "specimage") {
       setPage("prdt/machn");
     }
   }, [name]);
@@ -52,9 +52,10 @@ const ImageFile = (props) => {
   };
 
   const file = form.values[name];
+
   const isPdf = isEditing
-    ? file?.slice(-4) == ".pdf"
-    : file?.name?.slice(-4) == ".pdf";
+  ? file?.slice(-4) == ".pdf"
+  : file?.name?.slice(-4) == ".pdf";
 
   const imageUrl =
     form.values[name] != null && typeof form.values[name] == "object"
@@ -69,10 +70,8 @@ const ImageFile = (props) => {
         size="xl"
         title="Image"
       >
-        {!isPdf && (
+        {/* {isPdf ? <FileAnalytics size={100} color="black" />: */}
           <Image width={700} height={600} alt="Image Preview" src={imageUrl} />
-        )}
-        {isPdf && <FileAnalytics size={100} color="black" />}
       </Modal>
       <FileInput
         key={name}
@@ -95,7 +94,7 @@ const ImageFile = (props) => {
               onClick={deleteImage}
             />
           )}
-          {!isPdf && (
+          {!imageUrl.endsWith('.pdf') && !isPdf &&(
             <Image
               mt="md"
               style={{ cursor: "pointer" }}
@@ -106,7 +105,14 @@ const ImageFile = (props) => {
               onClick={viewImage}
             />
           )}
-          {isPdf && (
+          { imageUrl.endsWith('.pdf') &&(
+            <Group>
+              <a href= {imageUrl} target="_blank">
+                <IconFileAnalytics cursor={"pointer"} size="60" color="green" />
+              </a>
+            </Group>
+          )}
+           {isPdf && (
             <Group>
               <a href={isEditing ? file : null} target="_blank">
                 <IconFileAnalytics cursor={"pointer"} size="60" color="green" />

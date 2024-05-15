@@ -49,6 +49,7 @@ const AddOrder = () => {
   const [visible,setVisible]=useState(0);
   const [showModal, setShowModal] = useState(false);
   const [index,setIndex]=useState(null);
+  const [clientId,setClientId] = useState(0);
   const [changeOrderStatus, setChangeOrderStatus] = useState('NEW')
     const form = useForm({
     initialValues: {
@@ -122,8 +123,11 @@ const AddOrder = () => {
   const fetchData = async () => {
     try {
       const data = await get(`order/${id}/`);
-      
+      //this clientId is using to restrict mfg change 
+      setClientId(data.client)
+
       data.delete_order_lines = [];
+
       // Filter out null elements from order_lines array
       const filteredOrderLines = data.order_lines.filter(line => line !== null);
       
@@ -213,6 +217,7 @@ const AddOrder = () => {
       fetchData();
     }
   }, [isEditing,id])
+
   const createOrUpdateData = async (addanother) => {
     try {
       const data = form.values;
@@ -265,9 +270,12 @@ const AddOrder = () => {
     } 
     form.setFieldValue('client', val);
     const orderLines = form.values.order_lines;
-    orderLines.forEach(({ cutter_no }, index) => {
-      handleChange(cutter_no, index, val);
-    });
+    if(clientId != 1){
+      orderLines.forEach(({ cutter_no }, index) => {
+        handleChange(cutter_no, index, val);
+      });
+    }
+
   };
   
     const breadcrumbs = [
@@ -415,7 +423,7 @@ const AddOrder = () => {
                       <Grid.Col  md={6} lg={3}>                   
                       <Checkbox
                       color="red"
-                      iconColor = "dark.8"
+                      // iconColor = "dark.8"
                       label="Do you want to cancel this order?"
                       {...form.getInputProps(`order_lines.${index}.order_status`)}
                       />

@@ -238,6 +238,9 @@ const AddInspectionReport = () => {
           formData.append(key, data[key] != null ? data[key] : "");
         }
       }
+      if(!isEditing){
+        formData.delete("delete_image")
+      }
       const endpoint = isEditing ? `/report/${id}/` : "/report/";
       const response = isEditing
         ? await put(endpoint, formData)
