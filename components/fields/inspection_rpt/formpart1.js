@@ -11,7 +11,7 @@ const Formpart1 = (props) => {
     const { t } = useTranslation("common");
     const fields=FieldsArray();
     const [showModal, setShowModal] = useState(false);
-    const {form,isEditing} =props;
+    const {form,isEditing,locale} =props;
   return (<Box>
     <WorkOrderModal  form={form} setShowModal={setShowModal} showModal={showModal} isEditing={isEditing} />
     <Grid >{fields.map((field) => {
@@ -39,7 +39,7 @@ const Formpart1 = (props) => {
               if (type === "date") {
                 return (
                   <Grid.Col md={6} lg={4}  key={name}>
-                    <DatePicker key={name} name={name} form={form} {...props} />
+                    <DatePicker key={name} name={name} form={form} locale={locale} {...props} />
                   </Grid.Col >
                 );
               }

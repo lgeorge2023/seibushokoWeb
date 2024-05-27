@@ -243,12 +243,12 @@ const AddWorkOrder = () => {
       ) : (
         <Title order={3}>Work Order</Title>
       )}
-      <FormPart1 form={form} isEditing={isEditing} />
+      <FormPart1 form={form} isEditing={isEditing} locale={router.locale} />
       <Flex style={{gap:"20px"}}>
         <FormPart2 form={form} />
         <FormPart3 form={form} />
       </Flex>
-      <FormPart4 form={form} />
+      <FormPart4 form={form} locale={router.locale} />
       {visible == 1 && (
         <SubmitButtons
           isEditing={isEditing}

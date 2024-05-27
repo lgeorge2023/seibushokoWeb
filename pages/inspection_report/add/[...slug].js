@@ -347,7 +347,7 @@ const AddInspectionReport = () => {
       <Title order={3}>
         {isEditing ? t("edit_inspectionreport") : t("add__inspectionreport")}
       </Title>
-      <Formpart1 form={form} isEditing={isEditing} />
+      <Formpart1 form={form} isEditing={isEditing} locale={router.locale}/>
       <FormPart2 form={form} cutterData={cutterData} />
       <FormPart3 form={form} />
       <FormPart4 form={form} />
@@ -359,7 +359,7 @@ const AddInspectionReport = () => {
           <FormPart6 form={form} />
         )}
       </Flex>
-      <FormPart7 form={form} />
+      <FormPart7 form={form} locale={router.locale}/>
       <Dropzone
         onDrop={(droppedFiles) => {
           setDroppedData((prevDroppedData) => [...prevDroppedData, ...droppedFiles]);
@@ -387,10 +387,10 @@ const AddInspectionReport = () => {
           </Dropzone.Idle>
           <Box>
             <Text size="xl" inline>
-              Upload Inspection Report Files
+              {t("Upload Inspection Report Files")}
             </Text>
             <Text size="sm" c="dimmed" inline mt={7}>
-              Attach as many files as you like, each file should not exceed 5mb
+             {t("Attach as many files as you like, each file should not exceed 5mb")}
             </Text>
           </Box>
         </Group>

@@ -1,9 +1,10 @@
-import { DateInput, } from '@mantine/dates';
+import { DatePickerInput,DatesProvider } from '@mantine/dates';
 import { IconCalendar } from '@tabler/icons-react';
 import React from 'react';
 import { format, parseISO } from 'date-fns';
+import 'dayjs/locale/ja';
 
-const DatePicker = ({  name, form, ...props }) => {
+const DatePicker = ({  name, form, locale, ...props }) => {
   const value = form.values[name] ? parseISO(form.values[name]) : null;
 
   const handleChange = (selectedDate) => {
@@ -12,13 +13,15 @@ const DatePicker = ({  name, form, ...props }) => {
   };
 
   return (
-    <DateInput
+    <DatesProvider settings={{locale:locale}}>
+    <DatePickerInput
       icon={<IconCalendar size="0.5cm" stroke={1.5} />}
       value={value}
       onChange={handleChange}
       placeholder="Pick a date"
       {...props}
     />
+    </DatesProvider>
   );
 };
 

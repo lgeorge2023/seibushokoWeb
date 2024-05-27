@@ -57,9 +57,9 @@ function WorkOrderList() {
       { header: t('workOrder.productNo'),accessorKey:"product_no", sortable: true, size:100  },
       { header: t('workOrder.orderno'), accessorKey:"order_no", size:100 },
       { header: t('regrindType'),accessorKey:"regrind_type", sortable: true, size:100  },
-      { header: t('workOrder.regirndform'), accessorKey:"regrind_from", size:100  },
-      { header: t('workOrder.urgency'),accessorKey:"urgency", sortable: true, size:100  },
-      { header: t('workOrder.status'), accessorKey:'workorder_status', size:100  },
+      { header: t('workOrder.regirndform'), accessorKey:"regrind_from", size:100,Cell:({cell}) => t(cell.row.original.regrind_from)   },
+      { header: t('workOrder.urgency'),accessorKey:"urgency", sortable: true, size:100, Cell:({cell}) => t(cell.row.original.urgency)  },
+      { header: t('workOrder.status'), accessorKey:'workorder_status', size:100, Cell:({cell}) => t(cell.row.original.workorder_status) },
       { header: t('workOrder.orderdate'),
       accessorFn: (row) => {
         //convert to Date for sorting and filtering
@@ -72,7 +72,7 @@ function WorkOrderList() {
       },  
       filterVariant: 'date',
      Cell: ({ renderedCellValue }) => formatdate(renderedCellValue), size:100 },
-      { header: t('workOrder.location'),accessorKey:"location", sortable: true, size:100  },
+      { header: t('workOrder.location'),accessorKey:"location", sortable: true, size:100, Cell:({cell}) => t(cell.row.original.location)   },
       { header: t('client'), accessorKey:"client_name", size:100 },
  
   ]

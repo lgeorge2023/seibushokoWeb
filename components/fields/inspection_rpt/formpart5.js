@@ -42,7 +42,7 @@ const FormPart5 = (props) => {
     ],
     [
       { type:"text", label: t('inspection.Stroke') },
-      { type: "number",label: "",name:"report_trial.cc_stroke",precision:6 },
+      { type: "input",label: "",name:"report_trial.cc_stroke",precision:6 },
     ],
      [
       { type:"text", label: t('inspection.Straddle ToothThickness') },

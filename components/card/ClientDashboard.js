@@ -3,7 +3,7 @@ import { StatusGroup } from './StatusGroup'
 import Link from 'next/link';
 import { useTranslation } from "next-i18next";
 import { WelcomeCard } from './WelcomeCard';
-import { MonthPickerInput } from '@mantine/dates';
+import { DatesProvider, MonthPickerInput } from '@mantine/dates';
 import { useEffect, useState } from 'react';
 import { format } from 'date-fns';
 import MantineReactTables from '../MantineReactTable';
@@ -32,7 +32,7 @@ const useStyle = createStyles(theme => ({
         },
 	},
 }));
-export default function ClientDashboard({records,username,orderRecord}) {
+export default function ClientDashboard({records,username,orderRecord, locale}) {
 	const { classes } = useStyle();
     const { t } = useTranslation("common");
     const [workdate,setWorkDate] = useState( new Date());
@@ -93,7 +93,6 @@ export default function ClientDashboard({records,username,orderRecord}) {
     const updateUrgency = async (id, urgency) => {      
       try{
         const response = await put(`/workorder/urgency/${id}/${urgency}`)
-        console.log("response",response);
         notifications.show({
           title: t('Success'),
           message: t(response),
@@ -123,7 +122,7 @@ export default function ClientDashboard({records,username,orderRecord}) {
       })  },
     { header: t('workOrder.orderdate'), accessorKey: "workorder_date", size:100 },
     { header: t('Estimated Finish'), accessorKey: "delivery_date", size:100 },
-    { header: t('status'), accessorKey: "workorder_status", size:100 },
+    { header: t('status'), accessorKey: "workorder_status", size:100, Cell:({cell}) => t(cell.row.original.workorder_status) },
     ]
 const  orderColumns=[
     {header: t('content.orderno'), accessorKey: "order_no", size:100, },
@@ -158,6 +157,7 @@ const  orderColumns=[
                 <Flex justify='space-between'>
                     <Flex>
 				        <Title className={classes.section} order={5}>{t('Workorder')}</Title>
+                <DatesProvider settings={{locale:locale}}>
                 <MonthPickerInput
                 size="xs"
                 mt="md"
@@ -202,6 +202,7 @@ const  orderColumns=[
                   }
                 }}
               />
+              </DatesProvider>
                     </Flex>
                   <Flex>
                     <Box>  

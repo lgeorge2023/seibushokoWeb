@@ -12,12 +12,13 @@ import { StatusGroup } from "./StatusGroup";
 import { WelcomeCard } from "./WelcomeCard";
 import { useTranslation } from "next-i18next";
 import formatdate from "@/utils/formatdate";
-import { MonthPickerInput } from "@mantine/dates";
+import { MonthPickerInput, DatesProvider } from "@mantine/dates";
 import { useEffect, useState } from "react";
 import { parseISO } from "date-fns";
 import { format } from "date-fns";
 import { get } from "@/pages/api/apiUtils";
 import MantineReactTables from "../MantineReactTable";
+import 'dayjs/locale/ja';
 
 const useStyle = createStyles((theme) => ({
   section: {
@@ -42,7 +43,7 @@ const useStyle = createStyles((theme) => ({
   },
 }));
 
-export default function AdminDashboard({ records, username }) {
+export default function AdminDashboard({ records, username, locale }) {
   const { classes } = useStyle();
   const { t } = useTranslation("common");
   const [date, setDate] = useState(new Date());
@@ -108,7 +109,7 @@ export default function AdminDashboard({ records, username }) {
       Cell: ({ renderedCellValue }) => formatdate(renderedCellValue),
       size: 100,
     },
-    { header: t("status"), accessorKey: "workorder_status", size: 100 },
+    { header: t("status"), accessorKey: "workorder_status", size: 100, Cell:({cell}) => t(cell.row.original.workorder_status)  },
   ];
   return (
     <Box>
@@ -121,6 +122,7 @@ export default function AdminDashboard({ records, username }) {
               <Title className={classes.section} order={5}>
                 {t("Workorder")}
               </Title>
+              <DatesProvider settings={{locale:locale}}>
               <MonthPickerInput
                 size="xs"
                 mt="md"
@@ -140,6 +142,7 @@ export default function AdminDashboard({ records, username }) {
                   }
                 }}
               />
+              
               <Title size=".80rem" mt="xl" mr="sm" c>
                 OR
               </Title>
@@ -165,6 +168,7 @@ export default function AdminDashboard({ records, username }) {
                   }
                 }}
               />
+              </DatesProvider>
             </Flex>
             <Flex>
               <Box>

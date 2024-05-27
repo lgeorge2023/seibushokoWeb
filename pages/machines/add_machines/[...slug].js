@@ -139,7 +139,7 @@ function AddMachines() {
               if (type === "date") {
                 return (
                   <Grid.Col md={6} lg={4}  key={name}>
-                    <DatePicker key={name} name={name} form={form} {...props} />
+                    <DatePicker key={name} name={name} form={form} locale={router.locale} {...props} />
                   </Grid.Col >
                 );
               }

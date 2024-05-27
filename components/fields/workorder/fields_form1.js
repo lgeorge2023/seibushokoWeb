@@ -54,8 +54,8 @@ export const FieldsArray = () => {
     { value: "CUSTOMERRETURN", label: t("workOrder.cutomerReturn") },
     { value: "WORKORDER", label: t("Workorder") },
   ]
-  const sooneql=  [{ value: "TRUE", label: "True" },{value: "FALSE", label: "False"}] ;
-  const urgency=[{ value: "USUALLY", label: "Usually" },{value:"LIMITEDEXPRESS", label: "Limited Express"}] ;
+  const sooneql=  [{ value: "TRUE", label: t("True") },{value: "FALSE", label: t("False")}] ;
+  const urgency=[{ value: "USUALLY", label: t("USUALLY") },{value:"LIMITEDEXPRESS", label: t("LIMITEDEXPRESS")}] ;
 const Test=[{ value: "TRIAL", label: t('inspection.Trial') },{value: "NONTRIAL", label: t('inspection.Non Trial')}]
   const fields = [
     { label: t('workOrder.orderno'), name: 'order_no', readOnly: true,data:orders ,withAsterisk:true},

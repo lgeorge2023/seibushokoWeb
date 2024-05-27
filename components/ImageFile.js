@@ -100,7 +100,7 @@ const ImageFile = (props) => {
               style={{ cursor: "pointer" }}
               width={100}
               height={80}
-              alt="Image Preview"
+              alt="No Preview"
               src={imageUrl}
               onClick={viewImage}
             />
@@ -112,7 +112,7 @@ const ImageFile = (props) => {
               </a>
             </Group>
           )}
-           {isPdf && (
+           {isPdf && !isEditing &&(
             <Group>
               <a href={isEditing ? file : null} target="_blank">
                 <IconFileAnalytics cursor={"pointer"} size="60" color="green" />

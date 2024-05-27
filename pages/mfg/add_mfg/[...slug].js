@@ -179,7 +179,7 @@ function AddMFG() {
               if (type === "date") {
                 return (
                   <div key={name}>
-                    <DatePicker key={name} name={name} form={form} {...props} />
+                    <DatePicker key={name} name={name} form={form} locale={router.locale} {...props} />
                   </div>
                 );
               }

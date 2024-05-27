@@ -1,11 +1,13 @@
 import { Box,NumberInput, Select, Table, TextInput, Title } from '@mantine/core';
 import React from 'react'
-import { DatePickerInput } from '@mantine/dates';
+import { DatePickerInput, DatesProvider } from '@mantine/dates';
 import { parseISO } from 'date-fns';
 import ImageFile from './ImageFile';
 import { IconCalendar } from '@tabler/icons-react';
+import 'dayjs/locale/ja';
+
 const FormTable = (props) => {
-    const {column,data,header,form,style}=props;
+    const {column,data,header,form,style,locale}=props;
     const handleDateChange = (e,name) => {
       const formattedDate = e ? e.toISOString().split('T')[0] : '';
       form.setFieldValue(name, formattedDate);
@@ -84,18 +86,21 @@ const FormTable = (props) => {
                 if (type == "date") {
                   return (
                     <td key={colIndex} rowSpan={rowspan}>
+                      <DatesProvider settings={{locale:locale}}>
                      <DatePickerInput
                       icon={<IconCalendar size="0.5cm" stroke={1.5} />}
               placeholder="Pick a Date"
               value={parseISO(form.values[name])||null}
               onChange={(e)=>handleDateChange(e,name)}
             />
+            </DatesProvider>
              </td>
                   );
                 }
                 if (type === "regrinddate") {
                   return (
                     <td key={colIndex} rowSpan={rowspan}>
+                      {/* <DatesProvider settings={{locale:locale}}> */}
                      <DatePickerInput
               placeholder="Pick a Date"
               value={
@@ -104,6 +109,7 @@ const FormTable = (props) => {
                   : null}
               onChange={handleChange}
             />
+            {/* </DatesProvider> */}
              </td>
                   );
                 }

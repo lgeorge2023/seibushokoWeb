@@ -8,7 +8,7 @@ const FormPart7 = (props) => {
   const [manager, setManager] = useState([]);
   const { t } = useTranslation("common");
 
-  const {form}= props;
+  const {form,locale}= props;
   const fetchAllData = async () => {
     try {
       const [managerData] = await Promise.all([
@@ -16,7 +16,6 @@ const FormPart7 = (props) => {
       ]);
       setManager(managerData);
     } catch (error) {
-      console.error(error);
     }
   };
   useEffect(() => {
@@ -33,7 +32,7 @@ const FormPart7 = (props) => {
     ],
   ];
   return (
-    <FormTable header={null} column={[]} data={data} form={form} />
+    <FormTable header={null} column={[]} data={data} form={form} locale={locale} />
   );
 };
 

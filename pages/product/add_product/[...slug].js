@@ -177,7 +177,7 @@ const breadcrumbs = [
 
               if (type === "date") {
                 return (
-                  <DatePicker key={name} name={name} form={form} {...props} />
+                  <DatePicker key={name} name={name} form={form} locale={router.locale} {...props} />
                 );
               }
               if (name == "cutter_no") {

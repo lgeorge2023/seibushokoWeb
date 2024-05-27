@@ -16,11 +16,12 @@ import { get } from "@/pages/api/apiUtils";
 import { useTranslation } from 'next-i18next'
 
 export default function FormPart1(props) {
+  
   const { t } = useTranslation("common");
   const [showOrderModal, setOrderShowModal] = useState(false);
   const [visible, setVisible] = useState(false);
   const [requesterData,setRequesterdata]=useState([])
-  const {form,isEditing} = props;
+  const {form, isEditing, locale} = props;
   const fields = FieldsArray();
   const profile_data = JSON.parse(
     UserManagement.getItem("profile_data") || "{}"
@@ -96,7 +97,7 @@ export default function FormPart1(props) {
         if (type === "date") {
           return (
             <div key={i}>
-              <DatePicker name={name} form={form} {...props} id={name + i} />
+              <DatePicker name={name} form={form} locale={locale} {...props} id={name + i} />
             </div>
           );
         }

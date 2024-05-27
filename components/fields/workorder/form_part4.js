@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Select, Table, TextInput } from "@mantine/core";
-import { DatePickerInput } from "@mantine/dates";
+import { DatePickerInput, DatesProvider } from "@mantine/dates";
 import { parseISO } from "date-fns";
 import { useTranslation } from "next-i18next";
 import { fetchAndTransformStaffData } from "@/pages/api/Select";
+import { locale } from "dayjs";
 
 export default function FormPart4(props) {
   const form = props.form;
@@ -51,11 +52,13 @@ export default function FormPart4(props) {
           <td><TextInput placeholder={t('workOrder.Minutes')} {...form.getInputProps("regrind_work_order.minute")} /></td>
           <td><TextInput placeholder={t('workOrder.Second')} {...form.getInputProps("regrind_work_order.second")} /></td>
           <td rowSpan={5}>
+            <DatesProvider settings={{locale:props.locale}}>
             <DatePickerInput
               placeholder="Regrind Date"
               value={form.values.regrind_work_order.test_date ? parseISO(form.values.regrind_work_order.test_date) : null}
               onChange={handleChange}
             />
+            </DatesProvider>
           </td>
           <td rowSpan={5}><Select value={form.values.regrind_work_order.technician} data={technician} placeholder={t('workOrder.Technician')} {...form.getInputProps("regrind_work_order.technician")} /></td>
         </tr>

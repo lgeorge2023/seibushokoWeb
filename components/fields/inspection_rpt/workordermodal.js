@@ -80,7 +80,7 @@ import {useTranslation} from 'next-i18next'
       "ts_shaving_method":data.regrind_type,
       "trial":data.test,"no_polishing_times":data.regrind_count,
      "product_no":data.product,"regrind_count":data.regrind_count,
-      "regrind_type":data.regrind_type})
+      "regrind_type":data.regrind_type,"order_date":data.workorder_date})
    },
    (error) => { 
    })

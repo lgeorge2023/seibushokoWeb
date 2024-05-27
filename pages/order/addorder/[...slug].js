@@ -325,6 +325,7 @@ const AddOrder = () => {
                   label={t('content.orderDate')}
                   name={"order_date"}
                   form={form}
+                  locale={router.locale}
                 />
               </Grid.Col>
             </Grid>
@@ -424,7 +425,7 @@ const AddOrder = () => {
                       <Checkbox
                       color="red"
                       // iconColor = "dark.8"
-                      label="Do you want to cancel this order?"
+                      label={t("Do you want to cancel this order？")}
                       {...form.getInputProps(`order_lines.${index}.order_status`)}
                       />
                     </Grid.Col>                 

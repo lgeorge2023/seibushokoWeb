@@ -73,7 +73,7 @@ const FormPart6 = (props) => {
   const data = [
     [
       { type:"text", label: t('inspection.Angle of Axial Crossing') },
-      { type: "number",label: "" ,name:"report_trial.pc_angle_axial_cross",precision:6},
+      { type: "input",label: "" ,name:"report_trial.pc_angle_axial_cross",precision:6},
     ],
      [
       { type:"text", label:t('inspection.Cutter speed') },
