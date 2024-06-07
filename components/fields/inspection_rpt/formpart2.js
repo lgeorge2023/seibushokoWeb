@@ -44,7 +44,7 @@ const FormPart2 = (props) => {
     }
   };
   const onTrialchange=(e)=>{
-      form.setValues({"trial":e,"specified_profile":e=='TRIAL'?"False":"True"})
+      form.setValues({"trial":e,"specified_profile":e=='TRIAL'?t("False"):t("True")})
   }
   const data = [
     [

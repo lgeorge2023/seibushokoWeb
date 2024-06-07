@@ -445,6 +445,8 @@
   "TOOLS_FINISHED":"完了枚数",
   "TOOLS_DELIVERED":"発送枚数",
   "TOOLS_RECEIVED":"入荷枚数",
+  "Pick month range":"月の範囲を選択",
+  "Pick a month":"月を選択してください",
   "Do you want to cancel this order？":"この注文をキャンセルしますか?",
 
   "An unexpected error occurred":"予期しないエラーが発生しました",

@@ -165,6 +165,8 @@ const AddInspectionReport = () => {
       const api_data = await get(`report/${id}/`);
       const nulltostring = removeNulls(api_data);
       form.setValues(nulltostring);
+      const {specified_profile} = nulltostring
+      form.setValues( {specified_profile : t(specified_profile)});
       setDroppedData(nulltostring.report_files)
     } catch (error) {
       handleApiError(error, router, t);

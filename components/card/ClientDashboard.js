@@ -162,7 +162,7 @@ const  orderColumns=[
                 size="xs"
                 mt="md"
                 mr="md"
-                placeholder="Pick a month"
+                placeholder={t("Pick a month")}
                 clearable
                 maxDate={new Date()}
                 value={clearMonth ? date : null}
@@ -186,7 +186,7 @@ const  orderColumns=[
                 mr="md"
                 type="range"
                 clearable
-                placeholder="Pick month range"
+                placeholder={t("Pick month range")}
                 value={clearMonthRange ? dateRange : []}
                 maxDate={new Date()}
                 onChange={(e) => {

@@ -18,7 +18,7 @@ import { parseISO } from "date-fns";
 import { format } from "date-fns";
 import { get } from "@/pages/api/apiUtils";
 import MantineReactTables from "../MantineReactTable";
-import 'dayjs/locale/ja';
+import "dayjs/locale/ja";
 
 const useStyle = createStyles((theme) => ({
   section: {
@@ -47,9 +47,9 @@ export default function AdminDashboard({ records, username, locale }) {
   const { classes } = useStyle();
   const { t } = useTranslation("common");
   const [date, setDate] = useState(new Date());
-  const [dateRange,setDateRange] = useState([])
+  const [dateRange, setDateRange] = useState([]);
   const [clearMonth, setClearMonth] = useState(true);
-  const [clearMonthRange,setClearMonthRange] = useState(true);
+  const [clearMonthRange, setClearMonthRange] = useState(true);
   const [toolsCount, setToolsCount] = useState([]);
   const tableData = records.slice(0, 6);
   const [workrecords, setWorkRecords] = useState([]);
@@ -95,21 +95,35 @@ export default function AdminDashboard({ records, username, locale }) {
     { header: t("Client Name"), accessorKey: "client_name", size: 80 },
     { header: t("workOrder.cutterno"), accessorKey: "cutter_no", size: 80 },
     { header: t("workOrder.mfgno"), accessorKey: "mfg_no", size: 80 },
-    // { header: t('workOrder.geardrwno'), accessorKey: "geardrawing_no", size:100 },
     { header: t("workOrder.orderno"), accessorKey: "order_no", size: 100 },
     {
       header: t("workOrder.orderdate"),
-      accessorKey: "workorder_date",
+      accessorFn: (row) => {
+        const sDay = new Date(row.workorder_date);
+        sDay.setHours(0, 0, 0, 0);
+        return sDay;
+      },
+      filterVariant: "date",
       Cell: ({ renderedCellValue }) => formatdate(renderedCellValue),
       size: 100,
     },
     {
       header: t("Estimated Finish"),
-      accessorKey: "delivery_date",
+      accessorFn: (row) => {
+        const sDay = new Date(row.delivery_date);
+        sDay.setHours(0, 0, 0, 0);
+        return sDay;
+      },
+      filterVariant: "date",
       Cell: ({ renderedCellValue }) => formatdate(renderedCellValue),
       size: 100,
     },
-    { header: t("status"), accessorKey: "workorder_status", size: 100, Cell:({cell}) => t(cell.row.original.workorder_status)  },
+    {
+      header: t("status"),
+      accessorKey: "workorder_status",
+      size: 100,
+      Cell: ({ cell }) => t(cell.row.original.workorder_status),
+    },
   ];
   return (
     <Box>
@@ -122,52 +136,53 @@ export default function AdminDashboard({ records, username, locale }) {
               <Title className={classes.section} order={5}>
                 {t("Workorder")}
               </Title>
-              <DatesProvider settings={{locale:locale}}>
-              <MonthPickerInput
-                size="xs"
-                mt="md"
-                mr="md"
-                placeholder="Pick a month"
-                clearable
-                maxDate={new Date()}
-                value={clearMonth ? date : null}
-                onChange={(e) => {
-                  setClearMonth(true);
-                  let date = e !== null && format(e, "yyyy-MM-dd");
-                  setDate(e);
-                  dateWiseWorkorder(date, date);
-                  if (e == null) {
-                    setWorkRecords([]);
-                    setClearMonthRange(false)
-                  }
-                }}
-              />
-              
-              <Title size=".80rem" mt="xl" mr="sm" c>
-                OR
-              </Title>
-              <MonthPickerInput
-                size="xs"
-                mt="md"
-                mr="md"
-                type="range"
-                clearable
-                placeholder="Pick month range"
-                value={clearMonthRange ? dateRange : []}
-                maxDate={new Date()}
-                onChange={(e) => {
-                  setDateRange(e)
-                  setClearMonthRange(true)
-                  let firstDate = e[0] !== null && format(e[0], "yyyy-MM-dd");
-                  let secondDate = e[1] !== null && format(e[1], "yyyy-MM-dd");
-                  dateWiseWorkorder(firstDate, secondDate);
-                  if (e[0] == null && e[1] == null) {
-                    setWorkRecords([]);
-                    setClearMonth(false);
-                    // setToolsCount([])
-                  }
-                }}
-              />
+              <DatesProvider settings={{ locale: locale }}>
+                <MonthPickerInput
+                  size="xs"
+                  mt="md"
+                  mr="md"
+                  placeholder={t("Pick a month")}
+                  clearable
+                  maxDate={new Date()}
+                  value={clearMonth ? date : null}
+                  onChange={(e) => {
+                    setClearMonth(true);
+                    let date = e !== null && format(e, "yyyy-MM-dd");
+                    setDate(e);
+                    dateWiseWorkorder(date, date);
+                    if (e == null) {
+                      setWorkRecords([]);
+                      setClearMonthRange(false);
+                    }
+                  }}
+                />
+
+                <Title size=".80rem" mt="xl" mr="sm" c>
+                  OR
+                </Title>
+                <MonthPickerInput
+                  size="xs"
+                  mt="md"
+                  mr="md"
+                  type="range"
+                  clearable
+                  placeholder={t("Pick month range")}
+                  value={clearMonthRange ? dateRange : []}
+                  maxDate={new Date()}
+                  onChange={(e) => {
+                    setDateRange(e);
+                    setClearMonthRange(true);
+                    let firstDate = e[0] !== null && format(e[0], "yyyy-MM-dd");
+                    let secondDate =
+                      e[1] !== null && format(e[1], "yyyy-MM-dd");
+                    dateWiseWorkorder(firstDate, secondDate);
+                    if (e[0] == null && e[1] == null) {
+                      setWorkRecords([]);
+                      setClearMonth(false);
+                      // setToolsCount([])
+                    }
+                  }}
+                />
               </DatesProvider>
             </Flex>
             <Flex>

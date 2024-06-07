@@ -450,6 +450,8 @@
   "TOOLS_FINISHED":"TOOLS FINISHED",
   "TOOLS_DELIVERED":"TOOLS DELIVERED",
   "TOOLS_RECEIVED":"TOOLS RECEIVED",
+  "Pick month range":"Pick month range",
+  "Pick a month":"Pick a month",
   "Do you want to cancel this order？":"Do you want to cancel this order？",
 
   "An unexpected error occurred":"An unexpected error occurred",

@@ -18,7 +18,7 @@ const data = [
   ],
    [
     { type:"text", label: "Plunge feed" },
-    { type: "number",label: "",name:"report_trial.pc_plunge_feed" },
+    { type: "input",label: "",name:"report_trial.pc_plunge_feed" },
   ],
   [
     { type:"text", label: "Amount of cut" },
@@ -81,7 +81,7 @@ const FormPart6 = (props) => {
     ],
      [
       { type:"text", label: t('inspection.Plunge feed')},
-      { type: "number",label: "",name:"report_trial.pc_plunge_feed" ,precision:6},
+      { type: "input",label: "",name:"report_trial.pc_plunge_feed" ,precision:6},
     ],
     [
       { type:"text", label: t('inspection.Amount of cut') },
