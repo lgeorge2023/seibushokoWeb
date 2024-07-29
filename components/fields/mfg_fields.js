@@ -69,6 +69,7 @@ export const FieldsArray = () => {
     { name: "remarks", label: t('MFG.Remarks'), type: "text" },
     { name: "regrind_count", label: t('MFG.Regrind Count'), type: "number" },
     { name: "EOL", label: t('MFG.EOL'), type: "select", data: eol },
+    { name: "comment", label: t('Comment'), type: 'textarea' },
   ];
 
   return fields;

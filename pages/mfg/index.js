@@ -79,11 +79,11 @@ useEffect(() => {
   fetchClientId();
 }, []);
 const  columns=[
-  { header: t('MFG.MFG No'),accessorKey:"mfg_no", size:100 },
-  { header: t('MFG.Cutter No'), accessorKey:"cutter_no", size:100 },
-  { header: t('MFG.Module'),accessorKey:"module", size:100 },
-  { header: t('MFG.Drawing No'),accessorKey:"drawing_no", size:100 },
-  { header: t('MFG.Processing Type'), accessorKey:"process_type", size:100 },
+  { header: t('MFG.MFG No'),accessorKey:"mfg_no", size:100,enableEditing: false, },
+  { header: t('MFG.Cutter No'), accessorKey:"cutter_no", size:100,enableEditing: false, },
+  { header: t('MFG.Module'),accessorKey:"module", size:100,enableEditing: false, },
+  { header: t('MFG.Drawing No'),accessorKey:"drawing_no", size:100,enableEditing: false, },
+  { header: t('MFG.Processing Type'), accessorKey:"process_type", size:100,enableEditing: false, },
   { header: t('MFG.Registration Date'),
   accessorFn: (row) => {
     //convert to Date for sorting and filtering
@@ -92,12 +92,12 @@ const  columns=[
     return sDay;
   },  
   filterVariant: 'date',
-  Cell: ({ renderedCellValue }) => formatdate(renderedCellValue), size:100 },  
-  { header: t('MFG.Registered By'), accessorKey:"register_by", size:100},
-  { header: t('MFG.Location'),accessorKey:"location", size:100 }, 
-  { header: t('MFG.Status'), accessorKey:"status", size:100 },
-  { header: t('MFG.Client'),accessorKey:"client_name", size:100 },
-  { header: t('MFG.Regrind Count'),accessorKey:"regrind_count", size:100 },]
+  Cell: ({ renderedCellValue }) => formatdate(renderedCellValue), size:100,enableEditing: false, },  
+  { header: t('MFG.Registered By'), accessorKey:"register_by", size:100,enableEditing: false,},
+  { header: t('MFG.Location'),accessorKey:"location", size:100,enableEditing: false, }, 
+  { header: t('MFG.Status'), accessorKey:"status", size:100,enableEditing: false, },
+  { header: t('MFG.Client'),accessorKey:"client_name", size:100,enableEditing: false, },
+  { header: t('MFG.Regrind Count'),accessorKey:"regrind_count", size:100,enableEditing: false, },]
   return (
     <Layout breadcrumbs={breadcrumbs} >
     <Box>

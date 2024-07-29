@@ -85,16 +85,16 @@ const hideColumn={cutter_dwg_no:false,pressure_ang:false,helix_angle:false,hardn
     setMfgModal(true);
   }
  const columns=[
-    { header: t('cutter.Cutter No'),  accessorKey: 'cutter_no',  sortable: true, size:100 },
-    { header: t('cutter.Type') ,accessorKey: 'type', size:100 },
-    { header: t('cutter.Cutter Drawing No'),accessorKey: 'cutter_dwg_no', sortable: true, size:100 },
-    { header: t('cutter.Module'),accessorKey: 'module', sortable: true, size:100 },
-    { header: t('cutter.Pressure Angle'),accessorKey: 'pressure_ang', sortable: true, size:100 },
-    { header: t('cutter.Lead'),accessorKey: 'lead', sortable: true, size:100 },
-    { header: t('cutter.Helix Angle'),accessorKey: 'helix_angle', sortable: true, size:100 },
-    { header: t('cutter.Number Of Teeth'),accessorKey: 'no_of_teeth', sortable: true, size:100 },
-    { header: t('cutter.Hardness'),accessorKey: 'hardness', sortable: true, size:100 },
-    { header: t('cutter.Supplier'),accessorKey: 'supplier', sortable: true, size:100 },]
+    { header: t('cutter.Cutter No'),  accessorKey: 'cutter_no',  sortable: true, size:100, enableEditing: false, },
+    { header: t('cutter.Type') ,accessorKey: 'type', size:100,enableEditing: false, },
+    { header: t('cutter.Cutter Drawing No'),accessorKey: 'cutter_dwg_no', sortable: true, size:100,enableEditing: false, },
+    { header: t('cutter.Module'),accessorKey: 'module', sortable: true, size:100,enableEditing: false, },
+    { header: t('cutter.Pressure Angle'),accessorKey: 'pressure_ang', sortable: true, size:100,enableEditing: false, },
+    { header: t('cutter.Lead'),accessorKey: 'lead', sortable: true, size:100,enableEditing: false, },
+    { header: t('cutter.Helix Angle'),accessorKey: 'helix_angle', sortable: true, size:100,enableEditing: false, },
+    { header: t('cutter.Number Of Teeth'),accessorKey: 'no_of_teeth', sortable: true, size:100,enableEditing: false, },
+    { header: t('cutter.Hardness'),accessorKey: 'hardness', sortable: true, size:100,enableEditing: false, },
+    { header: t('cutter.Supplier'),accessorKey: 'supplier', sortable: true, size:100,enableEditing: false, },]
   return (
     <Layout breadcrumbs={breadcrumbs}> 
       <Box>

@@ -35,22 +35,6 @@ export const useStyles = createStyles((theme) => ({
         display: 'none',
       },
     },
-    header_end_wrap:{
-      marginRight:"37px",
-      width: "140px",
-      display: "flex",
-      justifyContent: "space-between",
-  },
-    lang_DD:{
-     marginTop:'9px',
-     marginRight:'5px',
-  },
-  user_DD:{
-    marginTop:'8px',
-  },
-  icon_user:{
-    display:'flex'
-    
-  }
+
 
   }));

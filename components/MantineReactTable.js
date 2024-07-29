@@ -39,8 +39,8 @@ const MantineReactTables = (props) => {
   }, [columnvisibility,page]);
   const size = 23;
   const downloadExcelFile = async (id) => {
-    const fileUrl = page=="workorder"?`/workorder/job_sheet/${language}/${id}`:`/report/print/${language}/${id}/`;
-    await downloadFile(fileUrl,page=="workorder"?"JobSheet.pdf":"InspectionReport.pdf",t);
+    const fileUrl = (page=="workorder" || page== "dash-wo")?`/workorder/job_sheet/${language}/${id}`:`/report/print/${language}/${id}/`;
+    await downloadFile(fileUrl, (page=="workorder" || page== "dash-wo")?"JobSheet.pdf":"InspectionReport.pdf",t);
   };
   const table = useMantineReactTable({
     localization:{
@@ -61,8 +61,8 @@ const MantineReactTables = (props) => {
       },
     })),
     data: data,
-    editDisplayMode: 'cell',
-    enableEditing: page == 'dash-wo'? true : false,
+    editDisplayMode: 'table',
+    enableEditing:true,
     state: { columnVisibility: columnvisibility || {} , isLoading: loading,},
     onColumnVisibilityChange: (state) => {
       setColumnVisibility(state);

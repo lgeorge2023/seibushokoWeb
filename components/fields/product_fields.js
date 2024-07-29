@@ -65,6 +65,7 @@ export const FieldsArray = () => {
     { label: t('Product.Gear Width'), name: 'gear_width', type: 'input', precision:6 },
     { label: t('Product.Twist Direction'), name: 'twist_direction', type: 'select', data: twistData },
     { label: t('Product.Product Image'), name: 'product_image', type: 'file'},
+    { name: "comment", label: t('Comment'), type: 'textarea' },
   ];
 
   return fields;

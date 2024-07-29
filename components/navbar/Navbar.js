@@ -33,8 +33,9 @@ import { useRouter } from "next/router";
 import { useNavigation } from "@/context/NavigationContext";
 import Link from "next/link";
 import { get } from "@/pages/api/apiUtils";
+import classes from './Navbar.module.css'
 
-export function NavbarNav() {
+export function NavbarNav({isMobile}) {
   const { t } = useTranslation("common");
   const [expanded, setExpanded] = useState(true);
   const [read,setunread]=useState(0);
@@ -67,6 +68,18 @@ response.then((res)=>setunread(res.unread_msgs))
       link: "/inspection_report",
     },
     {
+      label: "Product",
+      icon: IconSettings,
+      link: "/mobile/product",
+      visible: profile_data?.client !== 1 ,
+    },
+    {
+      label: "Machines",
+      icon: IconFridge,
+      link: "/mobile/machines",
+      visible: profile_data?.client !== 1 ,
+    },
+    {
       label: "Registration",
       icon: IconPlayerPlay,
       visible: profile_data?.client == 1 ,
@@ -96,10 +109,17 @@ response.then((res)=>setunread(res.unread_msgs))
   const router = useRouter();
   const [opened, { toggle }] = useDisclosure(true); 
   const [translatedMockdata, setTranslatedMockdata] = useState(mockdata);
+  const [mobile, setMobile] = useState(false)
+
   const handleToggleSidebar = () => {
     setExpanded((prevExpanded) => !prevExpanded);
+    setMobile(true)
     toggle();
   };
+
+  const handleMobileBurger =() =>{
+    setMobile((prevMobile)=> !prevMobile)
+  }
 
   useEffect(() => {
     setMockdataWithTranslatedLabels();
@@ -164,16 +184,26 @@ response.then((res)=>setunread(res.unread_msgs))
         ))}
     </NavLink>
   );
+
   return (
     <>
-      <Box>
-        <Navbar width={expanded ? { base: 200 } : { base: 86 }} height="83%">
+      <Burger
+            p="lg"
+            opened={mobile}
+            color="gray"
+            size='sm'
+            onClick={handleMobileBurger}
+            className={classes.burger}
+          />
+      <Box className={classes.navbarWrap}>
+        <Navbar width={expanded && (isMobile ? false: true) ?{ base: 200 } : { base: 86 }} height="83%" className={mobile? classes.navbar:classes.state}>
+        {!isMobile ? 
           <Burger
             p="lg"
             opened={opened}
             color="gray"
             onClick={handleToggleSidebar}
-          />
+          /> : null}
           <ScrollArea type="scroll" scrollbarSize={4} offsetScrollbars>
             {translatedMockdata.map((item) => renderNavLink(item, false))}
           </ScrollArea>

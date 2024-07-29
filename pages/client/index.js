@@ -74,13 +74,13 @@ function ClientList() {
   };
 const hideColumn={active:false,contact_person1_phone:false,address:false}
   const columns=[
-    { header: t('Client.Client'),accessorKey:"segment_name", size:100 },
-    { header: t('Client.Address'), accessorKey:"address", size:100 },
-    { header: t('Client.Phone No'),accessorKey:"contact_phone_no", size:100 },
-    { header: t('Client.Person In Charge 1'),accessorKey:"contact_person1", size:100 },
-    { header: t('Client.Email'), accessorKey:"contact_person1_email", size:100 },
-    { header: t('Client.General Contact No'),accessorKey:"contact_person1_phone", size:100 },
-    { header: t('Client.General Email'),accessorKey:"email", size:100 },
+    { header: t('Client.Client'),accessorKey:"segment_name", size:100,enableEditing: false, },
+    { header: t('Client.Address'), accessorKey:"address", size:100,enableEditing: false, },
+    { header: t('Client.Phone No'),accessorKey:"contact_phone_no", size:100,enableEditing: false, },
+    { header: t('Client.Person In Charge 1'),accessorKey:"contact_person1", size:100,enableEditing: false, },
+    { header: t('Client.Email'), accessorKey:"contact_person1_email", size:100,enableEditing: false, },
+    { header: t('Client.General Contact No'),accessorKey:"contact_person1_phone", size:100,enableEditing: false, },
+    { header: t('Client.General Email'),accessorKey:"email", size:100,enableEditing: false, },
     { header: t('Clinet.Is Active'),accessorKey:"active", enableColumnActions:false, size:100, Cell: ({ renderedCellValue }) => renderedCellValue === 1 ? <IconCheck size={20} color="teal" />: <IconX size={20} color="red" />},
   ]
 

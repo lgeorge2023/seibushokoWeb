@@ -1,21 +1,17 @@
+import MantineReactTables from "@/components/MantineReactTable";
 import Layout from "@/components/layout/Layout";
-import { Box, Title, Flex, Button, Loader, Input, Card, Grid } from "@mantine/core";
+import { get } from "@/pages/api/apiUtils";
+import ProtectedRoute from "@/utils/ProtectedRoute";
+import { Box, Card, Flex, Grid, Input, Title } from "@mantine/core";
+import React, { useEffect, useState } from "react";
+import formatdate from "@/utils/formatdate";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { useEffect, useState } from "react";
-import { get } from "../api/apiUtils";
-import { useRouter } from "next/router";
-import formatdate from "@/utils/formatdate";
-import MantineReactTables from "@/components/MantineReactTable";
 import { UserManagement } from "@/utils/UserManagement";
-import ProtectedRoute from "@/utils/ProtectedRoute";
-import Link from "next/link";
-import { handleApiError } from "@/utils/handleApiError";
 import { ListSearch } from "tabler-icons-react";
-import InspectionReportDetail from "@/components/mobile/InspectionReportDetail";
+import MachinesDetail from "@/components/mobile/MachinesDetail";
 
-function InspectionReport() {
-  const router = useRouter();
+function MobMachines() {
   const { t } = useTranslation("common");
   const [records, setRecords] = useState([]);
   const [visible, setVisible] = useState(false);
@@ -23,9 +19,11 @@ function InspectionReport() {
   const [isMobile, setIsMobile] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
+  const breadcrumbs = [{ label: t("Machines"), link: "/mobile/machines" }];
+
   const fetchData = async () => {
     try {
-      const data = await get("/report/");
+      const data = await get("/machines/");
       setRecords(data.reverse());
       setLoading(false);
     } catch (error) {
@@ -33,6 +31,7 @@ function InspectionReport() {
       setLoading(false);
     }
   };
+
   const fetchClientId = () => {
     const profile_data = JSON.parse(
       UserManagement.getItem("profile_data") || "{}"
@@ -41,10 +40,16 @@ function InspectionReport() {
     setVisible(visible);
   };
 
+  const hideColumn = {
+    description: false,
+    machinemodels: false,
+    machinetype: false,
+  };
+
   useEffect(() => {
-    handleResize();
     fetchData();
     fetchClientId();
+    handleResize();
     window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);
@@ -59,32 +64,27 @@ function InspectionReport() {
     }
   };
 
-  const editInfo = (row) => {
-    router.push(`inspection_report/add/edit/${row.id}`);
-  };
-  const hideColumn = {
-    gear_dwg_no: false,
-    order_date: false,
-    serial_no: false,
-    shaving_method: false,
-  };
   const columns = [
-    { header: t("content.orderno"), accessorKey: "order_no", size: 100, enableEditing: false, },
+    { header: t("Machine.Machine Id"), accessorKey: "machineid", size: 100,enableEditing: false, },
+    { header: t("Machine.Description"), accessorKey: "description", size: 100,enableEditing: false, },
     {
-      header: t("workOrder.workOrderNo"),
-      accessorKey: "work_order_no",
+      header: t("Machine.Machine Line"),
+      accessorKey: "machineline",
       size: 100,
       enableEditing: false,
     },
-    { header: t("Customer"), accessorKey: "client_name", size: 100,enableEditing: false, },
-    { header: t("Tool No"), accessorKey: "cutter_no", size: 100,enableEditing: false, },
-    { header: t("Gear Dwg No"), accessorKey: "gear_dwg_no", size: 100,enableEditing: false, },
-    { header: t("Person in Charge"), accessorKey: "person_charge", size: 100,enableEditing: false, },
     {
-      header: t("workOrder.orderdate"),
+      header: t("Machine.Machine Type"),
+      accessorKey: "machinetype",
+      size: 100,
+      enableEditing: false,
+    },
+    { header: t("Machine.Model"), accessorKey: "machinemodels", size: 100,enableEditing: false, },
+    {
+      header: t("Machine.Registration Date"),
       accessorFn: (row) => {
         //convert to Date for sorting and filtering
-        const sDay = new Date(row.order_date);
+        const sDay = new Date(row.registrationdate);
 
         sDay.setHours(0, 0, 0, 0); // remove time from date (useful if filter by equals exact date)
 
@@ -95,23 +95,25 @@ function InspectionReport() {
       size: 100,
       enableEditing: false,
     },
-    { header: t("Serial No"), accessorKey: "serial_no", size: 100,enableEditing: false, },
-    { header: t("Shaving Method"), accessorKey: "shaving_method", size: 100,enableEditing: false, },
-  ];
-  const breadcrumbs = [
-    { label: t("inspectionReport"), link: "./inspection_report" },
+    {
+      header: t("Machine.Registered By"),
+      accessorKey: "registeredby",
+      size: 100,
+      enableEditing: false,
+    },
+    { header: t("Machine.Client"), accessorKey: "client_name", size: 100,enableEditing: false, },
   ];
   return (
-    <Box>
-      <Layout breadcrumbs={breadcrumbs}>
+    <Layout breadcrumbs={breadcrumbs}>
+      <Box>
         {isMobile ? (
           <Box style={{ position: "absolute", top: "50px", left: "10px" }}>
-            <Card style={{width:'400px'}}>
-              <Grid>
-              <Grid.Col span={5}>
-                <Title mt='sm' order={5}>
-                {t("inspectionReport")}
-                </Title>
+            <Card style={{ width: "400px" }}>
+              <Grid gutter="sm" grow>
+                <Grid.Col span={5}>
+                  <Title mt="sm" order={5}>
+                    {t("content.machines")}
+                  </Title>
                 </Grid.Col>
                 <Grid.Col>
                   <Input
@@ -127,31 +129,25 @@ function InspectionReport() {
                 </Grid.Col>
               </Grid>
             </Card>
-              <InspectionReportDetail reportRecords={records} searchQuery={searchQuery}/>
+            <MachinesDetail machineRecords={records} searchQuery={searchQuery}/>
           </Box>
         ) : (
           <Box>
             <Flex justify="space-between" mb="sm">
-              <Title order={3}>{t("inspectionReport")}</Title>
-              {visible == 1 && (
-                <Button component={Link} href="/inspection_report/add/new">
-                  {t("Add New")}
-                </Button>
-              )}
+              <Title order={3}> {t("content.machines")} </Title>
             </Flex>
             <MantineReactTables
               column={columns}
               data={records}
-              editInfo={editInfo}
+              noaction={true}
               columnVisibility={hideColumn}
               visible={visible}
               loading={loading}
-              page={"inspection"}
             />
           </Box>
         )}
-      </Layout>
-    </Box>
+      </Box>
+    </Layout>
   );
 }
 export const getStaticProps = async ({ locale }) => ({
@@ -159,4 +155,5 @@ export const getStaticProps = async ({ locale }) => ({
     ...(await serverSideTranslations(locale ?? "en", ["common"])),
   },
 });
-export default ProtectedRoute(InspectionReport);
+
+export default ProtectedRoute(MobMachines);

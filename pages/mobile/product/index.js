@@ -1,21 +1,19 @@
+import { useEffect, useState } from "react";
+import { Box, Card, Flex, Grid, Input, Title } from "@mantine/core";
 import Layout from "@/components/layout/Layout";
-import { Box, Title, Flex, Button, Loader, Input, Card, Grid } from "@mantine/core";
+import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { useEffect, useState } from "react";
-import { get } from "../api/apiUtils";
-import { useRouter } from "next/router";
 import formatdate from "@/utils/formatdate";
 import MantineReactTables from "@/components/MantineReactTable";
 import { UserManagement } from "@/utils/UserManagement";
 import ProtectedRoute from "@/utils/ProtectedRoute";
-import Link from "next/link";
 import { handleApiError } from "@/utils/handleApiError";
+import { get } from "@/pages/api/apiUtils";
 import { ListSearch } from "tabler-icons-react";
-import InspectionReportDetail from "@/components/mobile/InspectionReportDetail";
+import ProductDetail from "@/components/mobile/ProductDetail";
 
-function InspectionReport() {
-  const router = useRouter();
+function MobProduct() {
   const { t } = useTranslation("common");
   const [records, setRecords] = useState([]);
   const [visible, setVisible] = useState(false);
@@ -23,9 +21,10 @@ function InspectionReport() {
   const [isMobile, setIsMobile] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
+  const breadcrumbs = [{ label: t("Product"), link: "/product" }];
   const fetchData = async () => {
     try {
-      const data = await get("/report/");
+      const data = await get("/product/");
       setRecords(data.reverse());
       setLoading(false);
     } catch (error) {
@@ -40,11 +39,10 @@ function InspectionReport() {
     const visible = profile_data?.client === 1;
     setVisible(visible);
   };
-
   useEffect(() => {
-    handleResize();
     fetchData();
     fetchClientId();
+    handleResize();
     window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);
@@ -59,59 +57,99 @@ function InspectionReport() {
     }
   };
 
-  const editInfo = (row) => {
-    router.push(`inspection_report/add/edit/${row.id}`);
-  };
+  const router = useRouter();
+
   const hideColumn = {
+    measure_type: false,
+    client_name: false,
+    no_of_teeth: false,
     gear_dwg_no: false,
-    order_date: false,
-    serial_no: false,
-    shaving_method: false,
+    material: false,
   };
   const columns = [
-    { header: t("content.orderno"), accessorKey: "order_no", size: 100, enableEditing: false, },
     {
-      header: t("workOrder.workOrderNo"),
-      accessorKey: "work_order_no",
+      accessorKey: "cutter_no",
+      header: t("Product.Cutter No"),
+      sortable: true,
       size: 100,
       enableEditing: false,
     },
-    { header: t("Customer"), accessorKey: "client_name", size: 100,enableEditing: false, },
-    { header: t("Tool No"), accessorKey: "cutter_no", size: 100,enableEditing: false, },
-    { header: t("Gear Dwg No"), accessorKey: "gear_dwg_no", size: 100,enableEditing: false, },
-    { header: t("Person in Charge"), accessorKey: "person_charge", size: 100,enableEditing: false, },
+    { accessorKey: "product_id", header: t("Product.Product Id"), size: 100,enableEditing: false, },
     {
-      header: t("workOrder.orderdate"),
+      accessorKey: "gear_dwg_no",
+      header: t("Product.Gear Drawing No"),
+      sortable: true,
+      size: 100,
+      enableEditing: false,
+    },
+    {
+      header: t("Product.Registration Date"),
       accessorFn: (row) => {
         //convert to Date for sorting and filtering
-        const sDay = new Date(row.order_date);
-
+        const sDay = new Date(row.register_date);
         sDay.setHours(0, 0, 0, 0); // remove time from date (useful if filter by equals exact date)
-
         return sDay;
       },
       filterVariant: "date",
+      sortable: true,
       Cell: ({ renderedCellValue }) => formatdate(renderedCellValue),
       size: 100,
       enableEditing: false,
     },
-    { header: t("Serial No"), accessorKey: "serial_no", size: 100,enableEditing: false, },
-    { header: t("Shaving Method"), accessorKey: "shaving_method", size: 100,enableEditing: false, },
-  ];
-  const breadcrumbs = [
-    { label: t("inspectionReport"), link: "./inspection_report" },
+    {
+      accessorKey: "register_by",
+      header: t("Product.Registered By"),
+      sortable: true,
+      size: 100,
+      enableEditing: false,
+    },
+    {
+      accessorKey: "module",
+      header: t("Product.Module"),
+      sortable: true,
+      size: 100,
+      enableEditing: false,
+    },
+    {
+      accessorKey: "no_of_teeth",
+      header: t("Product.No Of Teeth"),
+      sortable: true,
+      size: 100,
+      enableEditing: false,
+    },
+    {
+      accessorKey: "measure_type",
+      header: t("Product.Measure Type"),
+      sortable: true,
+      size: 100,
+      enableEditing: false,
+    },
+    {
+      accessorKey: "material",
+      header: t("Product.Material"),
+      sortable: true,
+      size: 100,
+      enableEditing: false,
+    },
+    {
+      accessorKey: "client_name",
+      header: t("Product.Client"),
+      sortable: true,
+      size: 100,
+      enableEditing: false,
+    },
   ];
   return (
-    <Box>
-      <Layout breadcrumbs={breadcrumbs}>
+    <Layout breadcrumbs={breadcrumbs}>
+      <Box>
         {isMobile ? (
           <Box style={{ position: "absolute", top: "50px", left: "10px" }}>
-            <Card style={{width:'400px'}}>
-              <Grid>
-              <Grid.Col span={5}>
-                <Title mt='sm' order={5}>
-                {t("inspectionReport")}
-                </Title>
+            <Card style={{ width: "400px" }}>
+              <Grid gutter="sm" grow>
+                <Grid.Col span={5}>
+                  <Title mt="sm" order={5}>
+                    {t("content.productList")}
+                  </Title>
                 </Grid.Col>
                 <Grid.Col>
                   <Input
@@ -127,31 +165,24 @@ function InspectionReport() {
                 </Grid.Col>
               </Grid>
             </Card>
-              <InspectionReportDetail reportRecords={records} searchQuery={searchQuery}/>
+            <ProductDetail productRecords={records} searchQuery={searchQuery}/>
           </Box>
         ) : (
           <Box>
             <Flex justify="space-between" mb="sm">
-              <Title order={3}>{t("inspectionReport")}</Title>
-              {visible == 1 && (
-                <Button component={Link} href="/inspection_report/add/new">
-                  {t("Add New")}
-                </Button>
-              )}
+              <Title order={3}>{t("content.productList")}</Title>
             </Flex>
             <MantineReactTables
               column={columns}
               data={records}
-              editInfo={editInfo}
+              noaction={true}
               columnVisibility={hideColumn}
-              visible={visible}
               loading={loading}
-              page={"inspection"}
             />
           </Box>
         )}
-      </Layout>
-    </Box>
+      </Box>
+    </Layout>
   );
 }
 export const getStaticProps = async ({ locale }) => ({
@@ -159,4 +190,5 @@ export const getStaticProps = async ({ locale }) => ({
     ...(await serverSideTranslations(locale ?? "en", ["common"])),
   },
 });
-export default ProtectedRoute(InspectionReport);
+
+export default ProtectedRoute(MobProduct);

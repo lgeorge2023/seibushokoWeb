@@ -76,12 +76,12 @@ function UserList() {
     email_cc:false,full_name:false
   }
   const columns=[
-    { header:t("User.User Name"),accessorKey: 'username', size:100 },
-    { header:t("User.Email"),accessorKey: 'email', size:100 },
-    { header:t("User.Full Name"),accessorKey: 'full_name', size:100 },
-    { header:t("User.Role"),accessorKey:'role', size:100 },
-    { header:t("User.Client/Segment"),accessorKey: 'client', size:100 },
-    { header:"CC",accessorKey: 'email_cc', size:100 },]
+    { header:t("User.User Name"),accessorKey: 'username', size:100,enableEditing: false, },
+    { header:t("User.Email"),accessorKey: 'email', size:100,enableEditing: false, },
+    { header:t("User.Full Name"),accessorKey: 'full_name', size:100,enableEditing: false, },
+    { header:t("User.Role"),accessorKey:'role', size:100,enableEditing: false, },
+    { header:t("User.Client/Segment"),accessorKey: 'client', size:100,enableEditing: false, },
+    { header:"CC",accessorKey: 'email_cc', size:100,enableEditing: false, },]
   return (
     <Layout breadcrumbs ={breadcrumbs}>
     <Box>

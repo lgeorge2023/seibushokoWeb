@@ -71,8 +71,8 @@ useEffect(() => {
   fetchClientId();
 }, []);
 const columns=[
-  { header: t('Regrind.Type'), accessorKey:"type", size:100  } ,
-  { header: t('Regrind.Axial Angle'),accessorKey:"axial_angle", size:100 }]
+  { header: t('Regrind.Type'), accessorKey:"type", size:100,enableEditing: false,  } ,
+  { header: t('Regrind.Axial Angle'),accessorKey:"axial_angle", size:100,enableEditing: false, }]
   return (
     <Layout breadcrumbs={breadcrumbs} >
   <Box>

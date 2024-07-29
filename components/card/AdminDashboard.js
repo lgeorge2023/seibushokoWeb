@@ -91,11 +91,12 @@ export default function AdminDashboard({ records, username, locale }) {
       header: t("workOrder.workOrderNo"),
       accessorKey: "work_order_no",
       size: 100,
+      enableEditing: false,
     },
-    { header: t("Client Name"), accessorKey: "client_name", size: 80 },
-    { header: t("workOrder.cutterno"), accessorKey: "cutter_no", size: 80 },
-    { header: t("workOrder.mfgno"), accessorKey: "mfg_no", size: 80 },
-    { header: t("workOrder.orderno"), accessorKey: "order_no", size: 100 },
+    { header: t("Client Name"), accessorKey: "client_name", size: 80,enableEditing: false, },
+    { header: t("workOrder.cutterno"), accessorKey: "cutter_no", size: 80,enableEditing: false, },
+    { header: t("workOrder.mfgno"), accessorKey: "mfg_no", size: 80,enableEditing: false, },
+    { header: t("workOrder.orderno"), accessorKey: "order_no", size: 100,enableEditing: false, },
     {
       header: t("workOrder.orderdate"),
       accessorFn: (row) => {
@@ -106,6 +107,7 @@ export default function AdminDashboard({ records, username, locale }) {
       filterVariant: "date",
       Cell: ({ renderedCellValue }) => formatdate(renderedCellValue),
       size: 100,
+      enableEditing: false,
     },
     {
       header: t("Estimated Finish"),
@@ -117,11 +119,13 @@ export default function AdminDashboard({ records, username, locale }) {
       filterVariant: "date",
       Cell: ({ renderedCellValue }) => formatdate(renderedCellValue),
       size: 100,
+      enableEditing: false,
     },
     {
       header: t("status"),
       accessorKey: "workorder_status",
       size: 100,
+      enableEditing: false,
       Cell: ({ cell }) => t(cell.row.original.workorder_status),
     },
   ];

@@ -6,6 +6,7 @@ import {
   Select,
   UnstyledButton,
   NumberInput,
+  Textarea,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import {  useEffect, useState } from "react";
@@ -63,6 +64,7 @@ const AddProduct = () => {
       disloc_coeff:"",
       register_date: format(startOfDay(new Date()), "yyyy-MM-dd"),
       product_image: "",
+      comment:'',
     },
     validate: {
       client: (value) => {
@@ -200,6 +202,17 @@ const breadcrumbs = [
                     )}
                   </Box>
                 );
+              }
+              if(type == 'textarea'){
+                return(
+                <Box key={name}>
+                  <Textarea
+                    placeholder="Type your comment"
+                    {...form.getInputProps(name)}
+                    {...props}
+                  />
+                </Box>
+                )
               }
               // Default to TextInput for other types
               return (

@@ -2,9 +2,12 @@ import React, {useEffect, useState } from "react";
 import { useForm } from "@mantine/form";
 import {
   Box,
+  Group,
   NumberInput,
   Select,
+  Text,
   TextInput,
+  Textarea,
   Title,
   UnstyledButton,
 } from "@mantine/core";
@@ -23,6 +26,8 @@ import { removeNulls } from "@/utils/removeNulls";
 import SubmitButtons from "@/components/SubmitButtons";
 import ProtectedRoute from "@/utils/ProtectedRoute";
 import { handleApiError } from "@/utils/handleApiError";
+import { Dropzone } from "@mantine/dropzone";
+import { IconPhoto } from "@tabler/icons-react";
 
 const registerBy = UserManagement.getItem("id");
 const userid = parseInt(registerBy);
@@ -36,6 +41,7 @@ function AddMFG() {
   const { slug } = router.query;
   const isEditing = slug && slug[0] === "edit";
   const id = slug && slug[1]; // Extract the id from the slug array
+  const [files, setFiles] = useState([]);
 
   const breadcrumbs = [
     { label:  t('mfg'), link: "/mfg" },
@@ -60,7 +66,8 @@ function AddMFG() {
       register_by: userid,
       manager: 0,
       client: 0,
-      EOL:"FALSE"
+      EOL:"FALSE",
+      comment:"",
     },
     validate: {
       cutter_no:(value) => value == 0 && t('Cutter No is required'),
@@ -98,6 +105,10 @@ function AddMFG() {
       for (const key in data) {
           formData.append(key, data[key]);
       }
+      // files.forEach((file)=>{
+      //   formData.append('mfg_file',file)
+      // })
+
       const endpoint = isEditing ? `/mfg/${id}/` : "/mfg/";
       const response = isEditing
         ? await put(endpoint, formData)
@@ -216,6 +227,17 @@ function AddMFG() {
                   </Box>
                 );
               }
+              if(type == 'textarea'){
+                return(
+                <Box key={name}>
+                  <Textarea
+                    placeholder="Type your comment"
+                    {...form.getInputProps(name)}
+                    {...props}
+                  />
+                </Box>
+                )
+              }
               // Default to TextInput for other types
               return (
                 <TextInput
@@ -227,6 +249,34 @@ function AddMFG() {
             })}          
           </div>
         </form>
+        {/* <Dropzone mt='md' accept={['image/png','	image/jpeg' ,'application/pdf','	text/csv', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel']} onDrop={setFiles}>
+        <Group
+          justify="center"
+          gap="md"
+          mih={80}
+          style={{ pointerEvents: "none", }}
+          ml={160}
+        >
+          <Dropzone.Idle>
+            <IconPhoto
+              style={{
+                width: "52px",
+                height: "52px",
+                color: "var(--mantine-color-dimmed)",
+              }}
+              stroke={1.5}
+            />
+          </Dropzone.Idle>
+          <Box>
+            <Text size="xl" inline>
+              {t("Upload MFG Files")}
+            </Text>
+            <Text size="sm" c="dimmed" inline mt={7}>
+             {t("Attach as many files as you like, each file should not exceed 5mb")}
+            </Text>
+          </Box>
+        </Group>
+      </Dropzone> */}
       </Box>
      <SubmitButtons isEditing={isEditing} onSubmit={onSubmit} isSubmitting={isSubmitting}/>
     </Layout>

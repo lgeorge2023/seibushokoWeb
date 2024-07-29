@@ -60,11 +60,13 @@ export const HeaderMenu = ({ breadcrumbs }) => {
 
   return (
     <Box>
-      <Header height={60} px="md">
+      <Header height={60} px="md" className='header_con'>
         <Group position="apart" sx={{ height: '100%' }}>
         <Group spacing={'4.3cm'} >
-        <Image src="/seibuicon.png" alt="logo" width={70} height={45} priority/>  
+        <Image src="/seibuicon.png" alt="logo" width={70} height={45} className='logo' priority/>  
+        <Box className='breadcrumb_link'>
         <BreadcrumbTrail breadcrumbs={breadcrumbs}/>
+        </Box>
         </Group>
           <Menu
           width={260}
@@ -90,7 +92,7 @@ export const HeaderMenu = ({ breadcrumbs }) => {
               className={cx(classes.user, { [classes.userActive]: userMenuOpened })} >
               <Group spacing={7}>
                 <Text className={classes.icon_user} weight={500} size="sm" sx={{ lineHeight: 1 }} mr={3}>
-                  {username}
+                  {username?.length > 10 ?username.slice(0,10)+'...':username}
                 <IconChevronDown size={rem(12)} stroke={1.5} />
                 </Text> 
               </Group>

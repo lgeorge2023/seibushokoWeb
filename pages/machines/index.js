@@ -75,11 +75,11 @@ useEffect(() => {
   fetchClientId();
 }, []);
 const columns=[
-  { header: t('Machine.Machine Id'),accessorKey:"machineid", size:100 },
-  { header: t('Machine.Description'), accessorKey:"description", size:100 },
-  { header: t('Machine.Machine Line'),accessorKey:"machineline", size:100 },
-  { header: t('Machine.Machine Type'),accessorKey:"machinetype", size:100 },
-  { header: t('Machine.Model'),accessorKey:"machinemodels", size:100 },
+  { header: t('Machine.Machine Id'),accessorKey:"machineid", size:100, enableEditing: false, },
+  { header: t('Machine.Description'), accessorKey:"description", size:100, enableEditing: false, },
+  { header: t('Machine.Machine Line'),accessorKey:"machineline", size:100, enableEditing: false, },
+  { header: t('Machine.Machine Type'),accessorKey:"machinetype", size:100, enableEditing: false, },
+  { header: t('Machine.Model'),accessorKey:"machinemodels", size:100, enableEditing: false, },
   { header: t('Machine.Registration Date'),
   accessorFn: (row) => {
     //convert to Date for sorting and filtering
@@ -91,9 +91,9 @@ const columns=[
 
   },  
   filterVariant: 'date',
-  Cell: ({ renderedCellValue }) => formatdate(renderedCellValue), size:100 },
-  { header: t('Machine.Registered By'),accessorKey:"registeredby", size:100 },
-  { header: t('Machine.Client'),accessorKey:"client_name", size:100 },]
+  Cell: ({ renderedCellValue }) => formatdate(renderedCellValue), size:100,enableEditing: false, },
+  { header: t('Machine.Registered By'),accessorKey:"registeredby", size:100,enableEditing: false, },
+  { header: t('Machine.Client'),accessorKey:"client_name", size:100,enableEditing: false, },]
   return (
     <Layout breadcrumbs={breadcrumbs}>
     <Box>

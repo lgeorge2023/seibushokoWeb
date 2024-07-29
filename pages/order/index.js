@@ -65,10 +65,10 @@ const hideColumn={mfg_no:false,drawing_no:false,cutter_no:false}
     fetchClientId();
   }, [page]);
  const columns=[
-  {header: t('content.orderno'), accessorKey: "order_no", size:100, },
-  {header: t('content.cutter'),  accessorKey: 'cutter_no', size:100 },
-  {header: t('content.MFG'), accessorKey: 'mfg_no', size:100 },
-  {header: t('content.drawing'),  accessorKey: 'drawing_no', size:100 },
+  {header: t('content.orderno'), accessorKey: "order_no", size:100, enableEditing: false,},
+  {header: t('content.cutter'),  accessorKey: 'cutter_no', size:100,enableEditing: false, },
+  {header: t('content.MFG'), accessorKey: 'mfg_no', size:100, enableEditing: false, },
+  {header: t('content.drawing'),  accessorKey: 'drawing_no', size:100, enableEditing: false, },
   {header: t('content.date'),
   accessorFn: (row) => {
     //convert to Date for sorting and filtering
@@ -81,10 +81,11 @@ const hideColumn={mfg_no:false,drawing_no:false,cutter_no:false}
   },  
   filterVariant: 'date',
    Cell: ({ renderedCellValue }) => formatdate(renderedCellValue), 
-   size:100 
+   size:100,
+   enableEditing: false, 
 },
-  {header: t('content.Product'), accessorKey: 'product', size:100 },
-  {header: t('content.remark'),  accessorKey: 'remarks', size:100 },]
+  {header: t('content.Product'), accessorKey: 'product', size:100,enableEditing: false, },
+  {header: t('content.remark'),  accessorKey: 'remarks', size:100,enableEditing: false, },]
   return (
     <Layout breadcrumbs={breadcrumbs}>
     <Box>
