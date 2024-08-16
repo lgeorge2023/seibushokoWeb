@@ -7,8 +7,9 @@ import { useTranslation } from "next-i18next";
 const FormPart7 = (props) => {
   const [manager, setManager] = useState([]);
   const { t } = useTranslation("common");
+  const [disabled,setDisabled] = useState(true);
 
-  const {form,locale}= props;
+  const {form,locale,visible}= props;
   const fetchAllData = async () => {
     try {
       const [managerData] = await Promise.all([
@@ -19,16 +20,19 @@ const FormPart7 = (props) => {
     }
   };
   useEffect(() => {
-    fetchAllData()
-  }, [])
+    fetchAllData();
+    if(visible == 1 ){
+      setDisabled(false);
+    }
+  }, [visible])
   const data = [
     [
-      { type:"text", label: t('inspection.Person In Charge') },
+      { type:"text", label: t('inspection.Person In Charge'),readOnly:true,disabled:disabled },
       { type: "select",name:"person_charge",data:manager,disabled:true},
     ],
      [
-      { type:"text", label: t('inspection.Sign Date') },
-      { type: "date",label: "", name:"sign_date"},
+      { type:"text", label: t('inspection.Sign Date'),readOnly:true,disabled:disabled },
+      { type: "date",label: "", name:"sign_date",readOnly:true,disabled:disabled},
     ],
   ];
   return (

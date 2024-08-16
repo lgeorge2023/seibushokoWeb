@@ -15,9 +15,9 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "next-i18next";
 const MantineReactTables = (props) => {
-  const { t } = useTranslation('common')
+  const { t } = useTranslation("common");
   const router = useRouter();
-  const language =router.locale;
+  const language = router.locale;
   const {
     column,
     data,
@@ -30,40 +30,49 @@ const MantineReactTables = (props) => {
     visible,
     loading,
     noaction,
-    TableRowStyle
+    TableRowStyle,
   } = props;
   const { colorScheme } = useMantineTheme();
   const [columnvisibility, setColumnVisibility] = useState(columnVisibility);
   useEffect(() => {
     UserManagement.setItem(page, JSON.stringify(columnvisibility));
-  }, [columnvisibility,page]);
+  }, [columnvisibility, page]);
   const size = 23;
   const downloadExcelFile = async (id) => {
-    const fileUrl = (page=="workorder" || page== "dash-wo")?`/workorder/job_sheet/${language}/${id}`:`/report/print/${language}/${id}/`;
-    await downloadFile(fileUrl, (page=="workorder" || page== "dash-wo")?"JobSheet.pdf":"InspectionReport.pdf",t);
+    const fileUrl =
+      page == "workorder" || page == "dash-wo"
+        ? `/workorder/job_sheet/${language}/${id}`
+        : `/report/print/${language}/${id}/`;
+    await downloadFile(
+      fileUrl,
+      page == "workorder" || page == "dash-wo"
+        ? "JobSheet.pdf"
+        : "InspectionReport.pdf",
+      t
+    );
   };
   const table = useMantineReactTable({
-    localization:{
-      actions:t('action'),
-      rowsPerPage:t('Rows per page')
+    localization: {
+      actions: t("action"),
+      rowsPerPage: t("Rows per page"),
     },
     columns: column.map((col) => ({
       ...col,
       headerProps: {
         sx: {
-          backgroundColor: 'rgba(52, 210, 235, 0.1)',
-          borderRight: '1px solid rgba(224, 224, 224, 1)',
-          color: '#facbcb',
+          backgroundColor: "rgba(52, 210, 235, 0.1)",
+          borderRight: "1px solid rgba(224, 224, 224, 1)",
+          color: "#facbcb",
         },
-        editVariant:col.editVariant,
-        mantineEditSelectProps:col.mantineEditSelectProps,
-        editVariant:col.editVariant,
+        editVariant: col.editVariant,
+        mantineEditSelectProps: col.mantineEditSelectProps,
+        editVariant: col.editVariant,
       },
     })),
     data: data,
-    editDisplayMode: 'table',
-    enableEditing:true,
-    state: { columnVisibility: columnvisibility || {} , isLoading: loading,},
+    editDisplayMode: "table",
+    enableEditing: true,
+    state: { columnVisibility: columnvisibility || {}, isLoading: loading },
     onColumnVisibilityChange: (state) => {
       setColumnVisibility(state);
     },
@@ -75,7 +84,7 @@ const MantineReactTables = (props) => {
       withBorder: colorScheme === "light",
     },
     enableRowVirtualization: false,
-    mantineTableBodyRowProps:TableRowStyle,
+    mantineTableBodyRowProps: TableRowStyle,
     initialState: {
       showGlobalFilter: true,
       density: "xs",
@@ -83,46 +92,63 @@ const MantineReactTables = (props) => {
     },
     enableDensityToggle: false,
     enableFullScreenToggle: false,
-    enableRowActions: noaction?false:true,
+    enableRowActions: noaction ? false : true,
     renderRowActions: ({ row }) => (
       <Box sx={{ display: "flex", flexWrap: "nowrap", gap: "8px" }}>
-        {visible == 1?
-        <Tooltip label={t('Edit')}>
-          <ActionIcon
-            onClick={() => {
-              editInfo(row.original);
-            }}
-          >
-          <IconEdit color=" #4a4747" size={size} />  
-          </ActionIcon>
-        </Tooltip>:null}
-        {(page == "workorder"|| page=="inspection" || page == "dash-wo") && (
-          <Tooltip label={t("Print")}>
-            <ActionIcon>
-              <IconPrinter
-                cursor="pointer"
-                color=" #4a4747"
-                size={size}
-                onClick={() => downloadExcelFile(row.original.id)}
-              />
+        {visible == 1 ? (
+          <Tooltip label={t("Edit")}>
+            <ActionIcon
+              onClick={() => {
+                editInfo(row.original);
+              }}
+            >
+              <IconEdit color=" #4a4747" size={size} />
             </ActionIcon>
           </Tooltip>
+        ) : null}
+      {page == 'dash-mfg' && (
+        <>
+          <Tooltip label={t("View Cutter")}>
+            <Link href={`/cutter/addcutter/edit/${row.original.cutter_id}`}>
+              <IconEye color="black" size={size}></IconEye>
+            </Link>
+          </Tooltip>
+        </>
+      )}
+        {(page == "workorder" || page == "inspection" || page == "dash-wo") && (
+          <>
+            <Tooltip label={t("Print")}>
+              <ActionIcon>
+                <IconPrinter
+                  cursor="pointer"
+                  color=" #4a4747"
+                  size={size}
+                  onClick={() => downloadExcelFile(row.original.id)}
+                />
+              </ActionIcon>
+            </Tooltip>
+            {page =="inspection"&&
+            <Tooltip label={t("View Inspection Report")}>
+        <Link href={`/inspection_report/add/edit/${row.original.id}`}>
+          <IconEye color="black" size={size}></IconEye>
+        </Link>
+      </Tooltip>}
+          </>
         )}
-        { page =="client" && (
+        {page == "client" && (
           <Box>
             {row.original.id != 1 ? (
               <Tooltip label={t("Delete")}>
-              <ActionIcon
-                color="red"
-                onClick={() => {
-                  deleteData(row.original);
-                }}
-              >
-                <IconTrash size={size} />
-              </ActionIcon>
-            </Tooltip>
-            ):null}
-          
+                <ActionIcon
+                  color="red"
+                  onClick={() => {
+                    deleteData(row.original);
+                  }}
+                >
+                  <IconTrash size={size} />
+                </ActionIcon>
+              </Tooltip>
+            ) : null}
           </Box>
         )}
         {deleteData && (
@@ -139,28 +165,33 @@ const MantineReactTables = (props) => {
         )}
         {page == "workorder" && (
           <Box>
-            {visible == 1 ?(
-            row.original.inspection_report === 0 ?(
-              (row.original.workorder_status === 'FINISHED' || row.original.workorder_status === 'DELIVERED' || row.original.workorder_status === 'INSPECTIONRPT' ?
-              <Tooltip label={t("add__inspectionreport")}>
-                <Link href={`/inspection_report/add/${row.original.id}`}>
-                  <IconFileAnalytics
-                    color="green"
-                    size={size}
-                  ></IconFileAnalytics>
-                </Link>
-              </Tooltip>
-              :null)
-            ):(
-              <Tooltip label={t("edit_inspectionreport")}>
-                <Link href={`/inspection_report/add/edit/${row.original.inspection_report}`}>
-                  <IconFileAnalytics
-                  color = "indigo"
-                  size={size}
-                  ></IconFileAnalytics>
-                </Link>
-              </Tooltip>
-            )):null}
+            {visible == 1 ? (
+              row.original.inspection_report === 0 ? (
+                row.original.workorder_status === "FINISHED" ||
+                row.original.workorder_status === "DELIVERED" ||
+                row.original.workorder_status === "INSPECTIONRPT" ? (
+                  <Tooltip label={t("add__inspectionreport")}>
+                    <Link href={`/inspection_report/add/${row.original.id}`}>
+                      <IconFileAnalytics
+                        color="green"
+                        size={size}
+                      ></IconFileAnalytics>
+                    </Link>
+                  </Tooltip>
+                ) : null
+              ) : (
+                <Tooltip label={t("edit_inspectionreport")}>
+                  <Link
+                    href={`/inspection_report/add/edit/${row.original.inspection_report}`}
+                  >
+                    <IconFileAnalytics
+                      color="indigo"
+                      size={size}
+                    ></IconFileAnalytics>
+                  </Link>
+                </Tooltip>
+              )
+            ) : null}
           </Box>
         )}
         {page == "cutter" && (
@@ -200,36 +231,36 @@ const MantineReactTables = (props) => {
             </Tooltip>
           </Box>
         )}
-        {page == "order" && (
-          visible == 1?
-          <Box>
-            {row.original.workorder_placed === 0 ? (
-              <Tooltip label={t("Add Work Order")}>
-                <Link href={`/work_order/add_workorder/${row.original.id}`}>
-                  <IconFileAnalytics
-                    color="green"
-                    size={size}
-                  ></IconFileAnalytics>
-                </Link>
-              </Tooltip>
-            ) : (
-              <Tooltip label={t("Edit Work Order")}>
-                <Link
-                  href={`/work_order/add_workorder/edit/${row.original.workorder_placed}`}
-                >
-                  <IconFileAnalytics
-                    color="indigo"
-                    size={size}
-                  ></IconFileAnalytics>
-                </Link>
-              </Tooltip>
-            )}
-          </Box>:null
-        )}
+        {page == "order" &&
+          (visible == 1 ? (
+            <Box>
+              {row.original.workorder_placed === 0 ? (
+                <Tooltip label={t("Add Work Order")}>
+                  <Link href={`/work_order/add_workorder/${row.original.id}`}>
+                    <IconFileAnalytics
+                      color="green"
+                      size={size}
+                    ></IconFileAnalytics>
+                  </Link>
+                </Tooltip>
+              ) : (
+                <Tooltip label={t("Edit Work Order")}>
+                  <Link
+                    href={`/work_order/add_workorder/edit/${row.original.workorder_placed}`}
+                  >
+                    <IconFileAnalytics
+                      color="indigo"
+                      size={size}
+                    ></IconFileAnalytics>
+                  </Link>
+                </Tooltip>
+              )}
+            </Box>
+          ) : null)}
       </Box>
     ),
   });
-  return <MantineReactTable table={table}/>;
+  return <MantineReactTable table={table} />;
 };
 
 export default MantineReactTables;

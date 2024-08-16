@@ -8,7 +8,8 @@ import { removeNulls } from "@/utils/removeNulls";
 const FormPart2 = (props) => {
   const { t } = useTranslation("common");
   const [regrind,setregrindData]=useState([]);
-  const {form,cutterData}= props;
+  const [disabled,setDisabled] = useState(true);
+  const {form,cutterData,visible}= props;
   const column = [
     { colspan: 2, label: t('inspection.TOOL SPESIFICATION') },
     { colspan: 2, label: t('inspection.TARGET WORK') },
@@ -32,7 +33,10 @@ const FormPart2 = (props) => {
   };
   useEffect(() => {
     fetchAllData()
-  }, [])
+    if(visible == 1 ){
+      setDisabled(false)
+    }
+  }, [visible])
 
   const onchange  = async (product_id) => {
       try {
@@ -49,36 +53,36 @@ const FormPart2 = (props) => {
   const data = [
     [
       { type:"text", label:t('inspection.Module') },
-      { type: "input",label: "",name:"ts_module",precision:6 },
+      { type: "input",label: "",name:"ts_module",precision:6,readOnly:true,disabled:disabled },
       { type:"text", label: t('inspection.Work No') },
-      { type:"select" , label: "",data:cutterData,  name:"tw_work_no",onchange:onchange,value:parseInt(form.values.tw_work_no)},
-      {  label: "",type: "input", rowspan: 2 ,name:"specified_profile",disabled:true},
+      { type:"select" , label: "",data:cutterData,  name:"tw_work_no",onchange:onchange,value:parseInt(form.values.tw_work_no),readOnly:true,disabled:disabled},
+      {  label: "",type: "input", rowspan: 2 ,name:"specified_profile",readOnly:true,disabled:disabled},
     ],
      [
       { type:"text", label: t('inspection.Pressure Angle')},
-      { type: "input",label: "",name:"ts_pressure_angle",precision:6 },
+      { type: "input",label: "",name:"ts_pressure_angle",precision:6,readOnly:true,disabled:disabled },
       { type:"text", label: t('inspection.Dislocation Coefficient')},
-      { type: "input" , label: "",name:"tw_disloc_coeff",precision:6},
+      { type: "input" , label: "",name:"tw_disloc_coeff",precision:6,readOnly:true,disabled:disabled},
     ],
      [
       { type:"text", label: t('inspection.No Of Teeth/Gear') },
-      { type: "input",label: "" ,name:"ts_no_teeth"},
+      { type: "input",label: "" ,name:"ts_no_teeth",readOnly:true,disabled:disabled},
       { type:"text", label: t('inspection.No Of Teeth') },
-      { type: "input" , label: "",name:"tw_no_teeth"},
+      { type: "input" , label: "",name:"tw_no_teeth",readOnly:true,disabled:disabled},
       { type:"text", label: t('inspection.Trial')},
     ],
     [
       { type:"text", label: t('inspection.Helix Angle') },
-      { type: "input",label: "",name:"ts_helix_angle",precision:6 },
+      { type: "input",label: "",name:"ts_helix_angle",precision:6,readOnly:true,disabled:disabled },
       { type:"text", label: t('inspection.Helix Angle') },
-      { type: "input" , label: "",name:"tw_helix_angle",precision:6},
-      { type: "select" , label: "",name:"trial",data:trial,onchange:onTrialchange,value:form.values.trial},
+      { type: "input" , label: "",name:"tw_helix_angle",precision:6,readOnly:true,disabled:disabled},
+      { type: "select" , label: "",name:"trial",data:trial,onchange:onTrialchange,value:form.values.trial,readOnly:true,disabled:disabled},
     ],
     [
       { type:"text", label: t('inspection.Helix Direction') },
-      { type: "select",label: "" ,name:"ts_helix_direction",data:tshelixdirection},
+      { type: "select",label: "" ,name:"ts_helix_direction",data:tshelixdirection,readOnly:true,disabled:disabled},
       { type:"text", label: t('inspection.Twist Direction') },
-      { type: "select" , label: "",name:"tw_twist_direction",data:twhelixdirection},
+      { type: "select" , label: "",name:"tw_twist_direction",data:twhelixdirection,readOnly:true,disabled:disabled},
       {  },
     ],
     [
@@ -90,9 +94,9 @@ const FormPart2 = (props) => {
     ],
     [
       { type:"text", label: t('inspection.Material') },
-      { type: "input",label: "",name:"ts_material" },
+      { type: "input",label: "",name:"ts_material",readOnly:true,disabled:disabled },
       { type:"text", label: t('inspection.Material') },
-      { type: "input" , label: "",name:"tw_material" },
+      { type: "input" , label: "",name:"tw_material",readOnly:true,disabled:disabled },
     ],
   ];
   

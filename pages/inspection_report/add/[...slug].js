@@ -165,8 +165,6 @@ const AddInspectionReport = () => {
       const api_data = await get(`report/${id}/`);
       const nulltostring = removeNulls(api_data);
       form.setValues(nulltostring);
-      const {specified_profile} = nulltostring
-      form.setValues( {specified_profile : t(specified_profile)});
       setDroppedData(nulltostring.report_files)
     } catch (error) {
       handleApiError(error, router, t);
@@ -346,22 +344,26 @@ const AddInspectionReport = () => {
 
   return (
     <Layout breadcrumbs={breadcrumbs}>
+      {visible == 1 ? 
       <Title order={3}>
         {isEditing ? t("edit_inspectionreport") : t("add__inspectionreport")}
-      </Title>
+      </Title>:
+      <Title order={3}>
+        { t("View Inspection Report")}
+      </Title>}
       <Formpart1 form={form} isEditing={isEditing} locale={router.locale}/>
-      <FormPart2 form={form} cutterData={cutterData} />
-      <FormPart3 form={form} />
-      <FormPart4 form={form} />
+      <FormPart2 form={form} cutterData={cutterData} visible={visible} />
+      <FormPart3 form={form} visible={visible}/>
+      <FormPart4 form={form} visible={visible}/>
       <Flex>
         {(resultLabel === "Conventional" || resultLabel === "Both") && (
-          <FormPart5 form={form} />
+          <FormPart5 form={form} visible={visible}/>
         )}
         {(resultLabel === "PlungeCut" || resultLabel === "Both") && (
-          <FormPart6 form={form} />
+          <FormPart6 form={form} visible={visible}/>
         )}
       </Flex>
-      <FormPart7 form={form} locale={router.locale}/>
+      <FormPart7 form={form} locale={router.locale}visible={visible}/>
       <Dropzone
         onDrop={(droppedFiles) => {
           setDroppedData((prevDroppedData) => [...prevDroppedData, ...droppedFiles]);

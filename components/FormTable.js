@@ -42,6 +42,7 @@ const FormTable = (props) => {
                      removeTrailingZeros
                       precision={precision}
                        placeholder={placeholder}
+                       readOnly={disabled}
                      />
                     </td> 
                   );

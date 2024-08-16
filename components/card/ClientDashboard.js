@@ -333,7 +333,7 @@ export default function ClientDashboard({
               data={mfgRecords}
               search={false}
               pagination={false}
-              noaction={true}
+              page = {'dash-mfg'}
             />
           </Card>
         </Box>
