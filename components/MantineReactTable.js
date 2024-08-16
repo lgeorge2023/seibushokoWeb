@@ -127,7 +127,7 @@ const MantineReactTables = (props) => {
                 />
               </ActionIcon>
             </Tooltip>
-            {page =="inspection"&&
+            {page =="inspection"&& visible != 1 &&
             <Tooltip label={t("View Inspection Report")}>
         <Link href={`/inspection_report/add/edit/${row.original.id}`}>
           <IconEye color="black" size={size}></IconEye>
