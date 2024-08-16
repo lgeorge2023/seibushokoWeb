@@ -14,6 +14,7 @@ import SubmitButtons from "@/components/SubmitButtons";
 import ProtectedRoute from "@/utils/ProtectedRoute";
 import { handleApiError } from "@/utils/handleApiError";
 import ImageFile from "@/components/ImageFile";
+import { UserManagement } from "@/utils/UserManagement";
 
 const AddCutter = () => {
   const { t } = useTranslation("common");
@@ -23,6 +24,9 @@ const AddCutter = () => {
   const isEditing = slug?.[0] === "edit";
   const id = slug?.[1];
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [disabled,setDisabled] = useState(true);
+
   const form = useForm({
     initialValues: {
       cutter_no: "",
@@ -63,7 +67,11 @@ const AddCutter = () => {
   };
   useEffect(() => {
     regrindType();
-  }, []);
+    fetchClientId();
+    if(visible == 1 ){
+      setDisabled(false)
+    }
+  }, [visible]);
   const fetchData = async () => {
     try {
       const data = await get(`cutter/${id}/`);
@@ -86,6 +94,7 @@ const AddCutter = () => {
       label: t("cutter.Cutter No"),
       type: "text",
       withAsterisk: true,
+      readOnly:disabled,
     },
     {
       name: "type",
@@ -94,9 +103,10 @@ const AddCutter = () => {
       placeholder: "Please Select",
       data: type,
       withAsterisk: true,
+      disabled:disabled,
     },
-    { name: "module", label: t("cutter.Module"), type: "number", precision: 6 },
-    { name: "supplier", label: t("cutter.Supplier"), type: "text" },
+    { name: "module", label: t("cutter.Module"), type: "number", precision: 6,readOnly:disabled, },
+    { name: "supplier", label: t("cutter.Supplier"), type: "text",readOnly:disabled},
     {
       name: "lead",
       label: t("cutter.Lead"),
@@ -106,70 +116,88 @@ const AddCutter = () => {
         { value: "LEFT", label: t("Left") },
         { value: "RIGHT", label: t("Right") },
       ],
+      disabled:disabled,
     },
     {
       name: "pressure_ang",
       label: t("cutter.Pressure Angle"),
       type: "number",
       precision: 6,
+      readOnly:disabled,
     },
     {
       name: "span_measurement",
       label: t("cutter.Span Measurement"),
       type: "number",
       precision: 6,
+      readOnly:disabled,
     },
     {
       name: "helix_angle",
       label: t("cutter.Helix Angle"),
       type: "number",
       precision: 6,
+      readOnly:disabled,
     },
     {
       name: "cutter_dwg_no",
       label: t("cutter.Cutter Drawing No"),
       type: "text",
       withAsterisk: true,
+      readOnly:disabled,
     },
     {
       name: "no_teeth_span",
       label: t("cutter.No Of Teeth In Span"),
       type: "number",
       precision: 6,
+      readOnly:disabled
     },
-    { name: "helix_degree", label: t("cutter.Helix Angle CBD"), type: "text" },
+    { name: "helix_degree", label: t("cutter.Helix Angle CBD"), type: "text",readOnly:disabled },
     {
       name: "no_of_teeth",
       label: t("cutter.Number Of Teeth"),
       type: "number",
       precision: 6,
+      readOnly:disabled
     },
-    { name: "hardness", label: t("cutter.Hardness"), type: "text" },
+    { name: "hardness", label: t("cutter.Hardness"), type: "text",readOnly:disabled },
     {
       name: "pitch_circle_dia",
       label: t("cutter.Pitch Circle Diameter"),
       type: "number",
       precision: 6,
+      readOnly:disabled,
     },
-    { name: "gear_no", label: t("cutter.Gear No"), type: "text" },
+    { name: "gear_no", label: t("cutter.Gear No"), type: "text",readOnly:disabled },
     {
       name: "lifespan",
       label: t("cutter.Life Span"),
       type: "number",
       precision: 6,
+      readOnly:disabled
     },
     {
       name: "base_circle_dia",
       label: t("cutter.Base Circle Diameter"),
       type: "number",
       precision: 6,
+      readOnly:disabled
     },
     {
       name: "cutter_dwg_file",
       label: t("cutter.dwgfile"),
       type: "file",
+      readOnly:disabled
     },
   ];
+  const fetchClientId = () => {
+    const profile_data = JSON.parse(
+      UserManagement.getItem("profile_data") || "{}"
+    );
+    const visible = profile_data?.client === 1;
+    setVisible(visible);
+  };
 
  
   const createOrUpdateData = async (addanother, values) => {
@@ -229,7 +257,9 @@ const AddCutter = () => {
       ]}
     >
       <Box>
-        <Title order={3}>{isEditing ? t("editCutter") : t("addCutter")}</Title>
+        {visible == 1 ?
+        <Title order={3}>{isEditing ? t("editCutter") : t("addCutter")}</Title>:
+        <Title order={3}> {t("View Cutter")}</Title>}
         <form>
           <div className="container">
             {fields.map((field) => {
@@ -242,6 +272,7 @@ const AddCutter = () => {
                       {" "}
                       <TextInput
                         label={props.label}
+                        readOnly={disabled}
                         {...props}
                         {...form.getInputProps("helix_degree")}
                       />
@@ -250,6 +281,7 @@ const AddCutter = () => {
                       {" "}
                       <TextInput
                         style={{ color: "white" }}
+                        readOnly={disabled}
                         {...form.getInputProps("helix_min")}
                       />
                     </Grid.Col>
@@ -257,6 +289,7 @@ const AddCutter = () => {
                       {" "}
                       <TextInput
                         color="white"
+                        readOnly={disabled}
                         {...form.getInputProps("helix_sec")}
                       />
                     </Grid.Col>
@@ -272,7 +305,8 @@ const AddCutter = () => {
               return <FormInput {...props} form={form} key={props.name} />;
             })}
           </div>
-          <SubmitButtons isEditing={isEditing} onSubmit={onSubmit} isSubmitting={isSubmitting}/>
+          {visible == 1 && (
+          <SubmitButtons isEditing={isEditing} onSubmit={onSubmit} isSubmitting={isSubmitting}/>)}
         </form>
       </Box>
     </Layout>
