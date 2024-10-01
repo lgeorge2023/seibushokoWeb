@@ -7,27 +7,17 @@ import { get, put } from "@/pages/api/apiUtils";
 import MobCard from "./MobCard";
 import { notifications } from "@mantine/notifications";
 
-function MobDashboard({ username }) {
+function MobDashboard({ username, firstTen }) {
   const { t } = useTranslation("common");
   const [mfgData, setMfgData] = useState([]);
   const [orderData, setOrderData] = useState([]);
-  const [workorderData, setWorkOrderData] = useState([]);
+  const [workorderData, setWorkOrderData] = useState(firstTen);
 
   useEffect(() => {
     mfgTableData();
     orderTableData();
-    workorderTableData();
   }, []);
 
-  const workorderTableData = async () => {
-    try {
-      const data = await get("/workorder/all");
-      const firstSix = data.reverse().slice(0, 6);
-      setWorkOrderData(firstSix);
-    } catch (err) {
-      console.error(err);
-    }
-  };
   const mfgTableData = async () => {
     try {
       const data = await get("/mfg");

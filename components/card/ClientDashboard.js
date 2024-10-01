@@ -56,6 +56,8 @@ export default function ClientDashboard({
   const [clearMonth, setClearMonth] = useState(true);
   const [dateRange, setDateRange] = useState([]);
   const [clearMonthRange, setClearMonthRange] = useState(true);
+  const [firstTen, setFirstTen] = useState([]);
+
 
   useEffect(() => {
     handleResize();
@@ -89,7 +91,12 @@ export default function ClientDashboard({
       }
 
       const data = get(`/workorder/all/${fromDate}/${toDate}`);
-      data.then((data) => setWorkRecords(data));
+      data.then((data) =>{
+        setWorkRecords(data)
+        const mobData = data.reverse().slice(0, 10);
+        setFirstTen(mobData);
+      });
+
     } catch (error) {
       // console.error("Error:", error);
     }
@@ -209,7 +216,7 @@ export default function ClientDashboard({
   return (
     <Box>
       {isMobile ? (
-        <MobDashboard username={username} />
+        <MobDashboard username={username} firstTen= {firstTen}/>
       ) : (
         <Box>
           <WelcomeCard username={username} />
