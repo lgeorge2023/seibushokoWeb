@@ -47,7 +47,7 @@ const MantineReactTables = (props) => {
       fileUrl,
       page == "workorder" || page == "dash-wo"
         ? "JobSheet.pdf"
-        : "InspectionReport.pdf",
+        : "InspectionReport.zip",
       t
     );
   };
