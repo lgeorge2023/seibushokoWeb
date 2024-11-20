@@ -53,7 +53,7 @@ function InspectionReportDetail({ reportRecords, searchQuery, }) {
 
   const downloadExcelFile  = async (id) =>{
     const fileUrl = `/report/print/${language}/${id}/`
-    await downloadFile(fileUrl,"InspectionReport.pdf",t)
+    await downloadFile(fileUrl,"InspectionReport.zip",t)
   } 
 
   return (
