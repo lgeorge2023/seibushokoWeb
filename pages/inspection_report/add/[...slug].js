@@ -151,13 +151,29 @@ const AddInspectionReport = () => {
   //   )
   // }
   const fetchWorkNoData = async (cutter_no) => {
+    if (!cutter_no || cutter_no === "" || cutter_no === "0") {
+      setCutterData([]);
+      return;
+    }
+
     try {
       const data = await fetchAndTransformWorkNo(cutter_no);
       setCutterData(data);
-    } catch (error) {}
+    } catch (error) {
+      console.error("Error fetching work no data:", error);
+      setCutterData([]);
+    }
   };
   useEffect(() => {
-    fetchWorkNoData(form.values.cutter_no);
+    if (
+      form.values.cutter_no &&
+      form.values.cutter_no !== "" &&
+      form.values.cutter_no !== "0"
+    ) {
+      fetchWorkNoData(form.values.cutter_no);
+    } else {
+      setCutterData([]);
+    }
   }, [form.values.cutter_no]);
 
   const fetchData = async () => {
@@ -276,7 +292,7 @@ const AddInspectionReport = () => {
 
   const handleMultipleFileUpload = async (id) => {
     if(newFiles.length > 0 || deletedFiles.length > 0){
-    try {
+      try {
         const formData = new FormData();
         if(isEditing){
           formData.append("workorder_id", id);
@@ -288,24 +304,24 @@ const AddInspectionReport = () => {
           formData.append("report_files",[])  
           
         }else{  
-        formData.append("workorder_id", id);
-        droppedData.forEach((file) => {
-        formData.append("report_files", file);
+          formData.append("workorder_id", id);
+          droppedData.forEach((file) => {
+            formData.append("report_files", file);
         
-      });
-    }
+          });
+        }
         const endpoint = '/report/files/';
         const response = isEditing ? await put(endpoint, formData) : await post(endpoint, formData);
         const message = isEditing ? t('Update') : t('Success');
         notifications.show({
-            title: message,
-            message: t(response),
-            color: "green",
+          title: message,
+          message: t(response),
+          color: "green",
         });
-    } catch (error) {
+      } catch (error) {
         handleApiError(error, router, t);
+      }
     }
-  }
 }
 
 
@@ -345,8 +361,8 @@ const AddInspectionReport = () => {
   return (
     <Layout breadcrumbs={breadcrumbs}>
       {visible == 1 ? 
-      <Title order={3}>
-        {isEditing ? t("edit_inspectionreport") : t("add__inspectionreport")}
+        <Title order={3}>
+          {isEditing ? t("edit_inspectionreport") : t("add__inspectionreport")}
       </Title>:
       <Title order={3}>
         { t("View Inspection Report")}
@@ -404,7 +420,7 @@ const AddInspectionReport = () => {
           {droppedData.map((item,index) => (
             <ul key={index}>
               <li><a href={item.file_path} style={{color:"#40c057",textDecoration:"none"}} target="_blank">{item.name}</a>
-                
+
                 <IconTrash color="red" size={17} onClick={()=>handleDeleteItem(item.id,index)}/>
               </li>
             </ul>

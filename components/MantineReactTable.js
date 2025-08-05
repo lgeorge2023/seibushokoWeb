@@ -31,6 +31,23 @@ const MantineReactTables = (props) => {
     loading,
     noaction,
     TableRowStyle,
+    pagination,
+    setPagination,
+    totalCount = 0,
+    globalFilter,
+    setGlobalFilter,
+    searchInput,
+    setSearchInput,
+    sorting,
+    setSorting,
+    columnFilters,
+    setColumnFilters,
+    rawColumnFilters,
+  setRawColumnFilters,
+    enableServerSidePagination = false,
+    enableServerSideSearch = false,
+    enableServerSideSorting = false,
+    enableServerSideColumnFilters = false,
   } = props;
   const { colorScheme } = useMantineTheme();
   const [columnvisibility, setColumnVisibility] = useState(columnVisibility);
@@ -51,6 +68,11 @@ const MantineReactTables = (props) => {
       t
     );
   };
+
+  const pageCount = enableServerSidePagination 
+    ? Math.ceil(totalCount / (pagination?.pageSize || 10))
+    : undefined;
+
   const table = useMantineReactTable({
     localization: {
       actions: t("action"),
@@ -68,11 +90,92 @@ const MantineReactTables = (props) => {
         mantineEditSelectProps: col.mantineEditSelectProps,
         editVariant: col.editVariant,
       },
+      renderTopToolbarCustomActions: () => (
+        <TextInput
+          placeholder={t('Search...')}
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
+          style={{ minWidth: 300 }}
+        />
+      ),
+      enableSorting: enableServerSideSorting ? col.sortable !== false : col.sortable !== false,
+      enableColumnFilters: enableServerSideColumnFilters ? col.filterable !== false : col.filterable !== false,
     })),
     data: data,
     editDisplayMode: "table",
     enableEditing: true,
-    state: { columnVisibility: columnvisibility || {}, isLoading: loading },
+
+    manualPagination: enableServerSidePagination,
+    manualSorting: enableServerSideSorting,
+    manualFiltering: enableServerSideSearch,
+    manualColumnFilters: enableServerSideColumnFilters,
+    ...(enableServerSidePagination && { rowCount: totalCount }),
+    ...(enableServerSidePagination && pageCount && { pageCount }),
+    state: {
+      columnVisibility: columnvisibility || {},
+      isLoading: loading,
+      ...(pagination && { pagination }),
+      ...(globalFilter !== undefined && { globalFilter }),
+      ...(sorting && { sorting }),
+      ...(columnFilters && { columnFilters }),
+    },
+
+    // Handle pagination changes
+    ...(setPagination && {
+      onPaginationChange: (updaterOrValue) => {
+        if (typeof updaterOrValue === "function") {
+          setPagination((prev) => {
+            const newPagination = updaterOrValue(prev);
+            return newPagination;
+          });
+        } else {
+          setPagination(updaterOrValue);
+        }
+      },
+    }),
+
+    // Handle search changes
+    ...(setGlobalFilter && {
+      onGlobalFilterChange: (updaterOrValue) => {
+        if (typeof updaterOrValue === "function") {
+          setGlobalFilter((prev) => {
+            const newFilter = updaterOrValue(prev);
+            return newFilter;
+          });
+        } else {
+          setGlobalFilter(updaterOrValue);
+        }
+      },
+    }),
+
+    // Handle sorting changes
+    ...(setSorting && {
+      onSortingChange: (updaterOrValue) => {
+        if (typeof updaterOrValue === "function") {
+          setSorting((prev) => {
+            const newSorting = updaterOrValue(prev);
+            return newSorting;
+          });
+        } else {
+          setSorting(updaterOrValue);
+        }
+      },
+    }),
+
+   // Handle column filters changes (debounced via rawColumnFilters)
+...(setRawColumnFilters && {
+  onColumnFiltersChange: (updaterOrValue) => {
+    if (typeof updaterOrValue === "function") {
+      setRawColumnFilters((prev) => {
+        const newFilters = updaterOrValue(prev);
+        return newFilters;
+      });
+    } else {
+      setRawColumnFilters(updaterOrValue);
+    }
+  },
+}),
+  
     onColumnVisibilityChange: (state) => {
       setColumnVisibility(state);
     },
@@ -89,10 +192,23 @@ const MantineReactTables = (props) => {
       showGlobalFilter: true,
       density: "xs",
       columnVisibility: columnvisibility || {},
+      ...(pagination && { pagination }),
+      ...(globalFilter !== undefined && { globalFilter }),
+      ...(sorting && { sorting }),
+      ...(columnFilters && { columnFilters }),
     },
     enableDensityToggle: false,
     enableFullScreenToggle: false,
     enableRowActions: noaction ? false : true,
+    
+    // Server-side pagination info display
+    ...(enableServerSidePagination && {
+      mantinePaginationProps: {
+        showRowsPerPage: true,
+        rowsPerPageOptions: ['10', '15', '20', '25', '30', '50', '100'],
+      },
+    }),
+
     renderRowActions: ({ row }) => (
       <Box sx={{ display: "flex", flexWrap: "nowrap", gap: "8px" }}>
         {visible == 1 ? (
@@ -107,14 +223,14 @@ const MantineReactTables = (props) => {
           </Tooltip>
         ) : null}
       {page == 'dash-mfg' && (
-        <>
-          <Tooltip label={t("View Cutter")}>
-            <Link href={`/cutter/addcutter/edit/${row.original.cutter_id}`}>
-              <IconEye color="black" size={size}></IconEye>
-            </Link>
-          </Tooltip>
-        </>
-      )}
+          <>
+            <Tooltip label={t("View Cutter")}>
+              <Link href={`/cutter/addcutter/edit/${row.original.cutter_id}`}>
+                <IconEye color="black" size={size}></IconEye>
+              </Link>
+            </Tooltip>
+          </>
+        )}
         {(page == "workorder" || page == "inspection" || page == "dash-wo") && (
           <>
             <Tooltip label={t("Print")}>
@@ -128,10 +244,10 @@ const MantineReactTables = (props) => {
               </ActionIcon>
             </Tooltip>
             {page =="inspection"&& visible != 1 &&
-            <Tooltip label={t("View Inspection Report")}>
-        <Link href={`/inspection_report/add/edit/${row.original.id}`}>
-          <IconEye color="black" size={size}></IconEye>
-        </Link>
+              <Tooltip label={t("View Inspection Report")}>
+                <Link href={`/inspection_report/add/edit/${row.original.id}`}>
+                  <IconEye color="black" size={size}></IconEye>
+                </Link>
       </Tooltip>}
           </>
         )}
