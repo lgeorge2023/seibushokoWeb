@@ -102,7 +102,7 @@ function WorkOrderList() {
     if (JSON.stringify(rawColumnFilters) !== JSON.stringify(columnFilters)) {
       const handler = setTimeout(() => {
         setColumnFilters(rawColumnFilters);
-      }, 400);
+      }, 500);
       return () => clearTimeout(handler);
     }
   }, [rawColumnFilters]);
@@ -116,7 +116,7 @@ function WorkOrderList() {
     if (searchInput !== globalFilter) {
       const handler = setTimeout(() => {
         setGlobalFilter(searchInput);
-      }, 400);
+      }, 500);
       return () => clearTimeout(handler);
     }
   }, [searchInput]);
